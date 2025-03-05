@@ -1,0 +1,60 @@
+Estrutura do Projeto
+
+Pacote apoio_comunitario
+
+Modelos
+Usuario: Representa um usuário do sistema, contendo informações como nome, email, senha (hash), tipo de documento e tipo de conta.
+
+Repositórios
+UsuarioRepository: Interface que estende JpaRepository para operações de banco de dados relacionadas a usuários. Inclui um método para buscar usuários pelo nome.
+
+Serviços
+UsuarioService: Classe de serviço que contém a lógica de negócios para usuários. Inclui métodos para listar todos os usuários e salvar um novo usuário.
+
+Controladores
+AvaliacaoController: Controlador REST que gerencia as avaliações. Inclui métodos para listar e criar avaliações.
+
+Segurança
+SecurityConfig: Classe de configuração de segurança que define as regras de autenticação e autorização, incluindo CSRF, login e logout.
+CustomUserDetailsService: Classe que implementa User DetailsService para carregar detalhes do usuário com base no nome de usuário. Utiliza o repositório de usuários para buscar informações.
+
+
+Descrição das Classes
+1. Usuario
+Atributos:
+id: Identificador único do usuário.
+nome: Nome do usuário.
+email: Email do usuário.
+senha_hash: Senha do usuário armazenada como hash.
+tipo_documento: Tipo de documento (CPF ou CNPJ).
+numero_documento: Número do documento.
+tipo_conta: Tipo de conta (Usuário ou Administrador).
+Métodos:
+Getters e setters para acessar e modificar os atributos.
+getAuthorities(): Retorna as autoridades do usuário para controle de acesso.
+2. UsuarioRepository
+Métodos:
+findByNome(String nome): Busca um usuário pelo nome.
+3. UsuarioService
+Métodos:
+listarUsuarios(): Retorna uma lista de todos os usuários.
+salvarUsuario(Usuario usuario): Salva um novo usuário no banco de dados.
+4. AvaliacaoController
+Métodos:
+listarAvaliacoes(): Retorna uma lista de todas as avaliações.
+criarAvaliacao(Avaliacao avaliacao): Cria uma nova avaliação.
+5. SecurityConfig
+Métodos:
+securityFilterChain(HttpSecurity http): Configura a segurança HTTP, incluindo CSRF, autorização de requisições, login e logout.
+passwordEncoder(): Retorna um codificador de senhas usando BCrypt.
+6. CustomUser DetailsService
+Métodos:
+loadUserByUsername(String nome): Carrega os detalhes do usuário com base no nome de usuário. Lança uma exceção se o usuário não for encontrado.
+----------------------------------------------------------------------
+
+Usei Java 21, versão do Spring tá setada no POM.
+A parte de segurança é a que está em mais beta (possivel atualizaçao) pois estou esperando a parte front do login.
+Por fim, de forma resumida: 
+Usei JPA, Spring Data JPA, Spring Boot, Spring Security e Hibernate.
+Quanto mais terstarmos as funções, melhor. O banco só não pode quebrar.
+Pra testar o BD, é só rodar o código e lançar o BD no computador de cada um através do Workbench. O arquivo que eu estou enviando .sql NÃO*** é um banco de dados. É o script dele. O banco de dados fica existindo em cada PC.
