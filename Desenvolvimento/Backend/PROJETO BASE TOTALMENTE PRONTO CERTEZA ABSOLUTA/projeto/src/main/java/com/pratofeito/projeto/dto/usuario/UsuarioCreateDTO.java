@@ -8,8 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 public class UsuarioCreateDTO {
 
     @NotBlank(message = "O nome é obrigatório!")
@@ -29,5 +28,51 @@ public class UsuarioCreateDTO {
 
     private TipoConta tipo_conta;
 
+    public String getNome() {
+        return nome;
+    }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public TipoDocumento getTipo_documento() {
+        return tipo_documento;
+    }
+
+    public void setTipo_documento(TipoDocumento tipo_documento) {
+        this.tipo_documento = tipo_documento;
+    }
+
+    public String getNumero_documento() {
+        return numero_documento;
+    }
+
+    public void setNumero_documento(String numero_documento) {
+        this.numero_documento = numero_documento;
+    }
+
+    public TipoConta getTipo_conta() {
+        return tipo_conta;
+    }
+
+    public void setTipo_conta(TipoConta tipo_conta) {
+        this.tipo_conta = tipo_conta;
+    }
 }
