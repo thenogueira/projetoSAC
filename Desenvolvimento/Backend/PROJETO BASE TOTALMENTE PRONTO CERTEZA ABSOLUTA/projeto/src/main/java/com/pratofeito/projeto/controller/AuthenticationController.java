@@ -44,7 +44,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.repository.findByEmail(data.email()).isPresent()) return ResponseEntity.badRequest().build();
+        if(this.repository.findByEmail(data.email()).isPresent()) return ResponseEntity.badRequest().body("O Email já existe");
 
         String encryptePassword = new BCryptPasswordEncoder().encode(data.senha_hash());
         Usuario novoUsuario = new Usuario();
