@@ -19,10 +19,7 @@
 
 div.imgfundo{
     background-image: url('../img/21.jpg'); 
-    width: 100vw;
-    height: 614px;
-    background-repeat: no-repeat;
-    position: absolute;
+    
 }
 
 div.cadastro{
