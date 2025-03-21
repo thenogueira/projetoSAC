@@ -6,26 +6,40 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Collection;
 import java.util.List;
 
-
 /**
  * Classe que representa a entidade Usuário no sistema.
  * Esta classe é mapeada para a tabela "usuario" no banco de dados.
- * Utiliza anotações do JPA para definir a estrutura da tabela e do Spring para validações.
+ * Implementa a interface UserDetails do Spring Security para integração com o sistema de autenticação.
  */
-// Lombok: gera automaticamente os métodos setters
 @Table(name = "usuario") // Define o nome da tabela no banco de dados
 @Entity // Indica que esta classe é uma entidade JPA
 public class Usuario implements UserDetails {
+
+    /**
+     * Construtor para criar um novo usuário.
+     *
+     * param nome Nome do usuário.
+     * param email Email do usuário.
+     * param senha_hash Senha criptografada do usuário.
+     * param tipo_conta Tipo de conta do usuário (ADMIN, CLIENTE, etc.).
+     * param tipo_documento Tipo de documento do usuário (CPF, CNPJ, etc.).
+     * param numero_documento Número do documento do usuário.
+     */
+    public Usuario(String nome, String email, String senha_hash, TipoConta tipo_conta, TipoDocumento tipo_documento, String numero_documento) {
+        this.nome = nome;
+        this.email = email;
+        this.senha_hash = senha_hash;
+        this.tipo_conta = tipo_conta;
+        this.tipo_documento = tipo_documento;
+        this.numero_documento = numero_documento;
+    }
 
     /**
      * Identificador único do usuário.
@@ -58,7 +72,6 @@ public class Usuario implements UserDetails {
      * Hash da senha do usuário.
      * Campo obrigatório que armazena a senha criptografada.
      */
-
     @NotBlank(message = "A senha é obrigatória!") // Validação: o campo não pode estar em branco
     @Column(name = "senha_hash", nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String senha_hash;
@@ -75,9 +88,6 @@ public class Usuario implements UserDetails {
      * Número do documento do usuário.
      * Campo obrigatório com no máximo 14 caracteres.
      */
-
-
-
     @Column(name = "numero_documento", length = 14, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String numero_documento;
 
@@ -89,42 +99,78 @@ public class Usuario implements UserDetails {
     @Column(name = "tipo_conta") // Define o nome da coluna no banco de dados
     private TipoConta tipo_conta;
 
-
+    /**
+     * Retorna as autoridades (roles) do usuário.
+     * Converte o tipo_conta para uma autoridade do Spring Security.
+     *
+     * return Lista de autoridades do usuário.
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Converte o tipo_conta para uma autoridade (role) do Spring Security
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.tipo_conta.name()));
     }
 
+    /**
+     * Retorna a senha do usuário.
+     *
+     * return Senha criptografada do usuário.
+     */
     @Override
     public String getPassword() {
         return getSenha_hash();
     }
 
+    /**
+     * Retorna o email do usuário como nome de usuário.
+     *
+     * return Email do usuário.
+     */
     @Override
     public String getUsername() {
         return getEmail();
     }
 
+    /**
+     * Verifica se a conta do usuário não expirou.
+     *
+     * return true, pois a conta nunca expira.
+     */
     @Override
     public boolean isAccountNonExpired() {
-        return true; // A conta não expirou
+        return true;
     }
 
+    /**
+     * Verifica se a conta do usuário não está bloqueada.
+     *
+     * return true, pois a conta nunca está bloqueada.
+     */
     @Override
     public boolean isAccountNonLocked() {
-        return true; // A conta não está bloqueada
+        return true;
     }
 
+    /**
+     * Verifica se as credenciais do usuário não expiraram.
+     *
+     * return true, pois as credenciais nunca expiram.
+     */
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // As credenciais não expiraram
+        return true;
     }
 
+    /**
+     * Verifica se a conta do usuário está ativa.
+     *
+     * @return true, pois a conta está sempre ativa.
+     */
     @Override
     public boolean isEnabled() {
-        return true; // A conta está ativa
+        return true;
     }
+
+    // Getters e Setters
 
     public int getId() {
         return id;
