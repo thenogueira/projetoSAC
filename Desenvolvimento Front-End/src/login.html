@@ -1,34 +1,40 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-    <link rel="stylesheet" href="estilos/cadastro.css">
+    <link rel="stylesheet" href="estilos/telas-cadastros.css">
+
 </head>
 <body>
 
-
     <div class="container">
+
         <div class="image-container">
-            <img src="../img/fundo1.png" alt="Imagem de exemplo">
+            <img src="../img/fundo-1.png" alt="Imagem de exemplo">
         </div>
-        <div class="cadastro" id="login">
+
+        <div id="login">
             
             <div>
                 <h1>Login</h1>
-                <p class="mini">Não tem uma conta? <br> <a href="cadastro1.html">Cadastre-se aqui</a></p> 
+
+                <p class="texto-mini">Não tem uma conta? <br> <a href="cadastro-1.html">Cadastre-se aqui</a></p> 
+
                 <form id="loginForm" action="/login" method="POST">
+
                     <p>Email</p>
                     <input type="email" id="email" name="email" placeholder="Email" required><br>
+
                     <p>Senha</p>
                     <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
-                    <div class="cont"><button type="submit" id="entrar">Entrar</button></div>
-                </form>
-                              
+
+                    <div class="mini-container"><button type="submit" id="botao-entrar">Entrar</button></div>
+
+                </form>              
             </div>
-            
         </div>
     </div>
 
