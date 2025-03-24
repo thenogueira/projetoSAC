@@ -21,6 +21,61 @@ import java.util.List;
 @Table(name = "usuario") // Define o nome da tabela no banco de dados
 @Entity // Indica que esta classe é uma entidade JPA
 public class Usuario implements UserDetails {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha_hash() {
+        return senha_hash;
+    }
+
+    public void setSenha_hash(String senha_hash) {
+        this.senha_hash = senha_hash;
+    }
+
+    public TipoDocumento getTipo_documento() {
+        return tipo_documento;
+    }
+
+    public void setTipo_documento(TipoDocumento tipo_documento) {
+        this.tipo_documento = tipo_documento;
+    }
+
+    public String getNumero_documento() {
+        return numero_documento;
+    }
+
+    public void setNumero_documento(String numero_documento) {
+        this.numero_documento = numero_documento;
+    }
+
+    public TipoConta getTipo_conta() {
+        return tipo_conta;
+    }
+
+    public void setTipo_conta(TipoConta tipo_conta) {
+        this.tipo_conta = tipo_conta;
+    }
 
     /**
      * Construtor para criar um novo usuário.
