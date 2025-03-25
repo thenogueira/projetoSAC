@@ -1,33 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cadastro</title>
-    <link rel="stylesheet" href="estilos/cadastro.css">
+    <link rel="stylesheet" href="estilos/telas-cadastros.css">
 
 </head>
 <body>
+    
     <div class="container">
+
         <div class="image-container">
-            <img src="../img/4881929-Photoroom.png" alt="Imagem de exemplo">
+            <img src="../img/fundo-1.png" alt="Imagem de exemplo">
         </div>
-        <div class="cadastro">
+
+        <div class="cadastro-container">
             <div>
-                <p class="mini" id="etapa">Etapa 1 de 2</p>
+                <a href="cadastro-1.html" id="voltar"><img src="../img/seta-voltar.png" alt=""></a>
+
+                <p class="texto-mini">Etapa 2 de 2</p>
+
                 <h1>Criando Conta</h1>
-                <p class="mini">Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
+
+                <p class="texto-mini">Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
+
                 <form id="cadastroForm" action="/submit" method="POST">
-                    <p class="primeiro">Nome</p>
-                    <input type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
-                    <p>CPF ou CNPJ</p>
-                    <input type="text" name="cpf" id="cpf" placeholder="CPF/CNPJ" required>
-                    <p>Endereço</p>
-                    <input type="text" id="endereco" name="endereco" placeholder="Endereço" required> <br>
-                    <div class="cont"><a href="cadastro2.html" id="continuar">Continuar</a></div>
+
+                    <p class="texto-1">Email</p>
+                    <input type="email" id="email" name="email" placeholder="Email" required><br>
+
+                    <p>Senha</p>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+
+                    <p>Confirmar Senha</p>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+                    <!-- Fazer com que o confirmar senha só permita cadastrar com as duas senhas sendo iguais -->
+
+                    <div class="mini-container"><button type="submit"id="botao-cadastrar">Cadastrar</button></div>
                 </form>
             </div>
+        </div>
     </div>
 
     <script>
@@ -56,15 +70,4 @@
     </script>
 </body>
 </html>
-
-                <!-- <p>Email</p>
-                <input type="email" id="email" name="email" placeholder="Email" required><br>
-                <p>Senha</p>
-                <input type="password" id="senha" name="senha" placeholder="Senha" required><br> -->
-                
-                <!-- <select id="tipo" name="tipo" required>
-                    <option value="" disabled selected>Selecione uma opção</option>
-                    <option value="doador">Quero ser doador</option>
-                    <option value="ajuda">Preciso de ajuda</option>
-                </select><br> -->
 
