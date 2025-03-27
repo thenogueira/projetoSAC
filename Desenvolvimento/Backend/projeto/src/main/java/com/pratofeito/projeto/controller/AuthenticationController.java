@@ -79,6 +79,6 @@ public class AuthenticationController {
         this.repository.save(novoUsuario);
 
         // Retorna uma resposta de sucesso
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Usuário registrado com sucesso");
     }
 }

@@ -3,43 +3,46 @@ package com.pratofeito.projeto.security;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-/**
- * Serviço personalizado para carregar detalhes do usuário durante a autenticação.
- * Implementa a interface UserDetailsService do Spring Security para integrar a autenticação
- * com a entidade Usuario do sistema.
- */
-@Service // Indica que esta classe é um serviço gerenciado pelo Spring
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired // Injeção de dependência automática do repositório UsuarioRepository
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
-    /**
-     * Carrega os detalhes do usuário com base no email.
-     * Este método é chamado pelo Spring Security durante o processo de autenticação.
-     *
-     * @param email Email do usuário a ser carregado.
-     * @return UserDetails contendo informações do usuário.
-     * @throws UsernameNotFoundException Se o usuário não for encontrado.
-     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Busca o usuário no banco de dados pelo email
+        // Validação básica do email
+        if (email == null || email.trim().isEmpty()) {
+            throw new UsernameNotFoundException("Email não pode ser vazio");
+        }
+
         Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
 
-        // Lança uma exceção se o usuário não for encontrado
         Usuario usuario = usuarioOptional.orElseThrow(() ->
-                new UsernameNotFoundException("Usuário não encontrado: " + email)
+                new UsernameNotFoundException("Usuário não encontrado com o email: " + email)
         );
 
-        // Retorna o objeto Usuario, que implementa UserDetails
-        return usuario;
+        // Converte as roles/permissões do seu usuário para GrantedAuthority
+        List<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + usuario.getAuthorities()) // Supondo que getRole() retorna USER, ADMIN etc.
+        );
+
+        return new User(
+                usuario.getEmail(),
+                usuario.getPassword(),
+                authorities
+        );
     }
 }
