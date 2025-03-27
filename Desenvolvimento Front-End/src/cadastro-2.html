@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="estilos/telas-cadastros.css">
+
+</head>
+<body>
+    
+    <div class="container">
+
+        <div class="image-container">
+            <img src="../img/fundo-1.png" alt="Imagem de exemplo">
+        </div>
+
+        <div class="cadastro-container">
+            <div>
+                <a href="cadastro-1.html" id="voltar"><img src="../img/seta-voltar.png" alt=""></a>
+
+                <p class="texto-mini">Etapa 2 de 2</p>
+
+                <h1>Criando Conta</h1>
+
+                <p class="texto-mini">Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
+
+                <form id="cadastroForm" action="/submit" method="POST">
+
+                    <p class="texto-1">Email</p>
+                    <input type="email" id="email" name="email" placeholder="Email" required><br>
+
+                    <p>Senha</p>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+
+                    <p>Confirmar Senha</p>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+                    <!-- Fazer com que o confirmar senha só permita cadastrar com as duas senhas sendo iguais -->
+
+                    <div class="mini-container"><button type="submit"id="botao-cadastrar">Cadastrar</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const cpf = document.getElementById('cpf').value;
+            const endereco = document.getElementById('endereco').value;
+            const tipo = document.getElementById('tipo').value;
+
+            if (!nome || !cpf) {
+                alert('Por favor, preencha todos os campos.');
+                event.preventDefault();
+                return;
+            }
+
+            // if (!nome || !email || !senha || !endereco || !tipo) {
+            //     alert('Por favor, preencha todos os campos.');
+            //     event.preventDefault();
+            //     return;
+            // }
+
+            alert('Cadastro realizado com sucesso!');
+        });
+    </script>
+</body>
+</html>
+
