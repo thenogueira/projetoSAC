@@ -35,11 +35,11 @@ public class Usuario implements UserDetails {
 
     public Usuario(){};
 
-    public Usuario(String nome, String email, String senha_hash, TipoConta tipo_conta, TipoDocumento tipoDocumento, String numeroDocumento) {
+    public Usuario(String nome, String email, String senha_hash, TipoConta tipoConta, TipoDocumento tipoDocumento, String numeroDocumento) {
         this.nome = nome;
         this.email = email;
         this.senha_hash = senha_hash;
-        this.tipo_conta = tipo_conta;
+        this.tipoConta = tipoConta;
         this.tipoDocumento = tipoDocumento;
         this.numeroDocumento = numeroDocumento;
     }
@@ -100,7 +100,7 @@ public class Usuario implements UserDetails {
      */
     @Enumerated(EnumType.STRING) // Define que o valor do enum será armazenado como String no banco de dados
     @Column(name = "tipo_conta") // Define o nome da coluna no banco de dados
-    private TipoConta tipo_conta;
+    private TipoConta tipoConta = TipoConta.Usuario;
 
     /**
      * Retorna as autoridades (roles) do usuário.
@@ -110,7 +110,7 @@ public class Usuario implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + this.tipo_conta.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.tipoConta.name()));
     }
 
     /**
@@ -223,11 +223,11 @@ public class Usuario implements UserDetails {
         this.numeroDocumento = numero_documento;
     }
 
-    public TipoConta getTipo_conta() {
-        return tipo_conta;
+    public TipoConta getTipoConta() {
+        return tipoConta;
     }
 
-    public void setTipo_conta(TipoConta tipo_conta) {
-        this.tipo_conta = tipo_conta;
+    public void setTipoConta(TipoConta tipoConta) {
+        this.tipoConta = tipoConta;
     }
 }

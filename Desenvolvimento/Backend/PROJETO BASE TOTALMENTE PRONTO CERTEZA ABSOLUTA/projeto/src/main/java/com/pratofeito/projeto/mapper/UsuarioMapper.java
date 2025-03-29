@@ -46,7 +46,7 @@ public class UsuarioMapper {
         dto.setId(usuario.getId());           // ID do usuário
         dto.setNome(usuario.getNome());        // Nome do usuário
         dto.setEmail(usuario.getEmail());      // Email do usuário
-        dto.setTipo_conta(usuario.getTipo_conta()); // Tipo de conta do usuário (enum)
+        dto.setTipo_conta(usuario.getTipoConta()); // Tipo de conta do usuário (enum)
 
         return dto; // Retorna o DTO populado
     }

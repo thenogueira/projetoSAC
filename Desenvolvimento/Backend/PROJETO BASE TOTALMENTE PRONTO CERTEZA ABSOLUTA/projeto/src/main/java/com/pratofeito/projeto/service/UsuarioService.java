@@ -74,7 +74,7 @@ public class UsuarioService implements UserDetails {
 
 
     public Collection<? extends GrantedAuthority> getAuthorities(Usuario usuario) {
-        return List.of(new SimpleGrantedAuthority(usuario.getTipo_conta().name())); // Converte o tipo de conta em uma autoridade do Spring Security
+        return List.of(new SimpleGrantedAuthority(usuario.getTipoConta().name())); // Converte o tipo de conta em uma autoridade do Spring Security
     }
 
     @Override

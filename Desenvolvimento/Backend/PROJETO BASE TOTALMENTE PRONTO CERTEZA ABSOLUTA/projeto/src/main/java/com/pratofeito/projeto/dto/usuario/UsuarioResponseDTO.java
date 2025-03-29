@@ -10,7 +10,7 @@ public class UsuarioResponseDTO {
     private int id;
     private String nome;
     private String email;
-    private TipoConta tipo_conta;
+    private TipoConta tipoConta;
 
 
     public int getId() {
@@ -38,10 +38,10 @@ public class UsuarioResponseDTO {
     }
 
     public TipoConta getTipo_conta() {
-        return tipo_conta;
+        return tipoConta;
     }
 
     public void setTipo_conta(TipoConta tipo_conta) {
-        this.tipo_conta = tipo_conta;
+        this.tipoConta = tipo_conta;
     }
 }
