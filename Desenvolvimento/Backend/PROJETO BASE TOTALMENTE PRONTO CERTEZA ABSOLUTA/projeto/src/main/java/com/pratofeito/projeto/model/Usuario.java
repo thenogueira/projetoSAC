@@ -32,13 +32,16 @@ public class Usuario implements UserDetails {
      * param tipo_documento Tipo de documento do usuário (CPF, CNPJ, etc.).
      * param numero_documento Número do documento do usuário.
      */
-    public Usuario(String nome, String email, String senha_hash, TipoConta tipo_conta, TipoDocumento tipo_documento, String numero_documento) {
+
+    public Usuario(){};
+
+    public Usuario(String nome, String email, String senha_hash, TipoConta tipo_conta, TipoDocumento tipoDocumento, String numeroDocumento) {
         this.nome = nome;
         this.email = email;
         this.senha_hash = senha_hash;
         this.tipo_conta = tipo_conta;
-        this.tipo_documento = tipo_documento;
-        this.numero_documento = numero_documento;
+        this.tipoDocumento = tipoDocumento;
+        this.numeroDocumento = numeroDocumento;
     }
 
     /**
@@ -82,14 +85,14 @@ public class Usuario implements UserDetails {
      */
     @Enumerated(EnumType.STRING) // Define que o valor do enum será armazenado como String no banco de dados
     @Column(name = "tipo_documento", nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
-    private TipoDocumento tipo_documento;
+    private TipoDocumento tipoDocumento;
 
     /**
      * Número do documento do usuário.
      * Campo obrigatório com no máximo 14 caracteres.
      */
     @Column(name = "numero_documento", length = 14, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
-    private String numero_documento;
+    private String numeroDocumento;
 
     /**
      * Tipo de conta do usuário (ADMIN, CLIENTE, etc.).
@@ -204,20 +207,20 @@ public class Usuario implements UserDetails {
         this.senha_hash = senha_hash;
     }
 
-    public TipoDocumento getTipo_documento() {
-        return tipo_documento;
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setTipo_documento(TipoDocumento tipo_documento) {
-        this.tipo_documento = tipo_documento;
+    public void setTipoDocumento(TipoDocumento tipo_documento) {
+        this.tipoDocumento = tipo_documento;
     }
 
-    public String getNumero_documento() {
-        return numero_documento;
+    public String getNumeroDocumento() {
+        return numeroDocumento;
     }
 
-    public void setNumero_documento(String numero_documento) {
-        this.numero_documento = numero_documento;
+    public void setNumeroDocumento(String numero_documento) {
+        this.numeroDocumento = numero_documento;
     }
 
     public TipoConta getTipo_conta() {
