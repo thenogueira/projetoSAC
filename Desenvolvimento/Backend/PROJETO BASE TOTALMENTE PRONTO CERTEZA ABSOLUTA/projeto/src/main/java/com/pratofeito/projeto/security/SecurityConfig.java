@@ -36,21 +36,19 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
-                // Configuração de proteção CSRF
-                .csrf(csrf -> csrf.disable()) // Usa cookies para armazenar o token CSRF
+                .csrf(csrf -> csrf.disable()) // Desabilita completamente CSRF
+                .cors(cors -> cors.disable()) // Desabilita CORS temporariamente para testes
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/ocorrencias/criar").hasRole("Administrador")
-                                .requestMatchers(HttpMethod.GET,"/usuarios/listar").hasRole("Administrador")
-                        .requestMatchers(HttpMethod.POST, "/public/**").permitAll()
-                                .anyRequest().authenticated()
-                        )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/usuarios/atualizar/**").permitAll() // Liberação explícita
+                        .requestMatchers(HttpMethod.GET, "/usuarios/listar").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/ocorrencias/**").hasRole("ADMINISTRADOR")
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .build(); // Constrói e retorna a cadeia de filtros de segurança
+                .build();
     }
 
     @Bean

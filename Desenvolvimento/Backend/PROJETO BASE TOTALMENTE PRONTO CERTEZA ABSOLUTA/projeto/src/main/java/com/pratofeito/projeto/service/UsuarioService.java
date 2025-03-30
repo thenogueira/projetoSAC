@@ -3,14 +3,18 @@ package com.pratofeito.projeto.service;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import com.pratofeito.projeto.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Serviço responsável por implementar a lógica de negócio relacionada à entidade Usuario.
@@ -91,4 +95,29 @@ public class UsuarioService implements UserDetails {
     public String getUsername() {
         return "";
     }
+
+    @Transactional
+    public Usuario atualizarUsuario(Integer id, Usuario usuarioAtualizado) {
+        Usuario usuarioExistente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        // Atualiza apenas os campos permitidos
+        usuarioExistente.setNome(usuarioAtualizado.getNome());
+        usuarioExistente.setEmail(usuarioAtualizado.getEmail());
+
+
+        return usuarioRepository.save(usuarioExistente);
+    }
+
+    public Usuario buscarUsuarioPorId(Integer id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        return usuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+    }
+
+    public Optional<Usuario> buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+
+
 }
