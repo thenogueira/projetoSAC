@@ -26,7 +26,7 @@ public class UsuarioCreateDTO {
 
     private String numero_documento;
 
-    private TipoConta tipo_conta;
+    private TipoConta tipoConta;
 
     public String getNome() {
         return nome;
@@ -69,10 +69,10 @@ public class UsuarioCreateDTO {
     }
 
     public TipoConta getTipo_conta() {
-        return tipo_conta;
+        return tipoConta;
     }
 
     public void setTipo_conta(TipoConta tipo_conta) {
-        this.tipo_conta = tipo_conta;
+        this.tipoConta = tipo_conta;
     }
 }

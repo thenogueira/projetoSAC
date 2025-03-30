@@ -51,8 +51,8 @@ public class UsuarioService implements UserDetails {
      * throws IllegalArgumentException Se o documento não atender aos requisitos de tamanho para CPF ou CNPJ.
      */
     private void validarDocumento(Usuario usuario) {
-        String numeroDocumento = usuario.getNumero_documento(); // Obtém o número do documento do usuário
-        TipoDocumento tipoDocumento = usuario.getTipo_documento(); // Obtém o tipo de documento (CPF ou CNPJ)
+        String numeroDocumento = usuario.getNumeroDocumento(); // Obtém o número do documento do usuário
+        TipoDocumento tipoDocumento = usuario.getTipoDocumento(); // Obtém o tipo de documento (CPF ou CNPJ)
 
         // Validação para CPF
         if ((tipoDocumento == TipoDocumento.CPF) && (numeroDocumento.length() != 11)) {
@@ -74,7 +74,7 @@ public class UsuarioService implements UserDetails {
 
 
     public Collection<? extends GrantedAuthority> getAuthorities(Usuario usuario) {
-        return List.of(new SimpleGrantedAuthority(usuario.getTipo_conta().name())); // Converte o tipo de conta em uma autoridade do Spring Security
+        return List.of(new SimpleGrantedAuthority(usuario.getTipoConta().name())); // Converte o tipo de conta em uma autoridade do Spring Security
     }
 
     @Override
