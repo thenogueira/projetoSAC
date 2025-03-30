@@ -3,6 +3,7 @@ package com.pratofeito.projeto.service;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import com.pratofeito.projeto.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -116,6 +117,12 @@ public class UsuarioService implements UserDetails {
 
     public Optional<Usuario> buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
+    }
+
+    public void deletarUsuario(Integer id) {
+        usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
+        usuarioRepository.deleteById(id);
     }
 
 

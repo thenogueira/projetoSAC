@@ -42,7 +42,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/usuarios/atualizar/**").permitAll() // Liberação explícita
+                        .requestMatchers("/usuarios/atualizar/**").permitAll()
+                        .requestMatchers("/usuarios/deletar/**").permitAll()// Liberação explícita
                         .requestMatchers(HttpMethod.GET, "/usuarios/listar").hasRole("ADMINISTRADOR")
                         .requestMatchers("/ocorrencias/**").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated()
