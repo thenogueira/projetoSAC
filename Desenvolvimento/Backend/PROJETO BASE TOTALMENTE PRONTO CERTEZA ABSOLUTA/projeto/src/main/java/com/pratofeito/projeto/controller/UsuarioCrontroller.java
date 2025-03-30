@@ -81,4 +81,15 @@ public class UsuarioCrontroller {
         Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
         return ResponseEntity.ok(UsuarioMapper.toResponseDTO(usuario));
     }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<?> deletarUsuario(@PathVariable Integer id) {
+        try {
+            usuarioService.deletarUsuario(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com o ID: " + id);
+        }
+    }
+
 }
