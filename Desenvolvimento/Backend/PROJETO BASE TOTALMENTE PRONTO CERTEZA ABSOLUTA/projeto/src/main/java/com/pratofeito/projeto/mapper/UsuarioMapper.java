@@ -2,6 +2,7 @@ package com.pratofeito.projeto.mapper;
 
 import com.pratofeito.projeto.dto.usuario.UsuarioCreateDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioResponseDTO;
+import com.pratofeito.projeto.dto.usuario.UsuarioUpdateDTO;
 import com.pratofeito.projeto.model.Usuario;
 
 /**
@@ -46,8 +47,20 @@ public class UsuarioMapper {
         dto.setId(usuario.getId());           // ID do usuário
         dto.setNome(usuario.getNome());        // Nome do usuário
         dto.setEmail(usuario.getEmail());      // Email do usuário
-        dto.setTipo_conta(usuario.getTipo_conta()); // Tipo de conta do usuário (enum)
+        dto.setTipo_conta(usuario.getTipoConta()); // Tipo de conta do usuário (enum)
 
         return dto; // Retorna o DTO populado
+    }
+
+    public static Usuario toEntity(UsuarioUpdateDTO usuarioUpdateDTO) {
+        if (usuarioUpdateDTO == null) {
+            return null;
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioUpdateDTO.getNome());
+        usuario.setEmail(usuarioUpdateDTO.getEmail());
+        // Não atualizamos ID, senha ou outros campos sensíveis aqui
+        return usuario;
     }
 }

@@ -2,13 +2,20 @@ package com.pratofeito.projeto.controller;
 
 import com.pratofeito.projeto.dto.usuario.UsuarioCreateDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioResponseDTO;
+import com.pratofeito.projeto.dto.usuario.UsuarioUpdateDTO;
 import com.pratofeito.projeto.mapper.UsuarioMapper;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.service.UsuarioService;
+import jakarta.persistence.Id;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -58,4 +65,31 @@ public class UsuarioCrontroller {
         // Converte a entidade salva para DTO de resposta
         return UsuarioMapper.toResponseDTO(usuarioSalvo);
     }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<?> atualizarUsuario(
+            @PathVariable Integer id,
+            @Valid @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
+
+        // Verifica se o novo email já existe em outro usuário
+        Optional<Usuario> usuarioExistente = usuarioService.buscarPorEmail(usuarioUpdateDTO.getEmail());
+        if (usuarioExistente.isPresent() && usuarioExistente.get().getId() != id) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O e-mail já está em uso por outro usuário");
+        }
+
+        Usuario usuarioAtualizado = UsuarioMapper.toEntity(usuarioUpdateDTO);
+        Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
+        return ResponseEntity.ok(UsuarioMapper.toResponseDTO(usuario));
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<?> deletarUsuario(@PathVariable Integer id) {
+        try {
+            usuarioService.deletarUsuario(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com o ID: " + id);
+        }
+    }
+
 }
