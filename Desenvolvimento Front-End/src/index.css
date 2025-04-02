@@ -1,4 +1,4 @@
-@charset "UTF-8";
+/* @charset "UTF-8";
 
 @font-face {
     font-family: 'alfa';
@@ -21,7 +21,9 @@
     --corTexto: #333;
     --corMiniTexto: #696868;
     --corLinks: #5e17eb;
-
+    --primary-color: #3B82F6;
+    --secondary-color: #10B981;
+  
     --fontDestaque: 'alfa', serif, cursive;
     --fontPadrão: 'alexandria', Arial, sans-serif;
 }
@@ -31,7 +33,6 @@
 *{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -52,9 +53,7 @@ nav {
 }
 
 .menu-item {
-    color: #000000;
     text-decoration: none;
-    font-size: 16px;
     margin: 0 30px;
     transition: color 0.3s;
     display: inline-block;
@@ -92,7 +91,7 @@ nav {
     color: #000000;
     text-decoration: none;
 
-}
+} 
 
 .banner {
     background-color: var(--corFundo1);
@@ -277,4 +276,4 @@ footer {
     color: #666;
     font-size: 14px;
     font-family: var(--fontPadrão);
-}
+}  */
