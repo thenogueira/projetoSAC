@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="estilos/telas-cadastros.css">
+
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="image-container">
+            <img src="../img/fundo-1.png" alt="Imagem de exemplo">
+        </div>
+
+        <div id="login">
+            
+            <div>
+                <h1>Login</h1>
+
+                <p class="texto-mini">Não tem uma conta? <br> <a href="cadastro-1.html">Cadastre-se aqui</a></p> 
+
+                <form id="loginForm" action="/login" method="POST">
+
+                    <p>Email</p>
+                    <input type="email" id="email" name="email" placeholder="Email" required><br>
+
+                    <p>Senha</p>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+
+                    <div class="mini-container"><button type="submit" id="botao-entrar">Entrar</button></div>
+
+                </form>              
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const tipo = document.getElementById('tipo').value;
+
+            if (!nome || !email || !senha || !endereco || !tipo) {
+                alert('Por favor, preencha todos os campos.');
+                event.preventDefault();
+                return;
+            }
+
+            alert('Login realizado com sucesso!');
+        });
+    </script>
+</body>
+</html>
