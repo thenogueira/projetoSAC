@@ -4,6 +4,7 @@ import com.pratofeito.projeto.model.Ocorrencia;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import com.pratofeito.projeto.service.OcorrenciaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,7 @@ public class OcorrenciaController {
      * return A ocorrência criada e salva no banco de dados.
      */
     @PostMapping("/criar") // Mapeia requisições POST para o caminho /ocorrencias/criar
-    public Ocorrencia criarOcorrencia(@RequestBody Ocorrencia ocorrencia) { // @RequestBody indica que o objeto Ocorrencia é recebido no corpo da requisição
+    public Ocorrencia criarOcorrencia(@Valid @RequestBody Ocorrencia ocorrencia) { // @RequestBody indica que o objeto Ocorrencia é recebido no corpo da requisição
         // Carrega o usuário completo do banco
         Usuario usuario = usuarioRepository.findById(ocorrencia.getUsuario().getId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));

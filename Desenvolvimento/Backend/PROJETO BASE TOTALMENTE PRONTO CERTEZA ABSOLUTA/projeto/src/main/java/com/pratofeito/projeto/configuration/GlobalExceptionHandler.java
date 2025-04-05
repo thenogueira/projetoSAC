@@ -1,25 +1,25 @@
 package com.pratofeito.projeto.configuration;
 
-import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex,
-                                                                      WebRequest request) {
+    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex, WebRequest request) {
         String errorMessage = "Erro de integridade de dados";
+        HttpStatus status = HttpStatus.CONFLICT;
 
-        // Verifica se é um erro de duplicação de e-mail
         if (ex.getCause() instanceof SQLIntegrityConstraintViolationException) {
             SQLIntegrityConstraintViolationException sqlEx = (SQLIntegrityConstraintViolationException) ex.getCause();
             if (sqlEx.getMessage().contains("usuario.email")) {
@@ -27,71 +27,28 @@ public class GlobalExceptionHandler {
             }
         }
 
-        ErrorResponse errorResponse = new ErrorResponse(
-        ) {
-            @Override
-            public HttpStatusCode getStatusCode() {
-                return null;
-            }
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", errorMessage);
+        body.put("status", status.value());
 
-            @Override
-            public HttpHeaders getHeaders() {
-                return ErrorResponse.super.getHeaders();
-            }
+        return new ResponseEntity<>(body, status);
+    }
 
-            @Override
-            public ProblemDetail getBody() {
-                return null;
-            }
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", ex.getReason());
+        body.put("status", ex.getStatusCode().value());
 
-            @Override
-            public String getTypeMessageCode() {
-                return ErrorResponse.super.getTypeMessageCode();
-            }
-
-            @Override
-            public String getTitleMessageCode() {
-                return ErrorResponse.super.getTitleMessageCode();
-            }
-
-            @Override
-            public String getDetailMessageCode() {
-                return ErrorResponse.super.getDetailMessageCode();
-            }
-
-            @Override
-            public Object[] getDetailMessageArguments() {
-                return ErrorResponse.super.getDetailMessageArguments();
-            }
-
-            @Override
-            public Object[] getDetailMessageArguments(MessageSource messageSource, Locale locale) {
-                return ErrorResponse.super.getDetailMessageArguments(messageSource, locale);
-            }
-
-            @Override
-            public ProblemDetail updateAndGetBody(MessageSource messageSource, Locale locale) {
-                return ErrorResponse.super.updateAndGetBody(messageSource, locale);
-            }
-        };
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(body, ex.getStatusCode());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalExceptions(Exception ex, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(
-        ) {
-            @Override
-            public HttpStatusCode getStatusCode() {
-                return null;
-            }
+    public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", "Ocorreu um erro interno no servidor");
+        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-            @Override
-            public ProblemDetail getBody() {
-                return null;
-            }
-        };
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
