@@ -10,11 +10,12 @@ public enum TipoConta {
      * Tipo de conta para usuários comuns.
      * Usuários com esse tipo têm permissões padrão no sistema.
      */
-    Usuario,
+    USUARIO,
 
     /**
      * Tipo de conta para administradores.
      * Usuários com esse tipo têm permissões elevadas, como gerenciamento de outros usuários e configurações do sistema.
      */
-    Administrador
+    ADMINISTRADOR
+
 }

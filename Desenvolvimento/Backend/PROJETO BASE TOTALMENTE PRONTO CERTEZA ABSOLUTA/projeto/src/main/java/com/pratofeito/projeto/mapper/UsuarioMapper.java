@@ -26,7 +26,8 @@ public class UsuarioMapper {
                 usuarioCreateDTO.getSenha(),       // Senha do usuário
                 usuarioCreateDTO.getTipo_conta(),  // Tipo de conta do usuário (enum)
                 usuarioCreateDTO.getTipo_documento(), // Tipo de documento do usuário (enum)
-                usuarioCreateDTO.getNumero_documento() // Número do documento do usuário
+                usuarioCreateDTO.getNumero_documento(),
+                usuarioCreateDTO.getStatusConta()// Número do documento do usuário
         );
 
         return usuario; // Retorna a entidade Usuario criada
