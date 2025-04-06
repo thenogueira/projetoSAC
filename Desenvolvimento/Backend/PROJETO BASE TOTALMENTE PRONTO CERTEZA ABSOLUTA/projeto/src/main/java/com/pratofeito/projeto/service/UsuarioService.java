@@ -1,6 +1,8 @@
 package com.pratofeito.projeto.service;
 
 import com.pratofeito.projeto.model.Usuario;
+import com.pratofeito.projeto.model.enums.StatusConta;
+import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -125,6 +128,18 @@ public class UsuarioService implements UserDetails {
         usuarioRepository.deleteById(id);
     }
 
+    public void banirUsuario(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        if (usuario.getTipoConta() == TipoConta.ADMINISTRADOR) {
+            throw new IllegalStateException("Não é possível banir outro administrador");
+        }
+
+        usuario.setStatusConta(StatusConta.BANIDA);
+
+        usuarioRepository.save(usuario);
+    }
 
 
 }

@@ -1,10 +1,12 @@
 package com.pratofeito.projeto.controller;
 
+import com.pratofeito.projeto.configuration.GlobalExceptionHandler;
 import com.pratofeito.projeto.dto.AuthenticationDTO;
 import com.pratofeito.projeto.dto.LoginResponseDTO;
 import com.pratofeito.projeto.dto.RegisterDTO;
 import com.pratofeito.projeto.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +47,18 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
-        // Delegar a lógica de autenticação para o serviço
-        LoginResponseDTO response = authService.login(data);
-        return ResponseEntity.ok(response);
+        try {
+            LoginResponseDTO response = authService.login(data);
+            return ResponseEntity.ok(response);
+        } catch (GlobalExceptionHandler.UsuarioBanidoException e) {
+            // Para erros de banimento, podemos retornar um objeto de erro padronizado
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new LoginResponseDTO(null, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponseDTO(null, "Credenciais inválidas"));
+        }
     }
-
     /**
      * Endpoint para registro de novos usuários.
      *
