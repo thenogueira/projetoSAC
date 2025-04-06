@@ -8,7 +8,8 @@ CREATE TABLE usuario (
     email VARCHAR(40) UNIQUE NOT NULL,
     senha_hash VARCHAR(255) NOT NULL,
     tipo_documento ENUM('CPF', 'CNPJ') NOT NULL,
-    numero_documento VARCHAR(14) UNIQUE NOT NULL
+    numero_documento VARCHAR(14) UNIQUE NOT NULL,
+    status_conta ENUM('ATIVA', 'BANIDA') DEFAULT 'ATIVA'
 );
 
 CREATE TABLE ocorrencia (
