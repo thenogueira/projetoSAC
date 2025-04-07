@@ -1,11 +1,10 @@
 CREATE DATABASE apoio_comunitario;
 USE apoio_comunitario;
-/*drop database apoio_comunitario;*/
 CREATE TABLE usuario (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(30) NOT NULL,
     tipo_conta ENUM('USUARIO', 'ADMINISTRADOR') NOT NULL, -- Valores já em maiúsculas e consistentes
-    email VARCHAR(40) UNIQUE NOT NULL,
+    email VARCHAR(60) UNIQUE NOT NULL,
     senha_hash VARCHAR(255) NOT NULL,
     tipo_documento ENUM('CPF', 'CNPJ') NOT NULL,
     numero_documento VARCHAR(14) UNIQUE NOT NULL,
@@ -15,11 +14,13 @@ CREATE TABLE usuario (
 CREATE TABLE usuario_banido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero_documento VARCHAR(20) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    email VARCHAR(60) NOT NULL,
     motivo TEXT NOT NULL,
     data_banimento DATE NOT NULL,
     admin_id INT UNSIGNED NOT NULL,
-    FOREIGN KEY (admin_id) REFERENCES usuario(id)
+    usuario_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (admin_id) REFERENCES usuario(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
 CREATE TABLE ocorrencia (
