@@ -1,6 +1,6 @@
 CREATE DATABASE apoio_comunitario;
 USE apoio_comunitario;
-
+/*drop database apoio_comunitario;*/
 CREATE TABLE usuario (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(30) NOT NULL,
@@ -10,6 +10,16 @@ CREATE TABLE usuario (
     tipo_documento ENUM('CPF', 'CNPJ') NOT NULL,
     numero_documento VARCHAR(14) UNIQUE NOT NULL,
     status_conta ENUM('ATIVA', 'BANIDA') DEFAULT 'ATIVA'
+);
+
+CREATE TABLE usuario_banido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_documento VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    motivo TEXT NOT NULL,
+    data_banimento DATE NOT NULL,
+    admin_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (admin_id) REFERENCES usuario(id)
 );
 
 CREATE TABLE ocorrencia (
@@ -39,13 +49,11 @@ CREATE TABLE avaliacao (
 );
 
 -- Inserindo dados com os valores corretos do ENUM
-INSERT INTO usuario VALUES ('1', 'Caio', 'USUARIO', 'caio@gmail.com', 'caio1234', 'CNPJ', '14116955719');
-INSERT INTO usuario VALUES ('2', 'Rogerio', 'USUARIO', 'homer@gmail.com', 'caio1234', 'CNPJ', '14113446');
+INSERT INTO usuario VALUES ('1', 'Caio', 'USUARIO', 'caio@gmail.com', 'caio1234', 'CNPJ', '14118955719', 'ATIVA');
+INSERT INTO usuario VALUES ('2', 'Rogerio', 'ADMINISTRADOR', 'roger@gmail.com', 'roger1234', 'CPF', '14113446', 'ATIVA');
+INSERT INTO usuario VALUES ('3', 'Bartolomeu', 'USUARIO', 'bart@gmail.com', 'bart1234', 'CPF', '458579666', 'BANIDA');
+INSERT INTO usuario VALUES ('4', 'Ronaldo', 'ADMINISTRADOR', 'ronald@gmail.com', 'ronald1234', 'CNPJ', '01255587', 'ATIVA');
 
-SELECT * FROM usuario;
-DESC usuario;
-DESC ocorrencia;
-DESC avaliacao;
 
-SELECT * FROM ocorrencia;
-SELECT email, tipo_conta FROM usuario;
+
+
