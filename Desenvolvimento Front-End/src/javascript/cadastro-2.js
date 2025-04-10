@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Agora o evento será associado somente depois que o DOM for totalmente carregado
+    //Agora o evento será associado somente depois que o DOM for totalmente carregado
     const cadastroForm = document.getElementById('cadastroForm');
 
     if (cadastroForm) {  // Verifique se o formulário existe no DOM
