@@ -1,112 +1,139 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Postagens - Rede de Doações</title>
+    <title>Página do Naruto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            color: #666;
+            margin-top: 25px;
+        }
+        
+        .menu {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .menu li {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .submenu {
+            list-style-type: none;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .submenu li {
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+        
+        .checkbox-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .checkbox-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border: none;
+        }
+        
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>S A C</h1>
-        <nav>
-            <a href="Inicio"><button>Inicio</button></a>
-            <a href="duvidas"><button>Dúvidas</button></a>
-            <a href="ajuda"><button>Ajuda</button></a>
-            <a href="cadastro"><button>Cadastre-se</button></a>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Postagens</h2>
-            <form id="filtroForm">
-                <label for="categoria">Categoria:</label>
-                <select id="categoria" name="categoria">
-                    <option value="todas">Todas</option>
-                    <option value="alimentos">Alimentos</option>
-                    <option value="roupas">Roupas</option> 
-                </select>
-
-                <label for="data">Data:</label>
-                <input type="date" id="data" name="data">
-
-                <label for="tipo">Tipo:</label>
-                <select id="tipo" name="tipo">
-                    <option value="todos">Todos</option>
-                    <option value="doacao">Doação</option>
-                    <option value="pedido">Pedido</option>
-                </select>
-
-                <label for="localizacao">Localização:</label>
-                <input type="text" id="localizacao" name="localizacao" placeholder="Cidade/Estado">
-
-                <label for="urgencia">Urgência:</label>
-                <select id="urgencia" name="urgencia">
-                    <option value="todas">Todas</option>
-                    <option value="alta">Alta</option>
-                    <option value="media">Média</option>
-                    <option value="baixa">Baixa</option>
-                </select>
-
-                <button type="submit">Filtrar</button>
-            </form>
-        </section>
-
-        <section>
-            <figure>
-                <img src=" " alt="Doação 1" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 2" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 3" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 4" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 5" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 6" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 7" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 8" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 9" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 10" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 11" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <figure>
-                <img src=" " alt="Doação 12" width="200">
-                <figcaption>Titulo da postagem</figcaption>
-            </figure>
-            <button id="carregarMais">Mostrar Mais Postagens</button>
-        </section>
-    </main>
-    <footer>
-        <p>&copy;Sistema de Apoio Comunitário(SAC).</p>
-    </footer>
+    <div class="container">
+        <h1>Inicio</h1>
+        <ul class="menu">
+            <li>Duvidas
+                <ul class="submenu">
+                    <li>S A C</li>
+                    <li>Ajuda</li>
+                    <li>Naruto</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h2>Naruto Uzumaki</h2>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="descricao"> <label for="descricao">Insira uma descrição aqui</label></li>
+            <li><input type="checkbox" id="editar" checked> <label for="editar" class="completed">Editar Perfil</label></li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h3>Postagens</h3>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="avalsciações"> <label for="avalsciações">Avalsciações</label></li>
+            <li><input type="checkbox" id="pestar" checked> <label for="pestar" class="completed">Pestar</label></li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h3>Filtrar:</h3>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="receertes"> <label for="receertes">Receertes</label></li>
+            <li><input type="checkbox" id="antigas" checked> <label for="antigas" class="completed">Antigas</label></li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h3>Título de postagem</h3>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="data1"> <label for="data1">Data: 05/01/2024</label></li>
+            <li><input type="checkbox" id="postagem" checked> <label for="postagem" class="completed">Título de postagem</label></li>
+            <li><input type="checkbox" id="data2" checked> <label for="data2" class="completed">Data: 23/12/2023</label></li>
+        </ul>
+    </div>
 </body>
 </html>
-
