@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.disable()) // Desabilita CORS temporariamente para testes
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/usuarios/banir/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/usuarios/atualizar/**").permitAll()
                         .requestMatchers("/usuarios/deletar/**").permitAll()// Liberação explícita
