@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.model;
 
+import com.pratofeito.projeto.model.enums.StatusConta;
 import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import jakarta.persistence.*;
@@ -35,13 +36,14 @@ public class Usuario implements UserDetails {
 
     public Usuario(){};
 
-    public Usuario(String nome, String email, String senha_hash, TipoConta tipoConta, TipoDocumento tipoDocumento, String numeroDocumento) {
+    public Usuario(String nome, String email, String senha_hash, TipoConta tipoConta, TipoDocumento tipoDocumento, String numeroDocumento, StatusConta statusConta) {
         this.nome = nome;
         this.email = email;
         this.senha_hash = senha_hash;
         this.tipoConta = tipoConta;
         this.tipoDocumento = tipoDocumento;
         this.numeroDocumento = numeroDocumento;
+        this.statusConta = statusConta;
     }
 
     /**
@@ -100,7 +102,11 @@ public class Usuario implements UserDetails {
      */
     @Enumerated(EnumType.STRING) // Define que o valor do enum será armazenado como String no banco de dados
     @Column(name = "tipo_conta") // Define o nome da coluna no banco de dados
-    private TipoConta tipoConta = TipoConta.Usuario;
+    private TipoConta tipoConta = TipoConta.USUARIO;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_conta")
+    private StatusConta statusConta = StatusConta.ATIVA;
 
     /**
      * Retorna as autoridades (roles) do usuário.
@@ -229,5 +235,13 @@ public class Usuario implements UserDetails {
 
     public void setTipoConta(TipoConta tipoConta) {
         this.tipoConta = tipoConta;
+    }
+
+    public StatusConta getStatusConta() {
+        return statusConta;
+    }
+
+    public void setStatusConta(StatusConta statusConta) {
+        this.statusConta = statusConta;
     }
 }

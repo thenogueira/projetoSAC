@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.dto.usuario;
 
+import com.pratofeito.projeto.model.enums.StatusConta;
 import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import jakarta.validation.constraints.Email;
@@ -26,7 +27,9 @@ public class UsuarioCreateDTO {
 
     private String numero_documento;
 
-    private TipoConta tipoConta;
+    private TipoConta tipoConta = TipoConta.USUARIO;
+
+    private StatusConta statusConta;
 
     public String getNome() {
         return nome;
@@ -74,5 +77,21 @@ public class UsuarioCreateDTO {
 
     public void setTipo_conta(TipoConta tipo_conta) {
         this.tipoConta = tipo_conta;
+    }
+
+    public TipoConta getTipoConta() {
+        return tipoConta;
+    }
+
+    public void setTipoConta(TipoConta tipoConta) {
+        this.tipoConta = tipoConta;
+    }
+
+    public StatusConta getStatusConta() {
+        return statusConta;
+    }
+
+    public void setStatusConta(StatusConta statusConta) {
+        this.statusConta = statusConta;
     }
 }

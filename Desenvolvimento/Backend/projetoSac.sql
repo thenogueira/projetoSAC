@@ -38,7 +38,7 @@ CREATE TABLE avaliacao (
 );
 
 -- Inserindo dados com os valores corretos do ENUM
-INSERT INTO usuario VALUES ('1', 'Caio', 'USUARIO', 'caio@gmail.com', 'caio1234', 'CNPJ', '14116955779');
+INSERT INTO usuario VALUES ('1', 'Caio', 'USUARIO', 'caio@gmail.com', 'caio1234', 'CNPJ', '14116955719');
 INSERT INTO usuario VALUES ('2', 'Rogerio', 'USUARIO', 'homer@gmail.com', 'caio1234', 'CNPJ', '14113446');
 
 SELECT * FROM usuario;
