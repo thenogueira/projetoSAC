@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+
+
 @font-face {
     font-family: 'alfa';
     src: url(../../fontes/AlfaSlabOne-Regular.ttf);
@@ -12,27 +14,21 @@
     font-weight: normal;
 }
 
-
-:root {
-    --corFundo1: #b9f6be;
-    --corFundo2: #83e88a;
-    --corFundo2: #afd6ec;
-    --corDestaque: #299431;
-    --corTexto: #333;
-    --corMiniTexto: #696868;
-    --corLinks: #5e17eb;
-
-    --fontDestaque: 'alfa', serif, cursive;
-    --fontPadrão: 'alexandria', Arial, sans-serif;
+:root{
+    --fundo1: #b9f6be;
+    --fundo2: #83e88a;
+    --fundo3: #afd6ec;
+    --destaque: #299431;
+    --texto: #333;
+    --minitexto: #696868;
+    --links: #5e17eb;
+  
+    --font-destaque: 'alfa', serif, cursive;
+    --font-padrão: 'alexandria', Arial, sans-serif;
 }
 
 
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/*
 
 body {
     font-family: var(--fontPadrão);
@@ -52,9 +48,7 @@ nav {
 }
 
 .menu-item {
-    color: #000000;
     text-decoration: none;
-    font-size: 16px;
     margin: 0 30px;
     transition: color 0.3s;
     display: inline-block;
@@ -92,7 +86,7 @@ nav {
     color: #000000;
     text-decoration: none;
 
-}
+} 
 
 .banner {
     background-color: var(--corFundo1);
@@ -277,4 +271,5 @@ footer {
     color: #666;
     font-size: 14px;
     font-family: var(--fontPadrão);
-}
+}  */
+

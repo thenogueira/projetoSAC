@@ -1,4 +1,4 @@
-@charset "UTF-8";
+/* @charset "UTF-8";
 
 :root{
     --corFundo1: #b9f6be;
@@ -41,7 +41,7 @@ div.cadastro{
 
 .image-container {
     width: 75%;
-    height: 100%; /* Altura total do container */
+    height: 100%;
 }
 .image-container img {
     max-width: 100%;
@@ -145,4 +145,4 @@ a#voltar{
 a:hover{
     text-decoration: underline;
 }
-
+ */

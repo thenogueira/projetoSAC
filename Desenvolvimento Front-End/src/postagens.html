@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Naruto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            color: #666;
+            margin-top: 25px;
+        }
+        
+        .menu {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .menu li {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .submenu {
+            list-style-type: none;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .submenu li {
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+        
+        .checkbox-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .checkbox-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #ddd;
+            margin: 20px 0;
+            border: none;
+        }
+        
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inicio</h1>
+        <ul class="menu">
+            <li>Duvidas
+                <ul class="submenu">
+                    <li>S A C</li>
+                    <li>Ajuda</li>
+                    <li>Naruto</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h2>Naruto Uzumaki</h2>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="descricao"> <label for="descricao">Insira uma descrição aqui</label></li>
+            <li><input type="checkbox" id="editar" checked> <label for="editar" class="completed">Editar Perfil</label></li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h3>Postagens</h3>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="avalsciações"> <label for="avalsciações">Avalsciações</label></li>
+            <li><input type="checkbox" id="pestar" checked> <label for="pestar" class="completed">Pestar</label></li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h3>Filtrar:</h3>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="receertes"> <label for="receertes">Receertes</label></li>
+            <li><input type="checkbox" id="antigas" checked> <label for="antigas" class="completed">Antigas</label></li>
+        </ul>
+        
+        <hr class="divider">
+        
+        <h3>Título de postagem</h3>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" id="data1"> <label for="data1">Data: 05/01/2024</label></li>
+            <li><input type="checkbox" id="postagem" checked> <label for="postagem" class="completed">Título de postagem</label></li>
+            <li><input type="checkbox" id="data2" checked> <label for="data2" class="completed">Data: 23/12/2023</label></li>
+        </ul>
+    </div>
+</body>
+</html>
