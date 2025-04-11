@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-
-
 @font-face {
     font-family: 'alfa';
     src: url(../../fontes/AlfaSlabOne-Regular.ttf);
@@ -27,13 +25,20 @@
     --font-padrão: 'alexandria', Arial, sans-serif;
 }
 
+.font-destaque{
+    font-family: 'alfa', serif, cursive;;
+}
+
+.font-padrão{
+    font-family: 'alexandria', Arial, sans-serif;
+}
+
 
 /*
 
 body {
     font-family: var(--fontPadrão);
     background-color: #F5F5F7;
-    font-family: var(--fontPadrão);
 }
 
 nav {
@@ -52,7 +57,6 @@ nav {
     margin: 0 30px;
     transition: color 0.3s;
     display: inline-block;
-    font-family: var(--fontPadrão);
 }
 
 .sac{

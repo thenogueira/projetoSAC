@@ -7,21 +7,31 @@
     <link rel="stylesheet" href="index.css">
     <link href="./output.css" rel="stylesheet">
 
-</head>
-<body class="bg-[var(--fundo3)] ">
-    <nav class="bg-amber-50 py-4 px-6 text-center ">
+    <style>
+        @font-face {
+            font-family: 'alfa';
+            src: url(../fontes/AlfaSlabOne-Regular.ttf);
+            font-weight: normal;
+        }
 
-        <div>
-            <div>
-                <a href="postagens.html" class="px-8">Postagens</a>
-                <a href="duvidas.html" class="px-8">Duvidas</a>
+        @font-face {
+            font-family: 'alexandria';
+            src: url(../fontes/Alexandria-VariableFont_wght.ttf);
+            font-weight: normal;
+        }       
+    </style>
+
+</head>
+<body class="bg-[var(--fundo1)] font-padrão">
+
+    <nav class="bg-amber-50 py-4 px-6 text-center text-black ">
+                <a href="postagens.html" class="px-8 hover:text-gray-800">Postagens</a>
+                <a href="duvidas.html" class="px-8 hover:text-gray-800">Duvidas</a>
                 <span class="separator">|</span>
-                <a href="index.html" class="px-8">SAC</a>
+                <a href="index.html" class="px-8 text-[var(--destaque)] font-bold text-3xl">SAC</a>
                 <span class="separator">|</span>
-                <a href="ajuda.html" class="px-8">Ajuda</a>
-                <a href="login.html" class="login-btn">Cadastre-se</a>
-            </div>
-        </div>
+                <a href="ajuda.html" class="px-8 hover:text-gray-800">Ajuda</a>
+                <a href="login.html" class="py-1.25 px-2 rounded-lg bg-[var(--fundo1)]">Cadastre-se</a>
     </nav>   
     
     <main>    
@@ -75,7 +85,6 @@
     </div>
 
     <footer>
-        <footer>
             <div class="footer-container">
                 <div class="footer-section">
                     <h3>Sobre</h3>
@@ -96,7 +105,6 @@
             <div class="copyright">
                 ©Sistema de Ajudas Comunitárias (SAC)
             </div>
-        </footer>
     </footer>
 
 </body>
