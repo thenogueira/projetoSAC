@@ -22,24 +22,27 @@
     </style>
 
 </head>
-<body class="bg-[var(--fundo1)] font-padrão">
+<body class="bg-(--fundo3) font-padrão">
 
-    <nav class="bg-amber-50 py-4 px-6 text-center text-black ">
-                <a href="postagens.html" class="px-8 hover:text-gray-800">Postagens</a>
-                <a href="duvidas.html" class="px-8 hover:text-gray-800">Duvidas</a>
-                <span class="separator">|</span>
-                <a href="index.html" class="px-8 text-[var(--destaque)] font-bold text-3xl">SAC</a>
-                <span class="separator">|</span>
-                <a href="ajuda.html" class="px-8 hover:text-gray-800">Ajuda</a>
-                <a href="login.html" class="py-1.25 px-2 rounded-lg bg-[var(--fundo1)]">Cadastre-se</a>
+    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
+        <div class="flex items-center gap-15">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-(--destaque) font-destaque text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
+            <a href="login.html" class="py-1.25 px-2 rounded-lg bg-[var(--fundo1)]">Cadastre-se</a>
+        </div>
     </nav>   
     
     <main>    
-    <div class="container">
-        <div class="banner">
-            <h1>Bem-vindo ao SAC</h1>
-            <p>Texto sobre quem somos e nosso objetivo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt quia iusto harum repellendus modi explicabo soluta non ut eligendi aperiam quo eos aliquid placeat, pariatur consequatur aut. Voluptatibus, provident mollitia.</p>
-        </div>
+        <section class="w-vw h-dvh bg-(--fundo1) flex items-center">
+            <div class="px-30">
+                <h1  class="text-5xl text-(--destaque) font-destaque">Bem-vindo ao SAC</h1>
+                <p   class="m-4 ml-0 w-150 text-(--destaque) text-2xl">Texto sobre quem somos e nosso objetivo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt quia iusto harum repellendus modi explicabo soluta non ut eligendi aperiam quo eos aliquid placeat, pariatur consequatur aut. Voluptatibus, provident mollitia.</p>
+            </div>
+        </section>
         
         <div class="importance-section">
             <div class="image-box"><img src="../img/image.png" alt="necessitados"></div>
@@ -53,9 +56,9 @@
         
         <h1 class="titulo">Postagens mais importantes</h1>
 
-        <div class="posts-section">
+        <section class="posts-section">
             
-            <div class="post-container">
+            <article class="post-container">
                 <div class="post">
                     
                 </div>
@@ -72,16 +75,17 @@
             <div class="post-container">
                 <div class="post">
                     
-                </div>
-                <p class="texto-abaixo">Titulo da postagem</p>
             </div>
-        </div>
-    </main>  
-    
-        <div class="footer">
+                <p class="texto-abaixo">Titulo da postagem</p>
+        </section>
+
+        <aside class="footer">
             <p>Veja mais postagens e publique se cadastrando</p>
             <button>Cadastre-se</button>
-        </div>
+        </aside>
+    </main>  
+    
+        
     </div>
 
     <footer>
