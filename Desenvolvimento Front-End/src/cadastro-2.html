@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cadastro</title>
-    <link rel="stylesheet" href="cadastro.css">
+    <link rel="stylesheet" href="telas-cadastros.css">
+    
 
 </head>
 <body>
@@ -26,7 +27,7 @@
 
                 <p class="texto-mini">Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
 
-                <form id="cadastroForm" action="/submit" method="POST">
+                <form id="cadastroForm" action="submit" method="POST">
 
                     <p class="texto-1">Email</p>
                     <input type="email" id="email" name="email" placeholder="Email" required><br>
@@ -35,7 +36,7 @@
                     <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
 
                     <p>Confirmar Senha</p>
-                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Senha" required><br>
                     <!-- Fazer com que o confirmar senha só permita cadastrar com as duas senhas sendo iguais -->
 
                     <div class="mini-container"><button type="submit"id="botao-cadastrar">Cadastrar</button></div>
@@ -44,30 +45,9 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            const cpf = document.getElementById('cpf').value;
-            const endereco = document.getElementById('endereco').value;
-            const tipo = document.getElementById('tipo').value;
+    <script src="crud.js"></script>
+    <script src="cadastro2.js"></script>
 
-            if (!nome || !cpf) {
-                alert('Por favor, preencha todos os campos.');
-                event.preventDefault();
-                return;
-            }
-
-            // if (!nome || !email || !senha || !endereco || !tipo) {
-            //     alert('Por favor, preencha todos os campos.');
-            //     event.preventDefault();
-            //     return;
-            // }
-
-            alert('Cadastro realizado com sucesso!');
-        });
-    </script>
 </body>
 </html>
 
