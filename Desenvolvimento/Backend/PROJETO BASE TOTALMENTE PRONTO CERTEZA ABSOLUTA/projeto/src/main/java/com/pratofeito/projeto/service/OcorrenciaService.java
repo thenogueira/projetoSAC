@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.service;
 
+import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaUpdateDTO;
 import com.pratofeito.projeto.model.Ocorrencia;
 import com.pratofeito.projeto.repository.OcorrenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,27 @@ public class OcorrenciaService {
     public Ocorrencia salvarOcorrencia(Ocorrencia ocorrencia) {
         return ocorrenciaRepository.save(ocorrencia); // Chama o método do repositório para salvar a ocorrência
     }
+
+    /**
+     * Edita uma ocorrência existente
+     * param id ID da ocorrência
+     * param ocorrenciaAtualizada Dados atualizados
+     * @return Ocorrência editada
+     * @throws RuntimeException Se a ocorrência não for encontrada
+     */
+    public Ocorrencia editarOcorrencia(Integer id, OcorrenciaUpdateDTO ocorrenciaDTO) {
+        return ocorrenciaRepository.findById(id)
+                .map(ocorrencia -> {
+                    if (ocorrenciaDTO.getTitulo() != null) {
+                        ocorrencia.setTitulo(ocorrenciaDTO.getTitulo());
+                    }
+                    if (ocorrenciaDTO.getDescricao() != null) {
+                        ocorrencia.setDescricao(ocorrenciaDTO.getDescricao());
+                    }
+                    // Repita para todos os outros campos
+                    return ocorrenciaRepository.save(ocorrencia);
+                })
+                .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
+    }
+
 }
