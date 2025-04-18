@@ -1,11 +1,13 @@
 package com.pratofeito.projeto.controller;
 
+import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaUpdateDTO;
 import com.pratofeito.projeto.model.Ocorrencia;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import com.pratofeito.projeto.service.OcorrenciaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,5 +51,24 @@ public class OcorrenciaController {
 
         ocorrencia.setUsuario(usuario); // Associa o usuário completo
         return ocorrenciaService.salvarOcorrencia(ocorrencia); // Chama o método do serviço para salvar a ocorrência
+    }
+
+    /**
+     * Endpoint para editar uma ocorrência existente
+     * param id ID da ocorrência a ser editada
+     * param ocorrenciaAtualizada Objeto com os novos dados
+     * return Ocorrência atualizada
+     */
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<Ocorrencia> editarOcorrencia(
+            @PathVariable Integer id,
+            @Valid @RequestBody OcorrenciaUpdateDTO ocorrenciaDTO) {
+
+        try {
+            Ocorrencia ocorrenciaEditada = ocorrenciaService.editarOcorrencia(id, ocorrenciaDTO);
+            return ResponseEntity.ok(ocorrenciaEditada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
