@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.controller;
 
+import com.pratofeito.projeto.dto.usuario.BanirUsuarioDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioCreateDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioResponseDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioUpdateDTO;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -132,15 +135,20 @@ public class UsuarioCrontroller {
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/banir/{id}")
     public ResponseEntity<?> banirUsuario(
-            @PathVariable Integer id) {
+            @PathVariable Integer id,
+            @RequestBody BanirUsuarioDTO banirDTO) {
 
         try {
-            usuarioService.banirUsuario(id);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Usuario admin = (Usuario) authentication.getPrincipal();
+            usuarioService.banirUsuario(id, admin.getId(), banirDTO.getMotivo());
             return ResponseEntity.ok().body("Usuário banido com sucesso");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao banir usuário: " + e.getMessage());
         }
     }
 }
