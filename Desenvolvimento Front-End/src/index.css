@@ -22,16 +22,16 @@
     --links: #5e17eb;
   
     --font-destaque: 'alfa', serif, cursive;
-    --font-padrão: 'alexandria', Arial, sans-serif;
+    --font-padrao: 'alexandria', Arial, sans-serif;
 }
 
-.font-destaque{
+/* .font-destaque{
     font-family: 'alfa', serif, cursive;;
 }
 
 .font-padrão{
     font-family: 'alexandria', Arial, sans-serif;
-}
+} */
 
 
 /*
