@@ -5,38 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cadastro</title>
-    <link rel="stylesheet" href="cadastro.css">
-    <link rel="stylesheet" href="index.css">
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
-<body>
+<body class="bg-amber-50 font-alexandria flex justify-center">
 
-    <div class="container">
+    <div class="w-full h-full max-h-dvh flex justify-center">
 
-        <div class="image-container">
-            <img src="../img/fundo-1.png" alt="Imagem de exemplo">
+        <div class="" >
+            <img class="w-full h-full" src="../img/fundo-1.png" alt="Imagem de exemplo">
         </div>
+        
 
-        <div class="cadastro-container">
+
+        <div class="w-[30%] bg-fundo1 p-14 flex justify-center">
             <div>
-                <p class="texto-mini" id="etapa">Etapa 1 de 2</p>
+                <p class="text-minitexto text-sm" id="etapa">Etapa 1 de 2</p>
 
-                <h1>Criando Conta</h1>
+                <h1 class="text-[32px] min-w-[230px]">Criando Conta</h1>
 
-                <p class="texto-mini">Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
+                <p class="text-minitexto text-sm">Já tem uma conta? <a class="text-links font-bold" href="login.html">Entrar</a></p>
 
                 <form id="cadastroForm" action="/submit" method="POST">
 
-                    <p>Nome</p>
-                    <input type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
+                    <p class="mt-10 mb-1">Nome</p>
+                    <input class="bg-amber-50 indent-1 rounded-md mb-5" type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
 
-                    <p>CPF ou CNPJ</p>
-                    <input type="text" name="cpf" id="cpf" placeholder="CPF/CNPJ" required>
+                    <p class="mt-4 mb-1">CPF ou CNPJ</p>
+                    <input class="bg-amber-50 indent-1 rounded-md mb-5" type="text" name="cpf" id="cpf" placeholder="CPF/CNPJ" required>
 
-                    <p>Endereço</p>
-                    <input type="text" id="endereco" name="endereco" placeholder="Endereço" required> <br>
+                    <p class="mt-4 mb-1">Endereço</p>
+                    <input class="bg-amber-50 indent-1 rounded-md mb-5" type="text" id="endereco" name="endereco" placeholder="Endereço" required> <br>
 
-                    <div class="mini-container"><a href="cadastro-2.html"id="botao-continuar">Continuar</a></div>
+                    <div class="mt-10 px-4 py-3 bg-destaque rounded-2xl inline-block text-white"><a href="cadastro-2.html"id="botao-continuar" required>Continuar</a></div>
                     
                 </form>
             </div>
