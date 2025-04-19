@@ -44,30 +44,8 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            const cpf = document.getElementById('cpf').value;
-            const endereco = document.getElementById('endereco').value;
-            const tipo = document.getElementById('tipo').value;
-
-            if (!nome || !cpf) {
-                alert('Por favor, preencha todos os campos.');
-                event.preventDefault();
-                return;
-            }
-
-            // if (!nome || !email || !senha || !endereco || !tipo) {
-            //     alert('Por favor, preencha todos os campos.');
-            //     event.preventDefault();
-            //     return;
-            // }
-
-            alert('Cadastro realizado com sucesso!');
-        });
-    </script>
+    <script src="crud.js"></script>
+    <script src="javascript/cadastro-2.js"></script>
 </body>
 </html>
 
