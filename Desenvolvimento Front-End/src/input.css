@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: 'alfa';
+    src: url(../fontes/AlfaSlabOne-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'alexandria';
+    src: url(../fontes/Alexandria-VariableFont_wght.ttf);
+    font-weight: normal;
+}
+
+@theme {
+    --color-mint-500: oklch(0.72 0.11 178);
+    --color-fundo1: #97ec9e;
+    --color-fundo2: #83e88a;
+    --color-fundo3: #9ccfec;
+    --color-destaque: #299431;
+    --color-texto: #333;
+    --color-minitexto: #696868;
+    --color-links: #5e17eb;
+  
+    --font-alfa: alfa, serif, cursive;
+    --font-alexandria: alexandria, Arial, sans-serif;
+
+    
+    --animate-wiggle: wiggle 1s ease-in-out infinite;
+    @keyframes wiggle {
+        0%,
+        100% {
+        transform: rotate(-3deg);
+        }
+        50% {
+        transform: rotate(3deg);
+        }
+    }
+}
