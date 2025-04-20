@@ -38,21 +38,7 @@
         </div>
     </div>
 
-
-    <script>
-        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-            const tipo = document.getElementById('tipo').value;
-
-            if (!nome || !email || !senha || !endereco || !tipo) {
-                alert('Por favor, preencha todos os campos.');
-                event.preventDefault();
-                return;
-            }
-
-            alert('Login realizado com sucesso!');
-        });
-    </script>
+    <script src="crud.js"></script>
+    <script src="login-1.js"></script>
 </body>
 </html>

@@ -1,9 +1,11 @@
 package com.pratofeito.projeto.service;
 
 import com.pratofeito.projeto.model.Usuario;
+import com.pratofeito.projeto.model.UsuarioBanido;
 import com.pratofeito.projeto.model.enums.StatusConta;
 import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
+import com.pratofeito.projeto.repository.UsuarioBanidoRepository;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +33,9 @@ public class UsuarioService implements UserDetails {
 
     @Autowired // Injeção de dependência automática do repositório UsuarioRepository
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioBanidoRepository usuarioBanidoRepository;
 
     /**
      * Retorna uma lista de todos os usuários cadastrados no sistema.
@@ -128,17 +134,30 @@ public class UsuarioService implements UserDetails {
         usuarioRepository.deleteById(id);
     }
 
-    public void banirUsuario(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id)
+    @Transactional
+    public void banirUsuario(Integer usuarioId, Integer adminId, String motivo) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         if (usuario.getTipoConta() == TipoConta.ADMINISTRADOR) {
             throw new IllegalStateException("Não é possível banir outro administrador");
         }
 
-        usuario.setStatusConta(StatusConta.BANIDA);
+        Usuario admin = usuarioRepository.findById(adminId)
+                .orElseThrow(() -> new EntityNotFoundException("Administrador não encontrado"));
 
+        usuario.setStatusConta(StatusConta.BANIDA);
         usuarioRepository.save(usuario);
+
+        UsuarioBanido banido = new UsuarioBanido();
+        banido.setAdmin(admin);
+        banido.setUsuario(usuario);
+        banido.setMotivo(motivo);
+        banido.setDataBanimento(LocalDate.now());
+        banido.setNumeroDocumento(usuario.getNumeroDocumento());
+        banido.setEmail(usuario.getEmail());
+
+        usuarioBanidoRepository.save(banido);
     }
 
 
