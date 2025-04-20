@@ -71,4 +71,20 @@ public class OcorrenciaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    /**
+     * Endpoint para deletar uma ocorrência existente
+     * param id ID da ocorrência a ser deletada
+     * return ResponseEntity com status 200 (OK) se deletado com sucesso, ou 404 (Not Found) se não encontrado
+     */
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Void> deletarOcorrencia(@PathVariable Integer id) {
+        try {
+            ocorrenciaService.deletarOcorrencia(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
