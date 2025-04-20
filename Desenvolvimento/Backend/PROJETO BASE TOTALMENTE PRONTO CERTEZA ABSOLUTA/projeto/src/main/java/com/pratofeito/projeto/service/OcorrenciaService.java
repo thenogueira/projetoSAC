@@ -59,4 +59,17 @@ public class OcorrenciaService {
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
     }
 
+    /**
+     * Deleta uma ocorrência pelo ID
+     * param id ID da ocorrência a ser deletada
+     * throws RuntimeException Se a ocorrência não for encontrada
+     */
+    public void deletarOcorrencia(Integer id) {
+        if (ocorrenciaRepository.existsById(id)) {
+            ocorrenciaRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Ocorrência não encontrada");
+        }
+    }
+
 }
