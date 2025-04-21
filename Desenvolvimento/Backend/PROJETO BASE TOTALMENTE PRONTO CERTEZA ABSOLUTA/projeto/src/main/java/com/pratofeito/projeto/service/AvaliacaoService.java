@@ -35,4 +35,27 @@ public class AvaliacaoService {
     public Avaliacao salvarAvaliacao(Avaliacao avaliacao) {
         return avaliacaoRepository.save(avaliacao); // Chama o método do repositório para salvar a avaliação
     }
+
+    /**
+     * Edita uma avaliação existente no banco de dados.
+     *
+     * @param id ID da avaliação a ser editada
+     * @param avaliacao Objeto Avaliacao com os dados atualizados
+     * @return A avaliação atualizada ou null se não encontrada
+     */
+    public Avaliacao editarAvaliacao(int id, Avaliacao avaliacao) {
+        Avaliacao avaliacaoExistente = avaliacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Avaliação não encontrada com o ID: " + id));
+
+        // Atualiza os campos permitidos
+        if (avaliacao.getNota() != 0) {
+            avaliacaoExistente.setNota(avaliacao.getNota());
+        }
+        if (avaliacao.getComentario() != null) {
+            avaliacaoExistente.setComentario(avaliacao.getComentario());
+        }
+
+        return avaliacaoRepository.save(avaliacaoExistente);
+    }
+
 }
