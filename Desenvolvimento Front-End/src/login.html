@@ -5,33 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-    <link rel="stylesheet" href="cadastro.css">
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
-<body>
+<body class="bg-amber-50 font-alexandria flex justify-center">
 
-    <div class="container">
+    <div class="w-full h-full max-h-dvh flex justify-center">
 
-        <div class="image-container">
-            <img src="../img/fundo-1.png" alt="Imagem de exemplo">
+        <div>
+            <img class="w-full h-full" src="../img/fundo-1.png" alt="Imagem de exemplo">
         </div>
 
-        <div id="login">
-            
+        <div class="w-[30%] bg-fundo1 p-14 flex justify-center">
             <div>
-                <h1>Login</h1>
+                <h1 class="text-[32px] min-w-[230px]">Login</h1>
 
-                <p class="texto-mini">Não tem uma conta? <br> <a href="cadastro-1.html">Cadastre-se aqui</a></p> 
+                <p class="text-minitexto text-sm">Não tem uma conta? <br> Cadastre-se <a  class="text-links font-bold" href="cadastro-1.html">aqui</a></p> 
 
                 <form id="loginForm" action="/login" method="POST">
 
-                    <p>Email</p>
-                    <input type="email" id="email" name="email" placeholder="Email" required><br>
+                    <p class="mt-10 mb-1">Email</p>
+                    <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5" type="email" id="email" name="email" placeholder="Email" required><br>
 
-                    <p>Senha</p>
-                    <input type="password" id="senha" name="senha" placeholder="Senha" required><br>
+                    <p class="mt-4 mb-1">Senha</p>
+                    <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 type="password" id="senha" name="senha" placeholder="Senha" required><br>
 
-                    <div class="mini-container"><button type="submit" id="botao-entrar">Entrar</button></div>
+                    <div class="mt-10 px-4 py-3 bg-destaque rounded-xl inline-block text-white"><button type="submit" id="botao-entrar">Entrar</button></div>
 
                 </form>              
             </div>
