@@ -39,4 +39,17 @@ public class AvaliacaoController {
     public Avaliacao criarAvaliacao(@RequestBody Avaliacao avaliacao) { // @RequestBody indica que o objeto Avaliacao é recebido no corpo da requisição
         return avaliacaoService.salvarAvaliacao(avaliacao); // Chama o método do serviço para salvar a avaliação
     }
+
+    /**
+     * Endpoint para editar uma avaliação existente.
+     *
+     * @param id ID da avaliação a ser editada
+     * @param avaliacao Objeto Avaliacao com os dados atualizados
+     * @return A avaliação atualizada ou null se não encontrada
+     */
+    @PutMapping("/{id}") // Mapeia requisições PUT para o caminho /avaliacoes/{id}
+    public Avaliacao editarAvaliacao(@PathVariable int id, @RequestBody Avaliacao avaliacao) {
+        return avaliacaoService.editarAvaliacao(id, avaliacao);
+    }
+
 }
