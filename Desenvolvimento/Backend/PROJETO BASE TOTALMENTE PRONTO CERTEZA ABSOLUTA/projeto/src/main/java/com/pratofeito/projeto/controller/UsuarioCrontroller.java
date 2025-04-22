@@ -6,6 +6,7 @@ import com.pratofeito.projeto.dto.usuario.UsuarioResponseDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioUpdateDTO;
 import com.pratofeito.projeto.mapper.UsuarioMapper;
 import com.pratofeito.projeto.model.Usuario;
+import com.pratofeito.projeto.model.enums.StatusConta;
 import com.pratofeito.projeto.service.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -149,6 +150,17 @@ public class UsuarioCrontroller {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao banir usuário: " + e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @GetMapping("/checar-status/{id}")
+    public ResponseEntity<StatusConta> checarStatus(@PathVariable Integer id) {
+        try {
+            StatusConta status = usuarioService.checarStatus(id);
+            return ResponseEntity.ok(status);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

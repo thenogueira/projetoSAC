@@ -160,5 +160,12 @@ public class UsuarioService implements UserDetails {
         usuarioBanidoRepository.save(banido);
     }
 
+    public StatusConta checarStatus(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
+
+        return usuario.getStatusConta();
+    }
+
 
 }
