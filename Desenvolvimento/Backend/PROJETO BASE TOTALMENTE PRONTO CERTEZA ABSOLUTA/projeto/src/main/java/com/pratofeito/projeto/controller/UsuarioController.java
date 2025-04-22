@@ -33,14 +33,14 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/usuarios")
-public class UsuarioCrontroller {
+public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService; // Serviço que contém a lógica de negócio para usuários
+    private final UsuarioService usuarioService;
 
-    // DTOs utilizados para transferência de dados (não são injetados)
-    private UsuarioResponseDTO usuarioResponseDTO;
-    private UsuarioCreateDTO usuarioCreateDTO;
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    } // Serviço que contém a lógica de negócio para usuários
+
 
     /**
      * Recupera todos os usuários cadastrados no sistema.
@@ -50,14 +50,12 @@ public class UsuarioCrontroller {
      * @response HTTP 200 (OK) com a lista de usuários
      */
     @GetMapping("/listar")
-    public List<UsuarioResponseDTO> listarUsuarios() {
-        // Recupera a lista de entidades Usuario do serviço
+    public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios() {
         List<Usuario> usuarios = usuarioService.listarUsuarios();
-
-        // Converte cada Usuario para UsuarioResponseDTO usando o mapper
-        return usuarios.stream()
+        List<UsuarioResponseDTO> response = usuarios.stream()
                 .map(UsuarioMapper::toResponseDTO)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     /**
