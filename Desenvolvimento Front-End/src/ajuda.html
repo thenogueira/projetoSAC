@@ -5,40 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ajuda</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
-<body>
-    <header>
-        <h1>SAC</h1>
-        <nav>
-            <a href="">Início</a>
-            <a href="">Postagens</a>
-            <a href="">Dúvidas</a>
-            <a href="">Cadastre-se</a>
-        </nav>
-    </header>
-    <main>
-            <h2>Canais de suporte</h2>
-            <p>Você também pode entrar em contato através dos seguintes canais:</p>
-            <ul>
-                <li>Email: suporte@SAC.com</li>
-                <li>Telefone: (11) 99999-9999</li>
-                <li>WhatsApp: (11) 98888-8888</li>
-            </ul>
-        </section>
-        <section>
-            <h2>Formas de Contato com o Suporte</h2>
-            <p>Você pode entrar em contato diretamente pelos canais listados ou acessar nossas redes sociais:</p>
-            <ul>
-                <li>Facebook: <a href=" " target="_blank">facebook.com/SAC</a></li>
-                <li>Instagram: <a href=" " target="_blank">@SAC</a></li>
-                <li>Twitter: <a href=" " target="_blank">@SAC</a></li>
-            </ul>
-        </section>
+<body class="bg-amber-50 font-alexandria text-textos">
+
+    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
+        <div class="flex items-center gap-15">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
+            <a href="login.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
+        </div>
+    </nav>
+
+    <hr class="text-minitexto">
+
+    <main class="px-30 h-screen flex items-center text-2xl">
+        <div class="">
+            <section >
+                <h2 class="text-black text-5xl font-alfa mb-6">Canais de suporte</h2>
+                <p class="w-200 mb-4">Você também pode entrar em contato através dos seguintes canais:</p>
+                <ul>
+                    <li class="text-2xl mb-4">Email: <strong class="text-black hover:underline hover:text-links">suporte@SAC.com</strong></li>
+                    <li class="text-2xl">WhatsApp: <strong class="text-black hover:underline hover:text-links">(11) 98888-8888</strong></li>
+                </ul>
+            </section>
+            <section class="mt-16">
+                <h2 class="text-black text-4xl font-alfa mb-6">Nossas Redes Sociais</h2>
+                <ul>
+                    <li>Youtube: <a class="font-bold hover:underline hover:text-links" href="" target="_blank">youtube.com/SAC</a></li>
+                    <li>Instagram: <a class="font-bold hover:underline hover:text-links" href="" target="_blank">@SAC</a></li>
+                </ul>
+            </section>
+        </div>
     </main>
-    <footer>
-        <p>&copy;Sistema de Apoio Comunitário(SAC).</p>
-    </footer>
+
+    <hr class="text-minitexto">
+    
+    <footer class="px-30 pt-10 pb-5 ">
+
+        <div class="flex gap-10">
+            <div class="flex flex-col">
+                <h3 class="text-2xl">Sobre</h3>
+                <ul>
+                    <li class="text-black  hover:text-minitexto duration-500"><a href="duvidas.html">Como o SAC funciona</a></li>
+                    <li class="text-black  hover:text-minitexto duration-500"><a href="ajuda.html">Central de Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col">
+                <h3 class="text-2xl">Doações</h3>
+                <ul>
+                    <li class="text-black  hover:text-minitexto duration-500"><a href="postagens.html">Postagens</a></li>
+                </ul>
+            </div>
+        </div>
+        
+    
+        <p class="text-minitexto  mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
+    </footer>   
 </body>
 </html>
 
