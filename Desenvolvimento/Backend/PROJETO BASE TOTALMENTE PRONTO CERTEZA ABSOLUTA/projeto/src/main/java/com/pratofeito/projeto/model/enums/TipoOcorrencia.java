@@ -10,11 +10,11 @@ public enum TipoOcorrencia {
      * Representa uma ocorrência do tipo "Doação".
      * Utilizado para identificar ações de doação de itens ou recursos no sistema.
      */
-    Doação,
+    DOACAO,
 
     /**
      * Representa uma ocorrência do tipo "Pedido".
      * Utilizado para identificar solicitações de itens ou recursos no sistema.
      */
-    Pedido
+    PEDIDO
 }

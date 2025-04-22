@@ -8,8 +8,6 @@
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
-    
-    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
 <body class="bg-amber-50 font-alexandria flex justify-center" >
@@ -28,7 +26,7 @@
 
                 <p class="text-minitexto text-sm">Já tem uma conta? <a class="text-links font-bold" href="login.html">Entrar</a></p>
 
-                <form id="cadastroForm" action="/submit" method="POST">
+                <form id="cadastroForm" action="submit" method="POST">
 
                     <p class="mt-10 mb-1">Email</p>
                     <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5" type="email" id="email" name="email" placeholder="Email" required><br>
@@ -53,4 +51,3 @@
     
 </body>
 </html>
-
