@@ -163,4 +163,24 @@ public class UsuarioCrontroller {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PostMapping("/banir-conta/{id}")
+    public ResponseEntity<String> banirConta(
+            @PathVariable Integer id,
+            @RequestBody BanirUsuarioDTO banirDTO) {
+
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Usuario admin = (Usuario) authentication.getPrincipal();
+
+            usuarioService.banirConta(id, admin.getId(), banirDTO.getMotivo());
+            return ResponseEntity.ok("Conta banida com sucesso");
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

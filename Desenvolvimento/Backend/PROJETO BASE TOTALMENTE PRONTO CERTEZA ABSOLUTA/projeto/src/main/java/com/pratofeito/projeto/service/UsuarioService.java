@@ -167,5 +167,33 @@ public class UsuarioService implements UserDetails {
         return usuario.getStatusConta();
     }
 
+    @Transactional
+    public void banirConta(Integer usuarioId, Integer adminId, String motivo) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        // Impede que administradores sejam banidos
+        if (usuario.getTipoConta() == TipoConta.ADMINISTRADOR) {
+            throw new IllegalStateException("Não é possível banir outro administrador");
+        }
+
+        Usuario admin = usuarioRepository.findById(adminId)
+                .orElseThrow(() -> new EntityNotFoundException("Administrador não encontrado"));
+
+        // Atualiza status
+        usuario.setStatusConta(StatusConta.BANIDA);
+        usuarioRepository.save(usuario);
+
+        // Registra o banimento
+        UsuarioBanido banido = new UsuarioBanido();
+        banido.setAdmin(admin);
+        banido.setUsuario(usuario);
+        banido.setMotivo(motivo);
+        banido.setDataBanimento(LocalDate.now());
+        banido.setNumeroDocumento(usuario.getNumeroDocumento());
+        banido.setEmail(usuario.getEmail());
+
+        usuarioBanidoRepository.save(banido);
+    }
 
 }
