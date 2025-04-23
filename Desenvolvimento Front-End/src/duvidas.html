@@ -5,121 +5,115 @@
     <meta name=”viewport” content=”width=device-width, initial-scale=1.0”>
     <meta http-equiv=”X-UA-Compatible” content=”ie=edge”>
     <title>duvidas</title>
-    <link rel="stylesheet" href="duvidas.css">
-    <link rel="stylesheet" href="index.css">
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
-<body>
-
-    <nav>
-        <a href="postagens.html" class="menu">Postagens</a>
-        <a href="duvidas.html" class="menu">Dúvidas</a>
-        <strong class="menu" id="sac">S A C</strong>
-        <a href="ajuda.html" class="menu">Ajuda</a>
-        <button >Cadastre-se</button>
-    </nav>
+<body class="bg-amber-50 font-alexandria">
+    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
+        <div class="flex items-center gap-15">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
+            <a href="login.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
+        </div>
+    </nav> 
 
     <main>
-        <div class="info">
-            <h1>Informações Importantes</h1>
+        <section class="text-xl">
+            <section class="py-30 bg-fundo1 px-30 py flex items-center">
+                <div class="text-2xl">
+                    <h2 class="text-black text-5xl font-alfa mb-6">Informações Importantes</h2>
+                        <p class="w-200">Aqui estão algumas informações sobre nosso site e duvidas frequentes que podem te ajudar, se ainda se mantiver com alguma duvida após ler, clique em <a class="text-links hover:underline" href="ajuda.html">Ajuda</a> para contactar nosso suporte</p>
 
-            <p>Aqui estão algumas informações sobre nosso site que pode tirar suas duvidas, se ainda se mantiver com duvidas após ler, clique em <a href="ajuda.html">Ajuda</a> para contactar nosso suporte</p>    
+                </div>
+            </section>
+
+            <section class="bg-amber-50 px-30 py-20 flex items-center">
+                <div>
+                    <summary class="w-200 mb-12">Nosso site não se envolve com nenhum tipo de transação de dinheiro ou entrega de produto Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+
+                    </summary>
+
+                    <summary class="w-200 mb-8">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae culpa dignissimos tempora minima molestias harum modi aliquam sint, eos accusamus, ipsa repellat debitis odit nihil, amet quia eligendi commodi laborum?</summary>
+
+                    <summary class="w-200 mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, repellat animi voluptatibus optio, id ad cum nemo pariatur ipsum earum alias odio qui exercitationem quas consectetur reprehenderit. Placeat, quibusdam harum.</summary>
+
+                    <summary class="w-200">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Animi nobis similique molestias, expedita provident, quibusdam optio minima non nam consequatur veritatis repellendus? Magni ut quod maiores quasi cupiditate doloribus saepe?.</summary>
+                </div>                
+            </section>
+
+            <hr class="mx-30">
+       
+            <section class="bg-amber-50 px-30 py-20 flex items-center">
+                <div class="w-full">
+
+                    <h2 class="text-black text-5xl mb-10">Duvidas Frequentes</h2>
+
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Como posso fazer uma doação?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Você pode se cadastrar e acessar a seção de postagens para encontrar pedidos de ajuda ou oferecer doações diretamente.</p>
+                    </details>
+
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Posso pedir ajuda anonimamente?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Sim, você pode escolher manter seu nome em sigilo ao criar uma postagem solicitando ajuda.</p>
+                    </details>
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Quais tipos de doações são aceitas?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Alimentos, roupas, brinquedos, produtos de higiene e outros itens essenciais são bem-vindos.</p>
+                    </details>
+
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Como entrar em contato com o suporte?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Você pode acessar a seção de Ajuda e enviar uma mensagem diretamente para nossa equipe.</p>
+                    </details>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <hr class="text-minitexto">
+    
+    <footer class="px-30 pt-10 pb-5 ">
+
+        <div class="flex gap-10">
+            <div class="flex flex-col">
+                <h3 class="text-2xl">Sobre</h3>
+                <ul>
+                    <li class="text-black  hover:text-minitexto duration-500"><a href="duvidas.html">Como o SAC funciona</a></li>
+                    <li class="text-black  hover:text-minitexto duration-500"><a href="ajuda.html">Central de Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col">
+                <h3 class="text-2xl">Doações</h3>
+                <ul>
+                    <li class="text-black  hover:text-minitexto duration-500"><a href="postagens.html">Postagens</a></li>
+                </ul>
+            </div>
         </div>
         
-        <div class="perguntas">
-            <h2>Perguntas Frequentes</h2>
-
-                <h2>Como posso fazer uma doação?</h2>
-            
-                <p>Você pode se cadastrar e acessar a seção de postagens para encontrar pedidos de ajuda ou oferecer doações diretamente.</p>
-
-
-                <h2>Posso pedir ajuda anonimamente?</h2>
-            
-                <p>Sim, você pode escolher manter seu nome em sigilo ao criar uma postagem solicitando ajuda.</p>
-
-                <h2>Quais tipos de doações são aceitas?</h2>
-            
-                <p>Alimentos, roupas, brinquedos, produtos de higiene e outros itens essenciais são bem-vindos.</p>
-
-
-                <h2>Como entrar em contato com o suporte?</h2>
-            
-                <p>Você pode acessar a seção de Ajuda e enviar uma mensagem diretamente para nossa equipe.</p>
-
-            
-            <p>Para qualquer outra dúvida clique <a href="ajuda.html">aqui</a></p>
-        </div>
-    </main>
-
-    <footer>
-        <footer>
-            <div class="footer-container">
-                <div class="footer-section">
-                    <h3>Sobre</h3>
-                    <ul>
-                        <li><a href="duvidas.html">Como o SAC funciona</a></li>
-                        <li><a href="ajuda.html">Central de Ajuda</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Doações</h3>
-                    <ul>
-                        <li><a href="postagens.html">Postagens</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                ©Sistema de Ajudas Comunitárias (SAC)
-            </div>
-        </footer>
+    
+        <p class="text-minitexto  mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
     </footer>
-
-
-
-
-
-
-    <!-- <header>
-        <h1> SAC</h1>
-        <nav>
-            <a href=" ">Início</a>
-            <a href=" ">Dúvidas</a>
-            <a href=" ">Ajuda</a>
-            <a href=" ">Cadastre-se</a>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h2>Perguntas Frequentes</h2>
-            <details>
-                <summary>Como posso fazer uma doação?</summary>
-                <p>Você pode se cadastrar e acessar a seção de postagens para encontrar pedidos de ajuda ou oferecer doações diretamente.</p>
-            </details>
-            <details>
-                <summary>Posso pedir ajuda anonimamente?</summary>
-                <p>Sim, você pode escolher manter seu nome em sigilo ao criar uma postagem solicitando ajuda.</p>
-            </details>
-            <details>
-                <summary>Quais tipos de doações são aceitas?</summary>
-                <p>Alimentos, roupas, brinquedos, produtos de higiene e outros itens essenciais são bem-vindos.</p>
-            </details>
-            <details>
-                <summary>Como entrar em contato com o suporte?</summary>
-                <p>Você pode acessar a seção de Ajuda e enviar uma mensagem diretamente para nossa equipe.</p>
-            </details>
-        </section>
-        <section>
-            <h2>Informaçoes importantes</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque vel porro reiciendis dignissimos perferendis. Perferendis, veniam nisi tenetur ex iure, repudiandae hic iusto repellat commodi dolore omnis, sit esse excepturi?Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum maiores corrupti, sequi quo blanditiis quasi consequatur qui eius eum, dicta perspiciatis reprehenderit est minus voluptatibus quia eaque hic veniam fuga?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore libero totam corporis magnam? Itaque aut adipisci, mollitia impedit fugit at nam laborum eius doloribus voluptate rem consequuntur saepe unde earum.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy;Sistema de Apoio Comunitário(SAC).</p>
-    </footer> -->
 </body>
 </html>
 
