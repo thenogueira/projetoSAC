@@ -16,7 +16,7 @@ CREATE TABLE usuario_banido (
     numero_documento VARCHAR(20) NOT NULL,
     email VARCHAR(60) NOT NULL,
     motivo TEXT NOT NULL,
-    data_banimento DATE NOT NULL,
+    data_banimento DATETIME NOT NULL,
     admin_id INT UNSIGNED NOT NULL,
     usuario_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (admin_id) REFERENCES usuario(id),
@@ -49,6 +49,18 @@ CREATE TABLE avaliacao (
     FOREIGN KEY(usuario_avaliador_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
 
+CREATE TABLE comentario (
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    texto TEXT NOT NULL, 
+    data_criacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    usuario_id INT UNSIGNED NOT NULL,
+    ocorrencia_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY(usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY(ocorrencia_id) REFERENCES ocorrencia(id) ON DELETE CASCADE
+    
+);
+/*DROP DATABASE apoio_comunitario;*/
 -- Inserindo dados com os valores corretos do ENUM
 INSERT INTO usuario VALUES ('1', 'Caio', 'USUARIO', 'caio@gmail.com', 'caio1234', 'CNPJ', '14118955719', 'ATIVA');
 INSERT INTO usuario VALUES ('2', 'Rogerio', 'ADMINISTRADOR', 'roger@gmail.com', 'roger1234', 'CPF', '14113446', 'ATIVA');

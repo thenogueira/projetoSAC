@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.controller;
 
+import com.pratofeito.projeto.exception.UsuarioBanidoException;
 import com.pratofeito.projeto.configuration.GlobalExceptionHandler;
 import com.pratofeito.projeto.dto.AuthenticationDTO;
 import com.pratofeito.projeto.dto.LoginResponseDTO;
@@ -47,17 +48,8 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
-        try {
-            LoginResponseDTO response = authService.login(data);
-            return ResponseEntity.ok(response);
-        } catch (GlobalExceptionHandler.UsuarioBanidoException e) {
-            // Para erros de banimento, podemos retornar um objeto de erro padronizado
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new LoginResponseDTO(null, e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginResponseDTO(null, "Credenciais inválidas"));
-        }
+        LoginResponseDTO response = authService.login(data);
+        return ResponseEntity.ok(response);
     }
     /**
      * Endpoint para registro de novos usuários.

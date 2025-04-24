@@ -1,6 +1,6 @@
 package com.pratofeito.projeto.service;
 
-import com.pratofeito.projeto.configuration.GlobalExceptionHandler;
+import com.pratofeito.projeto.exception.UsuarioBanidoException;
 import com.pratofeito.projeto.dto.AuthenticationDTO;
 import com.pratofeito.projeto.dto.LoginResponseDTO;
 import com.pratofeito.projeto.dto.RegisterDTO;
@@ -59,7 +59,8 @@ public class AuthService {
     private void verificarStatusConta(Usuario usuario) {
         switch (usuario.getStatusConta()) {
             case BANIDA:
-                throw new GlobalExceptionHandler.UsuarioBanidoException("Sua conta foi permanentemente banida");
+                throw new UsuarioBanidoException("Sua conta foi permanentemente banida");
+
             case ATIVA:
                 // Nada a fazer, conta ativa
                 break;

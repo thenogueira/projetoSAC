@@ -6,6 +6,7 @@ import com.pratofeito.projeto.dto.usuario.UsuarioResponseDTO;
 import com.pratofeito.projeto.dto.usuario.UsuarioUpdateDTO;
 import com.pratofeito.projeto.mapper.UsuarioMapper;
 import com.pratofeito.projeto.model.Usuario;
+import com.pratofeito.projeto.model.enums.StatusConta;
 import com.pratofeito.projeto.service.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -32,14 +33,14 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/usuarios")
-public class UsuarioCrontroller {
+public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService; // Serviço que contém a lógica de negócio para usuários
+    private final UsuarioService usuarioService;
 
-    // DTOs utilizados para transferência de dados (não são injetados)
-    private UsuarioResponseDTO usuarioResponseDTO;
-    private UsuarioCreateDTO usuarioCreateDTO;
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    } // Serviço que contém a lógica de negócio para usuários
+
 
     /**
      * Recupera todos os usuários cadastrados no sistema.
@@ -49,14 +50,12 @@ public class UsuarioCrontroller {
      * @response HTTP 200 (OK) com a lista de usuários
      */
     @GetMapping("/listar")
-    public List<UsuarioResponseDTO> listarUsuarios() {
-        // Recupera a lista de entidades Usuario do serviço
+    public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios() {
         List<Usuario> usuarios = usuarioService.listarUsuarios();
-
-        // Converte cada Usuario para UsuarioResponseDTO usando o mapper
-        return usuarios.stream()
+        List<UsuarioResponseDTO> response = usuarios.stream()
                 .map(UsuarioMapper::toResponseDTO)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -151,4 +150,17 @@ public class UsuarioCrontroller {
             return ResponseEntity.internalServerError().body("Erro ao banir usuário: " + e.getMessage());
         }
     }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @GetMapping("/checar-status/{id}")
+    public ResponseEntity<StatusConta> checarStatus(@PathVariable Integer id) {
+        try {
+            StatusConta status = usuarioService.checarStatus(id);
+            return ResponseEntity.ok(status);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+
 }
