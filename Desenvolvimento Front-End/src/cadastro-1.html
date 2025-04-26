@@ -11,40 +11,60 @@
     <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
-<body class="bg-amber-50 font-alexandria flex flex-col lg:flex-row min-h-screen">
+<body class="bg-amber-50 font-alexandria flex flex-col lg:flex-row">
            
-    <div class="flex flex-col lg:flex-row h-screen w-full items-center max-lg:pt-8">
-            <div class="bg-amber-50 relative w-full h-auto max-h-screen lg:w-3/4 lg:h-full xl:w-2:3 max-lg:m-[-2rem]">
-                <picture>
-                    <source class="w-full h-full object-cover" media="(min-width: 64rem)" srcset="../img/fundo-1.png">
+    <div class="flex flex-col lg:flex-row h-screen w-full items-center min-sm:max-lg:pt-8">
 
-                    <img class="w-full h-full object-cover" src="../img/fundo-1-menor.png" alt="">
-                </picture>
-            </div>
-            <div class="bg-fundo1  flex justify-center items-center p-8 
+        <div class="bg-amber-50 relative w-full h-screen max-h-screen lg:w-3/4 lg:h-full xl:w-2:3 max-lg:m-[-2rem]">
+            <picture>
+                <source class="w-full h-full object-cover" media="(min-width: 64rem)" srcset="../img/fundo-1.png">
 
-            lg:h-full lg:w-1/4
-            
-            xl:w-1/3  
+                <img class="w-full h-full object-cover max-sm:hidden" src="../img/top-view-heart-shape-with-copy-space.jpg" alt="">
+            </picture>
+        </div>
 
-            max-lg:absolute
-            min-h-[calc(100vh-2rem)] max-lg:px-20 max-lg:rounded-t-4xl max-lg:pt-[-2rem]">
-                <div class="w-full max-w-md">
-                    <div>
-                        <p class="text-minitexto text-sm" id="etapa">Etapa 1 de 2</p>
-                        <h1 class="text-[32px]">Criando Conta</h1>
-                        <p class="text-minitexto text-sm">Já tem uma conta? <a class="text-links font-bold" href="login.html">Entrar</a></p>
-                        <form id="cadastroForm" action="/submit" method="POST">
-                            <p class="
-                            mt-10 mb-1">Nome</p>
-                            <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
-                            <p class="mt-4 mb-1">CPF ou CNPJ</p>
-                            <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" name="cpf" id="cpf" placeholder="CPF/CNPJ" required>
-                            <p class="mt-4 mb-1">Endereço</p>
-                            <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" id="endereco" name="endereco" placeholder="Endereço" required> <br>
-                            <div class="mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white"><a href="cadastro-2.html" required>Continuar</a></div>
+        <div class="bg-fundo1  flex justify-center items-center px-8 max-sm:w-full max-sm:h-full
+
+        lg:h-full lg:w-1/4
         
-                        </form>
+        xl:w-1/3 
+        xl:px-12 
+
+        max-lg:absolute
+        min-h-[calc(100vh-2rem)] max-lg:px-20 min-sm:max-lg:rounded-t-4xl">
+
+            <div class="w-full max-w-md">
+
+                <div>
+
+                    <p class="text-minitexto text-[clamp(1rem,0.5vw,1rem)]">Etapa 1 de 2</p>
+
+                    <h1 class="text-[clamp(2rem,2vw,2.25rem)]">Criando Conta</h1>
+
+                    <p class="text-minitexto text-[clamp(1rem,0.5vw,1rem)]">Já tem uma conta? <a class="text-links font-bold text-[clamp(1rem,0.5vw,1rem)]" href="login.html">Entrar</a></p>
+
+                    <form class="text-[clamp(1rem,1.35vw,1.25rem)]" id="cadastroForm" action="/submit" method="POST">
+
+
+                        <p class="mt-6 lg:mt-10 mb-1">Nome</p>
+
+                        <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
+
+
+                        <p class="mt-2 lg:mt-4 mb-1">CPF ou CNPJ</p>
+
+                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" name="cpf" id="cpf" placeholder="CPF/CNPJ" required>
+
+
+                        <p class="mt-2 lg:mt-4 mb-1">Endereço</p>
+
+                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" id="endereco" name="endereco" placeholder="Endereço" required> <br>
+
+
+                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white"><p><a  href="cadastro-2.html">Continuar</a></p></div>
+    
+                    </form>
+                </div>
             </div>
         </div>  
     </div>
