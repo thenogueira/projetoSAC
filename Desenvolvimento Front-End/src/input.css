@@ -15,7 +15,7 @@
 @theme {
     --color-mint-500: oklch(0.72 0.11 178);
     --color-fundo1: #97ec9e;
-    --color-fundo2: #83e88a;
+    --color-fundo2: #5ddb66;
     --color-fundo3: #9ccfec;
     --color-destaque: #299431;
     --color-texto: #333;
@@ -45,6 +45,8 @@
     opacity: 0;  
     transform: translateX(-100%); 
     transition: all 1s; 
+    color: #5ddb66;
+    color: #299431;
 
 }
 
