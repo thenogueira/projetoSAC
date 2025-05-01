@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cadastro</title>
-    <link href="./output.css" rel="stylesheet">
-    <link href="./input.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
+    <!-- <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet"> -->
+    <!-- <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script> -->
 
 </head>
 <body class="bg-amber-50 font-alexandria flex flex-col lg:flex-row" >
@@ -68,20 +68,17 @@
 
                         <p class="mt-2 lg:mt-4 mb-1">Confirmar Senha</p>
 
-                        <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="password" id="senha" name="senha" placeholder="Confirmar" required><br>
+                        <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar" required><br>
                         <!-- Fazer com que o confirmar senha só permita cadastrar com as duas senhas sendo iguais -->
 
-                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white"><button type="submit">Cadastrar</button></div> <br>
+                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white"><button type="submit" id="saveBtn" class="bg-destaque px-4 py-2 rounded-xl text-white">Continuar</button></div> <br>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    
-    
 
-    <script src="crud.js"></script>
     <script src="javascript/cadastro-2.js"></script>
     
 </body>
