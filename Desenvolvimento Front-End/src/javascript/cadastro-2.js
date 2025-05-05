@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok) {
                 alert('Cadastro concluído com sucesso!');
-                localStorage.removeItem('cadastroTemp'); // Remove os dados temporários
                 form.reset(); // Limpa o formulário
                 window.location.href = 'login.html'; // Redireciona para a página de login
             } else {

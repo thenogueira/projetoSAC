@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         const userData = JSON.parse(localStorage.getItem('usuarioLogado'));
-        if (!userData || !userData.nome) {
+        if (!userData || !userData.id) {
             alert('Usuário não identificado. Faça login ou cadastre-se.');
             return;
         }

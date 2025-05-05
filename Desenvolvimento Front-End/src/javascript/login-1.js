@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Usuário logado:', data);
 
                 // Armazena os dados do usuário no localStorage
-                localStorage.setItem('usuarioLogado', JSON.stringify(data));
+                localStorage.setItem('usuarioLogado', JSON.stringify(data.usuario));
 
                 window.location.href = 'perfil.html'; // Redireciona para a página principal
             } else {
