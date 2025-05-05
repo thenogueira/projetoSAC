@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        const userData = JSON.parse(localStorage.getItem('cadastroTemp'));
+        const userData = JSON.parse(localStorage.getItem('usuarioLogado'));
         if (!userData || !userData.nome) {
             alert('Usuário não identificado. Faça login ou cadastre-se.');
             return;
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const tipo = document.getElementById('tipo').value.trim();
         const estado = document.getElementById('estado').value.trim();
         const lugar = document.getElementById('casa').value.trim();
-        // const urgencia = document.getElementById('urgencia').value.trim();
         const estado_doacao = "DISPONIVEL"; // Valor fixo para o estado da doação
         const descricao = document.getElementById('descricao').value.trim();
         const imagem = document.getElementById('imagem').files[0];
@@ -52,15 +51,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         async function saveAndSendPost() {
             const post = {
-                usuario_id: userData.nome,
+                usuario_id: userData.id, // Use o ID do usuário logado
                 titulo,
                 descricao,
                 tipo,
                 categoria,
                 localizacao: { estado, lugar },
-                // urgencia,
                 estado_doacao,
-                imagem,
+                imagem: imagemBase64,
                 data_criacao: new Date().toISOString(),
                 data_atualizacao: new Date().toISOString(),
             };

@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
                 alert('Login realizado com sucesso!');
                 console.log('Usuário logado:', data);
+
+                // Armazena os dados do usuário no localStorage
+                localStorage.setItem('usuarioLogado', JSON.stringify(data));
+
                 window.location.href = 'perfil.html'; // Redireciona para a página principal
             } else {
                 // Login falhou

@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <img class="w-100 rounded-t-xl" src="${post.imagem || '../img/default-image.png'}" alt="Imagem da ocorrência">
                 <figcaption class="indent-2 pt-2 pb-0 font-bold">${post.titulo}</figcaption>
                 <p class="indent-2 text-sm text-gray-600">${post.descricao}</p>
-                
                 <p class="indent-2 text-xs text-gray-400">Data: ${new Date(post.data).toLocaleDateString()}</p>
                 <p class="indent-2 text-xs text-gray-500">Usuário: ${post.usuario || 'Desconhecido'}</p>
             `;

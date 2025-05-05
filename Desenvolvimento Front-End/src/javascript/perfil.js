@@ -4,10 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveProfileBtn = document.getElementById('saveProfileBtn');
 
     // Load user data from localStorage
-    const userData = JSON.parse(localStorage.getItem('cadastroTemp'));
+    const userData = JSON.parse(localStorage.getItem('usuarioLogado'));
     if (userData) {
         document.getElementById('profileName').textContent = userData.nome;
         document.getElementById('profileImage').src = userData.profileImage || '../img/default-profile.png';
+        document.getElementById('profileDescription').textContent = userData.descricao || 'Sem descrição disponível.';
+    } else {
+        alert('Usuário não identificado. Faça login novamente.');
+        window.location.href = 'login.html';
     }
 
     // Toggle edit profile container visibility
