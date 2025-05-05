@@ -28,11 +28,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const tipo = document.getElementById('tipo').value.trim();
         const estado = document.getElementById('estado').value.trim();
         const lugar = document.getElementById('casa').value.trim();
-        const estado_doacao = document.getElementById('urgencia').value.trim();
+        // const urgencia = document.getElementById('urgencia').value.trim();
+        const estado_doacao = "DISPONIVEL"; // Valor fixo para o estado da doação
         const descricao = document.getElementById('descricao').value.trim();
-        const imagemInput = document.getElementById('imagem').files[0];
+        const imagem = document.getElementById('imagem').files[0];
 
-        if (!titulo || !categoria || !tipo || !estado || !lugar || !urgencia || !descricao) {
+        if (!titulo || !categoria || !tipo || !estado || !lugar || !descricao) {
             alert('Preencha todos os campos!');
             return;
         }
@@ -57,8 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 tipo,
                 categoria,
                 localizacao: { estado, lugar },
+                // urgencia,
                 estado_doacao,
-                imagem: imagemBase64,
+                imagem,
                 data_criacao: new Date().toISOString(),
                 data_atualizacao: new Date().toISOString(),
             };
