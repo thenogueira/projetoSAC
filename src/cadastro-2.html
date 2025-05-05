@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cadastro</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    <!-- <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script> -->
+
+</head>
+<body class="bg-amber-50 font-alexandria flex flex-col lg:flex-row" >
+
+    
+    
+    <div class="flex flex-col lg:flex-row h-screen w-full items-center min-sm:max-lg:pt-8">
+
+        
+
+        <div class="bg-amber-50 relative w-full h-screen max-h-screen lg:w-3/4 lg:h-full xl:w-2:3 max-lg:m-[-2rem]">
+
+            <i class="z-10 fa-solid fa-arrow-left bg-destaque m-4  mt-14 sm:m-8 absolute p-3 rounded-4xl" id=""></i>
+
+            <picture>
+                <source class="w-full h-full object-cover" media="(min-width: 64rem)" srcset="../img/fundo-1.png">
+
+                <img class="w-full h-full object-cover max-sm:hidden" src="../img/top-view-heart-shape-with-copy-space.jpg" alt="">
+            </picture>
+
+        </div>
+
+        <div class="bg-fundo1  flex justify-center items-center px-8 max-sm:w-full max-sm:h-full
+
+            lg:h-full lg:w-1/4
+            
+            xl:w-1/3 
+            xl:px-12 
+
+            max-lg:absolute
+            min-h-[calc(100vh-2rem)] max-lg:px-20 min-sm:max-lg:rounded-t-4xl">
+            <div class="w-full max-w-md">
+
+                
+
+                <div>
+
+                    
+
+                    <p class="text-minitexto text-[clamp(1rem,0.5vw,1rem)]">Etapa 2 de 2</p>
+
+                    <h1 class="text-[clamp(2rem,2vw,2.25rem)]">Criando Conta</h1>
+
+                    <p class="text-minitexto text-[clamp(1rem,0.5vw,1rem)]">Já tem uma conta? <a class="text-links font-bold text-[clamp(1rem,0.5vw,1rem)]" href="login.html">Entrar</a></p>
+
+                    <form class="text-[clamp(1rem,1.35vw,1.25rem)]" id="cadastroForm" action="submit" method="POST">
+
+
+                        <p class="mt-6 lg:mt-10 mb-1">Email</p>
+
+                        <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="email" id="email" name="email" placeholder="Email" required><br>
+
+
+                        <p class="mt-2 lg:mt-4 mb-1">Senha</p>
+
+                        <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="password" id="senha" name="senha" placeholder="Senha" required><br>
+
+
+                        <p class="mt-2 lg:mt-4 mb-1">Confirmar Senha</p>
+
+                        <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar" required><br>
+                        <!-- Fazer com que o confirmar senha só permita cadastrar com as duas senhas sendo iguais -->
+
+                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white"><button type="submit" id="saveBtn" class="bg-destaque px-4 py-2 rounded-xl text-white">Continuar</button></div> <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="javascript/cadastro-2.js"></script>
+    
+</body>
+</html>

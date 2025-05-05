@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Postagens - Rede de Doações</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
+
+</head>
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
+        <div class="flex items-center gap-15">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
+        </div>
+    </nav>
+
+    <hr class="text-minitexto">
+
+    <main class="px-30"></main>
+        <section>
+            <h2 class="text-black text-5xl my-10 text-center">Postagens</h2>
+
+            <p class="text-minitexto indent-3">Filtros</p>
+
+            <hr class="text-minitexto mx-[-2rem]">
+
+            <form class="text-minitexto flex flex-row gap-5 items-center justify-center pt-2" id="filtroForm">
+                <label for="categoria">Categoria:</label>
+                <select id="categoria" name="categoria">
+                    <option value="todas">Todas</option>
+                    <option value="alimentos">Alimentos</option>
+                    <option value="roupas">Roupas</option> 
+                </select>
+
+                <label for="data">Data:</label>
+                <input type="date" id="data" name="data">
+
+                <label for="tipo">Tipo:</label>
+                <select id="tipo" name="tipo">
+                    <option value="todos">Todos</option>
+                    <option value="doacao">Doação</option>
+                    <option value="pedido">Pedido</option>
+                </select>
+
+                <label for="localizacao">Localização:</label>
+                <select id="localizacao" name="localizacao">
+                    <option value="RJ">RJ</option>
+                    <option value="SP">SP</option>
+                    <option value="MG">MG</option>
+                </select>
+
+                <label for="urgencia">Urgência:</label>
+                <select id="urgencia" name="urgencia">
+                    <option value="todas">Todas</option>
+                    <option value="alta">Alta</option>
+                    <option value="media">Média</option>
+                    <option value="baixa">Baixa</option>
+                </select>
+
+                <button class="px-2 py-1 bg-fundo2 text-black rounded-lg ml-2" type="submit">Filtrar</button>
+            </form>
+
+            <div class="flex justify-center mt-4">
+                <a href="post.html" class="px-6 py-3 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
+                    Criar Postagens
+                </a>
+            </div>
+        </section>
+
+        <section class="flex justify-center">
+            <div id="postsContainer" class="grid grid-cols-3 gap-20 py-8 pt-16 w-full">
+                <!-- Posts will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <button class="px-8 py-4 bg-fundo2 mt-10 mb-40 text-xl text-center m-auto block rounded-xl" id="carregarMais">Mostrar Mais Postagens</button>
+    </main>
+    
+    <hr class="text-minitexto">
+    
+    <footer class="px-30 pt-10 pb-5 ">
+
+        <div class="flex gap-10">
+            <div class="flex flex-col">
+                <h3 class="text-lg">Sobre</h3>
+                <ul class="text-sm hover:text-black text-minitexto duration-500">
+                    <li><a href="duvidas.html">Como o SAC funciona</a></li>
+                    <li><a href="ajuda.html">Central de Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col">
+                <h3 class="text-lg">Doações</h3>
+                <ul class="text-sm hover:text-black text-minitexto duration-500">
+                    <li><a href="postagens.html">Postagens</a></li>
+                </ul>
+            </div>
+        </div>
+        
+    
+        <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
+    </footer>
+    <script src="javascript/postagens.js"></script>
+</body>
+</html>
+
