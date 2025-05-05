@@ -7,14 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById('email').value.trim();
         const senha_hash = document.getElementById('senha_hash').value.trim();
 
-        // Validação básica
         if (!email || !senha_hash) {
             alert('Preencha todos os campos!');
             return;
         }
 
         try {
-            // Envia os dados para o backend para validação
             const response = await fetch('http://localhost:8080/auth/login', {
                 method: 'POST',
                 headers: {
@@ -25,13 +23,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok) {
                 const data = await response.json();
+                console.log('Token recebido:', data.token); // Log para depuração
+
+                // Armazena o token no localStorage
+                localStorage.setItem('authToken', data.token);
+
                 alert('Login realizado com sucesso!');
-                console.log('Usuário logado:', data);
-
-                // Armazena os dados do usuário no localStorage
-                localStorage.setItem('usuarioLogado', JSON.stringify(data.usuario));
-
-                window.location.href = 'perfil.html'; // Redireciona para a página principal
+                window.location.href = 'postagens.html'; // Redireciona para a página principal
             } else {
                 const error = await response.json();
                 alert(`Erro no login: ${error.message}`);

@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('cadastroForm');
 
-    // Recupera os dados do cadastro-1 do localStorage
     const dadosCadastro = JSON.parse(localStorage.getItem('usuarioCadastro'));
     if (!dadosCadastro) {
         alert('Erro: Nenhum dado encontrado da primeira etapa. Retornando ao início.');
@@ -10,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     form.addEventListener('submit', async function (event) {
-        event.preventDefault(); // Impede o envio padrão do formulário
+        event.preventDefault();
 
         const email = document.getElementById('email').value.trim();
         const senha_hash = document.getElementById('senha').value.trim();
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const tipoConta = "USUARIO";
         const statusConta = "ATIVA";
 
-        // Validação básica
         if (!email || !senha_hash || !confirmarSenha) {
             alert('Preencha todos os campos!');
             return;
@@ -29,12 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Atualiza os dados do cadastro com as informações da segunda etapa
         const dadosCompletos = { email, senha_hash, tipoConta, ...dadosCadastro, statusConta };
-        localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCompletos));
 
         try {
-            // Envia os dados para o backend
             const response = await fetch('http://localhost:8080/auth/register', {
                 method: 'POST',
                 headers: {
@@ -45,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok) {
                 alert('Cadastro concluído com sucesso!');
-                form.reset(); // Limpa o formulário
-                window.location.href = 'login.html'; // Redireciona para a página de login
+                form.reset();
+                window.location.href = 'login.html';
             } else {
                 const error = await response.json();
                 alert(`Erro ao salvar cadastro: ${error.message}`);
