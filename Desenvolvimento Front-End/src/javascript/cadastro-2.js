@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('cadastroForm');
 
-    // Recupera os dados temporários do localStorage
-    const dadosTemp = JSON.parse(localStorage.getItem('cadastroTemp'));
-    if (!dadosTemp) {
+    // Recupera os dados do cadastro-1 do localStorage
+    const dadosCadastro = JSON.parse(localStorage.getItem('usuarioCadastro'));
+    if (!dadosCadastro) {
         alert('Erro: Nenhum dado encontrado da primeira etapa. Retornando ao início.');
         window.location.href = 'cadastro-1.html';
         return;
@@ -29,8 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Combina os dados da primeira e segunda etapa
-        const dadosCompletos = { email, senha_hash, tipoConta, ...dadosTemp, statusConta};
+        // Atualiza os dados do cadastro com as informações da segunda etapa
+        const dadosCompletos = { email, senha_hash, tipoConta, ...dadosCadastro, statusConta };
+        localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCompletos));
 
         try {
             // Envia os dados para o backend
@@ -44,19 +45,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok) {
                 alert('Cadastro concluído com sucesso!');
-                localStorage.removeItem('cadastroTemp'); // Remove os dados temporários
                 form.reset(); // Limpa o formulário
                 window.location.href = 'login.html'; // Redireciona para a página de login
             } else {
-                // Verifica se a resposta é JSON antes de tentar interpretá-la
-                const contentType = response.headers.get('Content-Type');
-                if (contentType && contentType.includes('application/json')) {
-                    const error = await response.json();
-                    alert(`Erro ao salvar cadastro: ${error.message}`);
-                } else {
-                    const errorText = await response.text();
-                    alert(`Erro ao salvar cadastro: ${errorText}`);
-                }
+                const error = await response.json();
+                alert(`Erro ao salvar cadastro: ${error.message}`);
             }
         } catch (error) {
             console.error('Erro ao enviar os dados:', error);
