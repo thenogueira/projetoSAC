@@ -32,6 +32,7 @@ public class OcorrenciaController {
      *
      * return Uma lista de objetos Ocorrencia.
      */
+    @CrossOrigin("*")
     @GetMapping("/listar") // Mapeia requisições GET para o caminho /ocorrencias/listar
     public List<Ocorrencia> listarOcorrencias() {
         return ocorrenciaService.listarOcorrencias(); // Chama o método do serviço para obter a lista de ocorrências
