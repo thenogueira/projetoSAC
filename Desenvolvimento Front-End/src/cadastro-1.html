@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cadastro</title>
-    <!-- <link href="./output.css" rel="stylesheet">
-    <link href="./input.css" rel="stylesheet"> -->
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
 
     <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-amber-50 font-alexandria flex flex-col lg:flex-row">
 
@@ -50,15 +55,25 @@
 
                         <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
 
+                        <!-- Botão para abrir/fechar a aba -->
+                        <button type="button" id="toggleDocumentoBtn" class="bg-gray-200 px-4 py-2 rounded-md mb-2 border border-gray-400 shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            Selecionar Tipo de Documento
+                        </button>
+
+                        <!-- Contêiner que será exibido/ocultado -->
+                        <div id="tipoDocumentoContainer" class="hidden mb-5">
+                            <label>
+                                <input type="radio" name="tipoDocumento" value="CPF" id="cpfOption" checked>
+                                CPF
+                            </label>
+                            <label class="ml-4">
+                                <input type="radio" name="tipoDocumento" value="CNPJ" id="cnpjOption">
+                                CNPJ
+                            </label>
+                        </div>
 
                         <p class="mt-2 lg:mt-4 mb-1">CPF ou CNPJ</p>
-
-                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" name="cpf" id="cpf" placeholder="CPF/CNPJ" required>
-
-
-                        <p class="mt-2 lg:mt-4 mb-1">Endereço</p>
-
-                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" id="endereco" name="endereco" placeholder="Endereço" required> <br>
+                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" name="numeroDocumento" id="numeroDocumento" placeholder="Digite o número do documento" required>
 
 
                         <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white"><p><button type="button" id="continueBtn" class="bg-destaque px-4 py-2 rounded-xl text-white">Continuar</button></p></div>

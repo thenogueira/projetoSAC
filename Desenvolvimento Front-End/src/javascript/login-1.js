@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Captura os dados do formulário
         const email = document.getElementById('email').value.trim();
-        const senha = document.getElementById('senha').value.trim();
+        const senha_hash = document.getElementById('senha_hash').value.trim();
 
         // Validação básica
-        if (!email || !senha) {
+        if (!email || !senha_hash) {
             alert('Preencha todos os campos!');
             return;
         }
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, senha }),
+                body: JSON.stringify({ email, senha_hash }),
             });
 
             if (response.ok) {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
                 alert('Login realizado com sucesso!');
                 console.log('Usuário logado:', data);
-                window.location.href = 'dashboard.html'; // Redireciona para a página principal
+                window.location.href = 'perfil.html'; // Redireciona para a página principal
             } else {
                 // Login falhou
                 const error = await response.json();
