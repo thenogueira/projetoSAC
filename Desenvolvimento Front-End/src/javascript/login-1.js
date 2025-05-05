@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (event) {
         event.preventDefault(); // Impede o envio padrão do formulário
 
-        // Captura os dados do formulário
         const email = document.getElementById('email').value.trim();
         const senha_hash = document.getElementById('senha_hash').value.trim();
 
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (response.ok) {
-                // Login bem-sucedido
                 const data = await response.json();
                 alert('Login realizado com sucesso!');
                 console.log('Usuário logado:', data);
@@ -35,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 window.location.href = 'perfil.html'; // Redireciona para a página principal
             } else {
-                // Login falhou
                 const error = await response.json();
                 alert(`Erro no login: ${error.message}`);
             }

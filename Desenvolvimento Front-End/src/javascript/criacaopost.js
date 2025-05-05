@@ -38,13 +38,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         let imagemBase64 = null;
-        if (imagemInput) {
+        if (imagem) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 imagemBase64 = e.target.result;
                 saveAndSendPost();
             };
-            reader.readAsDataURL(imagemInput);
+            reader.readAsDataURL(imagem);
         } else {
             saveAndSendPost();
         }
@@ -62,11 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 data_criacao: new Date().toISOString(),
                 data_atualizacao: new Date().toISOString(),
             };
-
-            // Salva o post no localStorage
-            const posts = JSON.parse(localStorage.getItem('posts')) || [];
-            posts.push(post);
-            localStorage.setItem('posts', JSON.stringify(posts));
 
             try {
                 // Envia o post para o backend

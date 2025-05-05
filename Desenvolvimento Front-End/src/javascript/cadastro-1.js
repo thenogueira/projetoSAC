@@ -26,13 +26,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Armazena os dados no localStorage
-        const dadosTemp = { 
+        const dadosCadastro = { 
             nome, 
             tipoDocumento, 
             numeroDocumento, 
             profileImage: '../img/default-profile.png' // Default profile image
         };
-        localStorage.setItem('cadastroTemp', JSON.stringify(dadosTemp));
+        localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCadastro));
 
         // Redireciona para a segunda etapa
         window.location.href = 'cadastro-2.html';
