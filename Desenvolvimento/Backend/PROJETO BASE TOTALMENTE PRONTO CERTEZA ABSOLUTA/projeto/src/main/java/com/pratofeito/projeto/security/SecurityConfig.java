@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/usuarios/atualizar/**").permitAll()
                         .requestMatchers("/usuarios/deletar/**").permitAll()// Liberação explícita
                         .requestMatchers(HttpMethod.GET, "/usuarios/listar").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/ocorrencias/**").hasRole("ADMINISTRADOR")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
