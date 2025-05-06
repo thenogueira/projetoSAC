@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Usuário não identificado. Faça login novamente.');
         window.location.href = 'login.html';
     }
-
+    login
     // Toggle edit profile container visibility
     editProfileBtn.addEventListener('click', function () {
         if (editProfileContainer.classList.contains('hidden')) {

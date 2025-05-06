@@ -35,6 +35,7 @@
 
             <hr class="text-minitexto mx-[-2rem]">
 
+            <!-- ajeitar caixas de escolhas, deixar elas redondas -->
             <form class="text-minitexto flex flex-row gap-5 items-center justify-center pt-2" id="filtroForm">
                 <label for="categoria">Categoria:</label>
                 <select id="categoria" name="categoria">
@@ -68,7 +69,7 @@
                     <option value="baixa">Baixa</option>
                 </select>
 
-                <button class="px-2 py-1 bg-fundo2 text-black rounded-lg ml-2" type="submit">Filtrar</button>
+                <button class="px-4 py-1.5 bg-fundo2 text-black rounded-lg ml-2" type="submit">Filtrar</button>
             </form>
 
             <div class="flex justify-center mt-20">
@@ -76,14 +77,16 @@
                     Criar Postagens
                 </a>
             </div>
+
+            <section class="flex items-center justify-center">
+                <div id="postsContainer" class="flex items-center justify-center py-8 pt-16 w-full">
+                    <!-- Posts will be dynamically loaded here -->
+    
+                </div>
+            </section>
         </section>
 
-        <section class="flex justify-center">
-            <div id="postsContainer" class="grid grid-cols-3 gap-20 py-8 pt-16 w-full">
-                <!-- Posts will be dynamically loaded here -->
-
-            </div>
-        </section>
+        
 
         <button class="px-8 py-4 bg-fundo2 mt-10 mb-40 text-xl text-center m-auto block rounded-xl" id="carregarMais">Mostrar Mais Postagens</button>
     </main>
