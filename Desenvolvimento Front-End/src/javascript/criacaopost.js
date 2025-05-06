@@ -17,11 +17,21 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        const userData = JSON.parse(localStorage.getItem('usuarioLogado'));
-        if (!userData || !userData.id) {
+        const usuarioData = JSON.parse(localStorage.getItem('usuarioLogado'));
+        if (!usuarioData || !usuarioData.id) {
             alert('Usuário não identificado. Faça login ou cadastre-se.');
+            window.location.href = 'login.html';
             return;
         }
+
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('Usuário não autenticado. Faça login novamente.');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        console.log('ID do usuário logado:', usuarioData.id); // Log para depuração
 
         const titulo = document.getElementById('titulo').value.trim();
         const categoria = document.getElementById('categoria').value.trim();
@@ -51,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         async function saveAndSendPost() {
             const post = {
-                usuario_id: userData.id, // Use o ID do usuário logado
+                usuario_id: usuarioData.id, // Use o ID do usuário logado
                 titulo,
                 descricao,
                 tipo,
@@ -69,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Inclui o token no cabeçalho
                     },
                     body: JSON.stringify(post),
                 });
