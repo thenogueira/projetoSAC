@@ -56,21 +56,23 @@
                         <input class="bg-amber-50 indent-1 p-1  rounded-md mb-5 w-full" type="text" id="nome" name="nome" placeholder="Nome Completo" required><br>
 
                         <!-- Botão para abrir/fechar a aba -->
-                        <button type="button" id="toggleDocumentoBtn" class="bg-gray-200 px-4 py-2 rounded-md mb-2 border border-gray-400 shadow hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 text-left mt-5">
+                        <button type="button" id="toggleDocumentoBtn" class="bg-fundo2 border-destaque px-4 py-2 rounded-md mb-2 border-2 mt-5
+                        
+                        focus:border-green-800 focus:bg-destaque focus:text-amber-50
+                        hover:border-green-800 hover:bg-destaque hover:text-amber-50">
                             Selecionar Tipo de Documento
                         </button>
 
                         <!-- Contêiner que será exibido/ocultado -->
                         <div id="tipoDocumentoContainer" class="hidden mb-7">
-                            <div class="flex gap-5 mt-5">
+                            <div class="flex gap-5 mt-2 ml-1">
                                 <label class="flex items-center gap-2">
-                                    <input  type="radio" name="tipoDocumento" value="CPF" id="cpfOption" checked class="appearance-none checked:border-blue-500  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                                    <input  type="radio" name="tipoDocumento" value="CPF" id="cpfOption" checked class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
                                     CPF
                                 </label>
                                 <label class="flex items-center gap-2">
-                                    <input type="radio" name="tipoDocumento" value="CNPJ" id="cnpjOption " class="appearance-none checked:border-blue-500  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                                    <input type="radio" name="tipoDocumento" value="CNPJ" id="cnpjOption " class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
                                     CNPJ
-                                    
                                 </label>
 
                                 
