@@ -1,4 +1,34 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        alert('Usuário não autenticado. Faça login novamente.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Exemplo de carregamento de dados do perfil
+    fetch('http://localhost:8080/usuarios/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`, // Inclui o token no cabeçalho
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar perfil');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('profileName').textContent = data.nome;
+            document.getElementById('profileEmail').textContent = data.email;
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao carregar perfil. Faça login novamente.');
+            window.location.href = 'login.html';
+        });
+
     const editProfileBtn = document.getElementById('editProfileBtn');
     const editProfileContainer = document.getElementById('editProfileContainer');
     const saveProfileBtn = document.getElementById('saveProfileBtn');
