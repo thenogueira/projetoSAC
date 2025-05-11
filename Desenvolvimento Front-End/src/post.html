@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Postagens</title>
+    <title>Document</title>
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
     
     <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+
 </head>
-<body class="bg-amber-50 font-alexandria text-textos">
+<body class="bg-fundo1 font-alexandria">
 
     <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
         <div class="flex items-center gap-15">
@@ -27,109 +22,78 @@
             <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
             <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
         </div>
-    </nav>
+    </nav> 
 
-    <main class="bg-fundo1 px-30 py-15">
-        <section class="bg-amber-50 flex rounded-3xl px-20 py-15">
-            <form id="postForm" class="w-full">
-                <h2 class="text-[clamp(2rem,2vw,2.25rem)] mb-8">Criar Postagem</h2>
-                <div class="my-8">
-                    <label for="titulo" class="block text-xl mb-1">Título:</label>
-                    <input type="text" id="titulo" class="w-full px-3 py-2 border rounded-lg" placeholder="Título da postagem" required>
-                </div>
+    <main class="mx-30 my-10">
+        <section class="bg-amber-50 px-15 py-8 rounded-2xl"> 
+            <h1 class="text-4xl mb-1">Titulo Postagem</h1>
+            <!-- puxar do BD -->
 
-                <div class="my-8">
-                    <label for="tipo" class="block text-xl mb-1">Tipo:</label>
-                    <select id="tipo" class="w-full px-3 py-2 border rounded-lg" required>
-                        <option value="Doação">Doação</option>
-                        <option value="Pedido">Pedido</option>
-                    </select>
-                </div>
-
-                <div class="my-8">
-                    <label for="categoria" class="block text-xl mb-1">Categoria:</label>
-                    <select id="categoria" class="w-full px-3 py-2 border rounded-lg" required>
-                        <option class="" value="Alimentos">Alimentos</option>
-                        <option value="Roupas">Roupas</option>
-                    </select>
-                </div>
+            <p class="text-minitexto">Data da postagem: 00/00/0000</p>
+            <!-- puxar do BD -->
             
-                <div class="my-14">
-                    <label for="localizacao" class="block text-xl mb-1">Localização:</label>
-                    <button type="button" id="toggleLocalizacaoBtn" class="w-full px-3 py-2 border rounded-lg bg-gray-100 hover:bg-gray-200">
-                        Inserir Localização
-                    </button>
+            <div class="flex items-center justify-end mb-6 w-full mt-8">
 
-                    <div id="localizacaoContainer" class="hidden mt-4">
+                <div class="flex gap-5 items-center w-full">
 
-                        <div class="mb-4">
-                            <label for="estado" class="block text-sm font-medium">Estado:</label>
-                            <select id="estado" class="w-full px-3 py-2 border rounded-lg">
+                    <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
+                        <img id="profileImage" class="object-cover w-full h-full" src="../img/right.png" alt="Foto de Perfil" width="50" height="50">
 
-                                <option value="">Selecione o Estado</option>
-                                <option value="AC">Acre</option>
-                                <option value="AL">Alagoas</option>
-                                <option value="AP">Amapá</option>
-                                <option value="AM">Amazonas</option>
-                                <option value="BA">Bahia</option>
-                                <option value="CE">Ceará</option>
-                                <option value="DF">Distrito Federal</option>
-                                <option value="ES">Espírito Santo</option>
-                                <option value="GO">Goiás</option>
-                                <option value="MA">Maranhão</option>
-                                <option value="MT">Mato Grosso</option>
-                                <option value="MS">Mato Grosso do Sul</option>
-                                <option value="MG">Minas Gerais</option>
-                                <option value="PA">Pará</option>
-                                <option value="PB">Paraíba</option>
-                                <option value="PR">Paraná</option>
-                                <option value="PE">Pernambuco</option>
-                                <option value="PI">Piauí</option>
-                                <option value="RJ">Rio de Janeiro</option>
-                                <option value="RN">Rio Grande do Norte</option>
-                                <option value="RS">Rio Grande do Sul</option>
-                                <option value="RO">Rondônia</option>
-                                <option value="RR">Roraima</option>
-                                <option value="SC">Santa Catarina</option>
-                                <option value="SP">São Paulo</option>
-                                <option value="SE">Sergipe</option>
-                                <option value="TO">Tocantins</option>
-                            </select>
-                        </div>
+                    </div>
+                    <!-- Foto de Perfil -->
+                    
+                    <div class="flex flex-col">
+                        <span id="profileName" class="text-xl">Satoru Gojo</span>
+                        <span>☆☆☆☆☆</span>
 
-                        <div class="mb-4">
-                            <label for="casa" class="block text-sm font-medium">Lugar:</label>
-                            <input type="text" id="casa" class="w-full px-3 py-2 border rounded-lg" placeholder="Ex: Rua das Flores, 123" required>
-                        </div>
-
+                        <!-- puxar do banco -->
                     </div>
                 </div>
 
-                <div class="my-8">
-                    <label for="urgencia" class="block text-xl mb-1">Urgência:</label>
-                    <select id="urgencia" class="w-full px-3 py-2 border rounded-lg" required>
-                        <option value="Alta">Alta</option>
-                        <option value="Média">Média</option>
-                        <option value="Baixa">Baixa</option>
-                    </select>
+                <button class="bg-fundo1 border-1 border-black py-2 px-4 rounded-xl">Contactar</button>
+
+            </div>
+
+            <hr class="text-minitexto">
+
+            <div class="mt-6">
+
+                <p class="mb-1 text-xl">Tipo: </p>
+                <p class="mb-1 text-xl">Categoria: </p>
+                <p class="mb-1 text-xl">Localização: </p>
+                <p class="mb-6 text-xl">Estado da doação: </p>
+
+                <label class="text-xl">Descrição</label>
+                <p name="descricaoPost" id="descricaoPost" class="border-1 mt-1  border-black w-full rounded-xl py-1 px-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. A dicta cupiditate debitis perspiciatis fugit tenetur explicabo, accusantium corporis ipsa deserunt sit aliquam molestiae sapiente rerum nemo quidem fugiat. Ex, ad. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quo voluptatem libero asperiores eum impedit officia ipsa eaque veniam, modi debitis, dolorem omnis. Ratione possimus in tempora mollitia. Dolor, id!</p>
+
+            </div>
+
+            <hr class="text-minitexto my-8">
+
+            <section class="flex gap-10 items-center justify-end relative">
+                <div class="w-55 h-55 bg-fundo2 ">
+                    <img class="w-full h-full object-cover" src="../img/fundo-1.png" alt="">
                 </div>
-                <div class="my-8">
-                    <label for="descricao" class="block text-xl mb-1">Descrição:</label>
-                    <textarea id="descricao" class="w-full px-3 py-2 border rounded-lg" placeholder="Descrição da postagem" required></textarea>
+                <div class="w-55 h-55 bg-fundo2">
+                    <img class="w-full h-full object-cover" src="../img/fundo-1.png" alt=""></div>
+                <div class="w-55 h-55 bg-fundo2"><img class="w-full h-full object-cover" src="../img/fundo-1.png" alt="">
                 </div>
-                <div class="my-8">
-                    <label for="imagem" class="block text-xl mb-1">Imagem:</label>
-                    <input type="file" id="imagem" class="w-full px-3 py-2 border rounded-lg" accept="image/*">
+                <div class="w-55 h-55 bg-fundo2">
+                    <img class="w-full h-full object-cover" src="../img/fundo-1.png" alt="">
                 </div>
-                <div class="flex justify-end mt-16">
-                    <button type="submit" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">Criar Postagem</button>
-                </div>
-            </form>
+
+                <!-- adicionar quantas imagens o usuario colocar na postagem só, não quatro ou mais -->
+
+                <button class="absolute right-[-15px] bg-black rounded-4xl"><img src="../img/right.png" alt=""></button>
+
+                <!-- botão só aparece se tiver mais de 4 imagens aqui -->
+            </section>
+
         </section>
+
     </main>
-    <script src="../src/javascript/criacaopost.js"></script>
-    
-    <footer class="px-30 pt-10 pb-5 ">
+
+    <footer class="px-30 pt-10 pb-5 bg-amber-50">
 
         <div class="flex gap-10">
             <div class="flex flex-col">
@@ -154,4 +118,3 @@
 
 </body>
 </html>
-
