@@ -1,4 +1,4 @@
-CREATE DATABASE apoio_comunitario;
+CREATE DATABASE IF NOT EXISTS apoio_comunitario;
 USE apoio_comunitario;
 CREATE TABLE usuario (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
