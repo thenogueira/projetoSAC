@@ -18,6 +18,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
      * return Um objeto Usuario correspondente ao nome fornecido, ou null se não encontrado.
      */
     Usuario findByNome(String nome);
-    Optional<Usuario> findByEmail(String email);
+    Usuario findByEmail(String email);
     Optional<Usuario> findByNumeroDocumento(String NumeroDocumento);
 }

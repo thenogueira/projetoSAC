@@ -124,7 +124,7 @@ public class UsuarioService implements UserDetails {
         return usuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
     }
 
-    public Optional<Usuario> buscarPorEmail(String email) {
+    public Usuario buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 

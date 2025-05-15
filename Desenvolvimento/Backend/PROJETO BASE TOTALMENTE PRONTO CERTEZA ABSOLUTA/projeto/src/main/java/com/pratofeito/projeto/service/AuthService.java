@@ -6,6 +6,7 @@ import com.pratofeito.projeto.dto.LoginResponseDTO;
 import com.pratofeito.projeto.dto.RegisterDTO;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.model.enums.StatusConta;
+import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import com.pratofeito.projeto.security.TokenService;
@@ -35,25 +36,33 @@ public class AuthService {
     }
 
     public LoginResponseDTO login(AuthenticationDTO data) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(data.email());
+        try{
+            Usuario usuario = validarCredenciais(data.email(), data.senha_hash());
 
-        // Verifica se o usuário existe antes de tentar autenticar
-        if (usuarioOpt.isEmpty()) {
-            throw new BadCredentialsException("Credenciais inválidas");
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha_hash());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
+            var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
+            return new LoginResponseDTO(token);
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Credenciais inválidas: email ou senha incorretos");
+        } catch (UsuarioBanidoException e) {
+            throw e; // Já tem tratamento específico
         }
-
-        Usuario usuario = usuarioOpt.get();
-
-        // Verifica o status da conta
-        verificarStatusConta(usuario);
-
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha_hash());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
-
-        return new LoginResponseDTO(token);
     }
 
+    private Usuario validarCredenciais(String email, String senha) {
+        Usuario usuario = usuarioRepository.findByEmail(email);
+        verificarStatusConta(usuario);
+        verificarSenha(usuario, senha);
+        return usuario;
+    }
+
+    private void verificarSenha(Usuario usuario, String senha) {
+        if (!passwordEncoder.matches(senha, usuario.getSenha_hash())) {
+            throw new BadCredentialsException("Senha incorreta");
+        }
+    }
 
 
     private void verificarStatusConta(Usuario usuario) {
@@ -66,15 +75,17 @@ public class AuthService {
                 break;
         }
     }
-        public void register(RegisterDTO data) {
-            validarRegistro(data);
-            Usuario novoUsuario = criarUsuario(data);
-            novoUsuario.setStatusConta(StatusConta.ATIVA); // Ou PENDENTE se precisar de confirmação
-            usuarioRepository.save(novoUsuario);
-        }
+    public void register(RegisterDTO data) {
+        validarRegistro(data);
+        Usuario novoUsuario = criarUsuario(data);
+        // Valores fixos para novas contas
+        novoUsuario.setTipoConta(TipoConta.USUARIO);
+        novoUsuario.setStatusConta(StatusConta.ATIVA);
+        usuarioRepository.save(novoUsuario);
+    }
 
     private void validarRegistro(RegisterDTO data) {
-        if(usuarioRepository.findByEmail(data.email()).isPresent()) {
+        if(usuarioRepository.findByEmail(data.email()) != null){
             throw new IllegalArgumentException("Email já cadastrado");
         }
 
@@ -95,9 +106,9 @@ public class AuthService {
                 data.nome(),
                 data.email(),
                 encryptedPassword,
-                data.tipoConta(),
+                TipoConta.USUARIO,
                 data.tipoDocumento(),
                 data.numeroDocumento(),
-                data.statusConta());
+                StatusConta.ATIVA);
     }
 }

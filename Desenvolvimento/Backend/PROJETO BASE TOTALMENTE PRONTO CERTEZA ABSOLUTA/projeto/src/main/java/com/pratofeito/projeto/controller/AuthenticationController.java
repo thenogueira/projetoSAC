@@ -1,7 +1,7 @@
 package com.pratofeito.projeto.controller;
 
 import com.pratofeito.projeto.exception.UsuarioBanidoException;
-import com.pratofeito.projeto.configuration.GlobalExceptionHandler;
+import com.pratofeito.projeto.exception.AuthenticationException;
 import com.pratofeito.projeto.dto.AuthenticationDTO;
 import com.pratofeito.projeto.dto.LoginResponseDTO;
 import com.pratofeito.projeto.dto.RegisterDTO;
@@ -9,7 +9,10 @@ import com.pratofeito.projeto.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Controlador REST para operações de autenticação e registro de usuários.
@@ -39,29 +42,39 @@ public class AuthenticationController {
      * Endpoint para autenticação (login) de usuários.
      *
      * @param data DTO contendo as credenciais de login (email e senha)
-     * @return ResponseEntity contendo o token de autenticação e informações do usuário
-     * @throws jakarta.validation.ValidationException Se os dados de entrada forem inválidos
-     * @apiNote POST /auth/login
-     * @response HTTP 200 (OK) com o token JWT e dados do usuário autenticado
-     * @response HTTP 400 (Bad Request) se as credenciais forem inválidas ou dados incorretos
-     * @response HTTP 401 (Unauthorized) se a autenticação falhar
+     * @return ResponseEntity contendo token e mensagens de erro em caso de falha
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
-        LoginResponseDTO response = authService.login(data);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
+        try {
+            LoginResponseDTO response = authService.login(data);
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException | BadCredentialsException e) { // Credentials error
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of(
+                            "error", "authentication_error",
+                            "message", "senha ou email incorretos"
+                    ));
+        } catch (UsuarioBanidoException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of(
+                            "error", "account_banned",
+                            "message", e.getMessage()
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of(
+                            "error", "server_error",
+                            "message", "Erro interno no servidor"
+                    ));
+        }
     }
+
     /**
      * Endpoint para registro de novos usuários.
      *
      * @param data DTO contendo os dados necessários para registro do usuário
      * @return ResponseEntity vazio em caso de sucesso ou mensagem de erro em caso de falha
-     * @throws IllegalArgumentException Se os dados de registro forem inválidos
-     * @apiNote POST /auth/register
-     * @response HTTP 200 (OK) se o registro for bem-sucedido
-     * @response HTTP 400 (Bad Request) se os dados de registro forem inválidos
-     * @response HTTP 409 (Conflict) se o email já estiver em uso
-     * @response HTTP 500 (Internal Server Error) em caso de erro inesperado
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data) {
@@ -69,12 +82,19 @@ public class AuthenticationController {
             // Chamar o serviço para processar o registro
             authService.register(data);
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            // Retornar erro 400 para dados inválidos
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            // Retornar erro 500 para exceções inesperadas
-            return ResponseEntity.internalServerError().body("Ocorreu um erro durante o registro: " + e.getMessage());
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of(
+                            "error", "authentication_error",
+                            "message", e.getMessage()
+                    ));
+        } catch (UsuarioBanidoException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of(
+                            "error", "account_banned",
+                            "message", e.getMessage()
+                    ));
         }
     }
 }
+
