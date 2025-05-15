@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById('email').value.trim();
         const senha_hash = document.getElementById('senha').value.trim();
         const confirmarSenha = document.getElementById('confirmarSenha').value.trim();
-        const tipoConta = "USUARIO";
-        const statusConta = "ATIVA";
+        const tipoConta = dadosCadastro.tipoConta;
+        const statusConta = dadosCadastro.statusConta;
 
         if (!email || !senha_hash || !confirmarSenha) {
             alert('Preencha todos os campos!');

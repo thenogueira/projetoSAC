@@ -21,6 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Validação básica do email
@@ -28,17 +29,17 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Email não pode ser vazio");
         }
 
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        Usuario usuarioOptional = usuarioRepository.findByEmail(email);
 
-        Usuario usuario = usuarioOptional.orElseThrow(() ->
-                new UsernameNotFoundException("Usuário não encontrado com o email: " + email)
-        );
+        if (usuarioRepository.findByEmail(email) == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado com o email: " + email);
+        }
 
         // Converte as roles/permissões do seu usuário para GrantedAuthority
         List<GrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_" + usuario.getAuthorities()) // Supondo que getRole() retorna USER, ADMIN etc.
+                new SimpleGrantedAuthority("ROLE_" + usuarioRepository.findByEmail(email).getAuthorities()) // Supondo que getRole() retorna USER, ADMIN etc.
         );
 
-        return usuario;
+        return usuarioRepository.findByEmail(email);
     }
 }
