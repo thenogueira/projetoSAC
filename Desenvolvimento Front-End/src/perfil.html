@@ -30,10 +30,10 @@
         <section class="bg-fundo1 px-30 py-10">
             <div class="flex items-end justify-end mb-6 w-full">
 
-                <div class="flex gap-5 items-end w-full">
+                <div class="flex gap-5 items-center w-full">
 
-                    <div class="rounded-full overflow-hidden w-35 h-35">
-                        <img id="profileImage" class="object-cover w-full h-full" src="../img/default-profile.png" alt="Foto de Perfil" width="50" height="50">
+                    <div class="rounded-full overflow-hidden w-35 h-35 bg-amber-100">
+                        <img id="profileImage" class="object-cover w-full h-full" src="../img/default-profile.png" alt=" " width="50" height="50">
 
                     </div>
                     <!-- Foto de Perfil -->
@@ -41,23 +41,27 @@
                     <div>
                         <span id="profileName" class="text-xl">Usuário</span>
                         <div class="border-l-2 border-black mt-2">
-                            <p id="profileDescription" class="w-105 pl-2 text-gray-500">Sem descrição disponível.</p>
+                            <p id="profileDescription" class="w-105 pl-2 text-gray-500">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta recusandae placeat repellat consequatur quae alias soluta </p>
                         </div>
                     </div>
                 </div>
 
-                <span>☆☆☆☆☆</span>
+                    <div class="items-end justify-end w-40">
+                        <!-- <span>☆☆☆☆☆</span> -->
+                        <!-- mudar estrelas, design, e puxar isso do banco de dados também -->
+                        <!-- SO APARECE EM PERFIL DOS OUTROS -->
+                        
+                        <button id="editProfileBtn" class="px-4 py-2 border-1 border-black rounded-lg mt-2 hover:bg-destaque-dark">
+                        Editar Perfil
+                        </button>
+                        <!-- Botão para abrir as opções de edição -->
+                         <!-- SO APARECE EM PERFIL DO USUARIO -->
+                    </div>
 
-                <!-- mudar estrelas, design, e puxar isso do banco de dados também -->
 
             </div>
 
-            <!-- Botão para abrir as opções de edição -->
-            <div class="flex justify-end mb-4">
-                <button id="editProfileBtn" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
-                    Editar Perfil
-                </button>
-            </div>
+            
 
             <!-- Contêiner para edição do perfil -->
             <div id="editProfileContainer" class="hidden bg-fundo2 p-4 rounded-lg shadow-lg">
@@ -97,11 +101,38 @@
 
         </section>
         <section class="bg-amber-50 px-30 mt-5" >
+            
             <div class="flex items-center gap-5  mb-15">
                 <p class="text-xl text-minitexto">Filtrar: </p>
                 <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Recentes</button>
                 <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Antigas</button>
-            </div>
+            </div> 
+
+            <!-- Aparece quando estiver selecionado postagens -->
+
+
+
+            <!-- <div class="flex items-center gap-5  mb-15">
+                
+                <p class="text-xl text-minitexto">Filtrar: </p>
+
+                
+                 <select class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl
+                focus:border-black focus:text-black" id="categoria" name="categoria">  
+                        <option value="" disabled selected hidden>Notas de avaliações</option>
+                        <option value="5">☆☆☆☆☆</option>
+                        <option value="4">☆☆☆☆</option>
+                        <option value="3">☆☆☆</option>
+                        <option value="2">☆☆</option>
+                        <option value="1">☆</option>
+                </select>
+
+                <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Recentes</button>
+                
+                <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Antigas</button> -->
+
+                <!-- aparece quando estiver comentarios selecionado 
+            </div> -->
 
             <!-- mesma coisa de cima. -->
 
