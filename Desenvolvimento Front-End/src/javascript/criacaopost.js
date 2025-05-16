@@ -17,7 +17,17 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        const usuarioData = JSON.parse(localStorage.getItem('usuarioLogado'));
+        const usuarioDataRaw = localStorage.getItem('usuarioLogado');
+        let usuarioData;
+        try {
+            usuarioData = JSON.parse(usuarioDataRaw);
+        } catch (error) {
+            console.error('Erro ao analisar os dados do usuário:', error);
+            alert('Usuário não identificado. Faça login ou cadastre-se.');
+            window.location.href = 'login.html';
+            return;
+        }
+
         if (!usuarioData || !usuarioData.id) {
             alert('Usuário não identificado. Faça login ou cadastre-se.');
             window.location.href = 'login.html';

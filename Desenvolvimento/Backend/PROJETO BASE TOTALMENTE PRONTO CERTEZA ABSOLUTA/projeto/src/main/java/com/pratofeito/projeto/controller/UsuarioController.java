@@ -96,8 +96,8 @@ public class UsuarioController {
             @Valid @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
 
         // Verifica se o novo e-mail já está em uso por outro usuário
-        Optional<Usuario> usuarioExistente = usuarioService.buscarPorEmail(usuarioUpdateDTO.getEmail());
-        if (usuarioExistente.isPresent() && usuarioExistente.get().getId() != id) {
+        Usuario usuarioExistente = usuarioService.buscarPorEmail(usuarioUpdateDTO.getEmail());
+        if (usuarioExistente != null && usuarioExistente.getId() != id) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "O e-mail já está em uso por outro usuário");
         }
 

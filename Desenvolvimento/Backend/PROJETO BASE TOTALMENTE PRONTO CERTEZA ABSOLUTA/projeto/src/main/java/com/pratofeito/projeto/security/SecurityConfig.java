@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Libera preflight
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/ocorrencias/**").permitAll() // Ajuste conforme necessidade
+                        .requestMatchers("/ocorrencias/**").permitAll()// Ajuste conforme necessidade
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
