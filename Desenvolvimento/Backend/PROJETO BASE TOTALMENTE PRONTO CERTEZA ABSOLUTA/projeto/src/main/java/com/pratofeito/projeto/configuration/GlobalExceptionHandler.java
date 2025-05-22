@@ -4,6 +4,7 @@ import com.pratofeito.projeto.exception.UsuarioBanidoException;
 import com.pratofeito.projeto.exception.ErroResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -73,6 +74,18 @@ public class GlobalExceptionHandler {
                 request.getDescription(false).replace("uri=", "")
         );
 
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ErroResponse response = new ErroResponse(
+                status.value(),
+                status.getReasonPhrase(),
+                "Senha ou email incorretos",
+                request.getDescription(false).replace("uri=", "")
+        );
         return new ResponseEntity<>(response, status);
     }
 }

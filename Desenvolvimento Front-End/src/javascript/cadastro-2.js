@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = document.getElementById('email').value.trim();
         const senha_hash = document.getElementById('senha').value.trim();
         const confirmarSenha = document.getElementById('confirmarSenha').value.trim();
-        const tipoConta = "USUARIO";
-        const statusConta = "ATIVA";
+        const tipoConta = dadosCadastro.tipoConta;
+        const statusConta = dadosCadastro.statusConta;
 
         if (!email || !senha_hash || !confirmarSenha) {
             alert('Preencha todos os campos!');
@@ -27,7 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const dadosCompletos = { email, senha_hash, tipoConta, ...dadosCadastro, statusConta };
+        // Gerar um ID único para o usuário
+        const userId = `user_${Date.now()}`; // Exemplo: user_1681234567890
+
+        const dadosCompletos = { id: userId, email, senha_hash, tipoConta, ...dadosCadastro, statusConta };
 
         try {
             const response = await fetch('http://localhost:8080/auth/register', {
@@ -41,6 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
                 alert('Cadastro concluído com sucesso!');
                 form.reset();
+
+                // Salvar o ID do usuário no localStorage
+                localStorage.setItem('usuarioLogado', JSON.stringify({ id: userId, email }));
+
                 window.location.href = 'login.html';
             } else {
                 const error = await response.json();

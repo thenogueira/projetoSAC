@@ -93,4 +93,76 @@ public class Ocorrencia {
     @Size(max = 30, message = "O nome deve ter no máximo 30 caracteres") // Validação: tamanho máximo de 30 caracteres
     @Column(name = "imagem", length = 30, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String imagem;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public TipoOcorrencia getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoOcorrencia tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
+    }
+
+    public String getEstadoDoacao() {
+        return estadoDoacao;
+    }
+
+    public void setEstadoDoacao(String estadoDoacao) {
+        this.estadoDoacao = estadoDoacao;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
 }
