@@ -43,7 +43,7 @@ public class AuthService {
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
-            return new LoginResponseDTO(token);
+            return new LoginResponseDTO(token, usuario);
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Credenciais inválidas: email ou senha incorretos");
         } catch (UsuarioBanidoException e) {
