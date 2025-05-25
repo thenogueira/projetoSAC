@@ -107,7 +107,7 @@ public class UsuarioService implements UserDetails {
     }
 
     @Transactional
-    public Usuario atualizarUsuario(Integer id, Usuario usuarioAtualizado) {
+    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
@@ -119,7 +119,7 @@ public class UsuarioService implements UserDetails {
         return usuarioRepository.save(usuarioExistente);
     }
 
-    public Usuario buscarUsuarioPorId(Integer id) {
+    public Usuario buscarUsuarioPorId(Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         return usuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
     }
@@ -128,14 +128,14 @@ public class UsuarioService implements UserDetails {
         return usuarioRepository.findByEmail(email);
     }
 
-    public void deletarUsuario(Integer id) {
+    public void deletarUsuario(Long id) {
         usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
         usuarioRepository.deleteById(id);
     }
 
     @Transactional
-    public void banirUsuario(Integer usuarioId, Integer adminId, String motivo) {
+    public void banirUsuario(Long usuarioId, Long adminId, String motivo) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
@@ -160,7 +160,7 @@ public class UsuarioService implements UserDetails {
         usuarioBanidoRepository.save(banido);
     }
 
-    public StatusConta checarStatus(Integer id) {
+    public StatusConta checarStatus(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o ID: " + id));
 
@@ -168,7 +168,7 @@ public class UsuarioService implements UserDetails {
     }
 
     @Transactional
-    public void banirConta(Integer usuarioId, Integer adminId, String motivo) {
+    public void banirConta(Long usuarioId, Long adminId, String motivo) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 

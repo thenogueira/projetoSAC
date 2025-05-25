@@ -53,7 +53,7 @@ public class Usuario implements UserDetails {
     @Id // Indica que este campo é a chave primária da tabela
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Define a estratégia de geração de valor (auto-incremento)
     @Column(name = "id") // Define o nome da coluna no banco de dados
-    private int id;
+    private Long id;
 
     /**
      * Nome do usuário.
@@ -181,11 +181,11 @@ public class Usuario implements UserDetails {
 
     // Getters e Setters
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

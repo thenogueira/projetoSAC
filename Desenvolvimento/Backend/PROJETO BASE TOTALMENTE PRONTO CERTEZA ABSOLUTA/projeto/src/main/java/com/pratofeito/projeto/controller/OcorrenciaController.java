@@ -62,7 +62,7 @@ public class OcorrenciaController {
      */
     @PutMapping("/editar/{id}")
     public ResponseEntity<Ocorrencia> editarOcorrencia(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody OcorrenciaUpdateDTO ocorrenciaDTO) {
 
         try {
@@ -79,7 +79,7 @@ public class OcorrenciaController {
      * return ResponseEntity com status 200 (OK) se deletado com sucesso, ou 404 (Not Found) se não encontrado
      */
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deletarOcorrencia(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarOcorrencia(@PathVariable Long id) {
         try {
             ocorrenciaService.deletarOcorrencia(id);
             return ResponseEntity.ok().build();

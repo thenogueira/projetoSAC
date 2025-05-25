@@ -21,15 +21,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({ email, senha_hash }),
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Token recebido:', data.token); // Log para depuração
+                if (response.ok) {
+        const data = await response.json();
+        console.log('Token recebido:', data.token); // Log para depuração
 
-                // Armazena o token no localStorage
-                localStorage.setItem('authToken', data.token);
+        // Armazena o token no localStorage
+        localStorage.setItem('authToken', data.token);
 
-                alert('Login realizado com sucesso!');
-                window.location.href = 'postagens.html'; // Redireciona para a página principal
+        // Armazena os dados do usuário (INCLUI o ID REAL do banco)
+        localStorage.setItem('usuarioLogado', JSON.stringify(data.usuario));
+
+        alert('Login realizado com sucesso!');
+        window.location.href = 'postagens.html'; // Redireciona para a página principal
             } else {
                 const error = await response.json();
                 alert(`Erro no login: ${error.message}`);

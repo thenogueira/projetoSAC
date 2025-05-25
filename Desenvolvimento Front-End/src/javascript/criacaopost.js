@@ -41,7 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        console.log('ID do usuário logado:', usuarioData.id); // Log para depuração
+        // Extrai o número do ID se ele estiver no formato "user_1747312194400"
+        let usuarioId = usuarioData.id;
+        if (typeof usuarioId === 'string' && usuarioId.startsWith('user_')) {
+            usuarioId = parseInt(usuarioId.replace('user_', ''), 10);
+        }
+
+        console.log('ID do usuário logado (convertido):', usuarioId); // Log para depuração
 
         const titulo = document.getElementById('titulo').value.trim();
         const categoria = document.getElementById('categoria').value.trim();
@@ -71,12 +77,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         async function saveAndSendPost() {
             const post = {
-                usuario_id: usuarioData.id, // Use o ID do usuário logado
+                usuario: {
+                    id: usuarioId
+                },
                 titulo,
                 descricao,
                 tipo,
                 categoria,
-                localizacao: { estado, lugar },
+                localizacao: `${estado}, ${lugar}`,
                 estado_doacao,
                 imagem: imagemBase64,
                 data_criacao: new Date().toISOString(),
@@ -84,12 +92,11 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             try {
-                // Envia o post para o backend
                 const response = await fetch('http://localhost:8080/ocorrencias/criar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Inclui o token no cabeçalho
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify(post),
                 });
@@ -97,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (response.ok) {
                     alert('Postagem criada com sucesso!');
                     form.reset();
-                    window.location.href = 'postagens.html'; // Redireciona para a página de postagens
+                    window.location.href = 'postagens.html';
                 } else {
                     const error = await response.json();
                     alert(`Erro ao criar postagem: ${error.message}`);
