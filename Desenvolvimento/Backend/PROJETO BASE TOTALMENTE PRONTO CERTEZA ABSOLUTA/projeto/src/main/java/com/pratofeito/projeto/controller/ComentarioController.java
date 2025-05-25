@@ -42,7 +42,7 @@ public class ComentarioController {
 
         if (optionalComentario.isEmpty()) {
             return ResponseEntity.notFound().build();
-        }
+        } // trata a exceção do pedido de comentário. À buscar pelo comentário de um usuário, é possivel que o mesmo não tenha comentarios.
 
         Comentario comentario = optionalComentario.get();
         comentario.setTexto(comentarioRequest.getTexto());
@@ -57,7 +57,7 @@ public class ComentarioController {
     public ResponseEntity<Void> excluirComentario(@PathVariable int id) {
         if (!comentarioRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
-        }
+        } // acima, se a busca por comentarios byid não encontrar sucesso, constroi uma mensagem
 
         comentarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
