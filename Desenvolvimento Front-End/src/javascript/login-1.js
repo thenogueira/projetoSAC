@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (response.ok) {
         const data = await response.json();
         console.log('Token recebido:', data.token); // Log para depuração
+        console.log('Objeto completo retornado:', data); 
 
         // Armazena o token no localStorage
         localStorage.setItem('authToken', data.token);
