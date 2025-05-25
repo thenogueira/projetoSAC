@@ -20,18 +20,18 @@ import java.sql.SQLException;
 public class DatabaseInitializer implements ApplicationRunner {
 
     private final DataSource dataSource;
-    private final String relativeScriptPath = "Dados/projetoSac.sql";
+    private final String relativeScriptPath = "Dados/projetoSac.sql"; // Var recebendo o path do script em sql
 
     public DatabaseInitializer(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
+    } // construtor padrao
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("Verificando disponibilidade do banco...");
         if (!isDatabaseAvailable()) {
             System.out.println("Banco não disponível. Iniciando inicialização...");
-            initializeDatabase();
+            initializeDatabase(); // iniciando a operacao do path
         } else {
             System.out.println("Banco já está disponível. Pulando inicialização.");
         }
@@ -42,10 +42,10 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             return rs.next(); // true se a tabela existe
         } catch (SQLException e) {
-            System.err.println("Erro ao verificar banco: " + e.getMessage());
+            System.err.println("Erro ao verificar banco: " + e.getMessage()); // pega o erro erro e joga
             return false;
         }
-    }
+    } // acima, resumidamente, um trychatch pra tratar erros na tbl
 
     private void initializeDatabase() {
         try {
@@ -60,6 +60,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             }
 
             if (scriptPath == null) {
+                // 3. Se não encontrar nem mesmo no home:
                 System.err.println("Arquivo SQL não encontrado. Procurando em: " + relativeScriptPath);
                 return;
             }
@@ -87,7 +88,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             System.out.println("Verificando: " + path.toAbsolutePath());
             if (Files.exists(path)) {
                 System.out.println("Script encontrado em: " + path);
-                return path;
+                return path; // para cada caminho setado, há uma busca, se encontrar, ele seta como veridico a prioridade
             }
         }
         return null;

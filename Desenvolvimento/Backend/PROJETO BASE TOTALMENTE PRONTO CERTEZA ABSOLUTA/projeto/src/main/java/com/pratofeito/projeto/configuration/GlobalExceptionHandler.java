@@ -18,12 +18,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex, WebRequest request) {
         String errorMessage = "Erro de integridade de dados";
-        HttpStatus status = HttpStatus.CONFLICT;
+        HttpStatus status = HttpStatus.CONFLICT; // basico,o E.H trata de exceções, e nesse caso, unicidade.
 
         if (ex.getCause() instanceof SQLIntegrityConstraintViolationException sqlEx &&
                 sqlEx.getMessage().contains("usuario.email")) {
             errorMessage = "O e-mail informado já está em uso por outro usuário";
-        }
+        } // pega a ex.getCause que é a causa da excecao e chega se tem email no CDE.
 
         ErroResponse response = new ErroResponse(
                 status.value(),
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
                 request.getDescription(false).replace("uri=", "")
         );
 
-        return new ResponseEntity<>(response, status);
+        return new ResponseEntity<>(response, status); // retorna a resposta normal
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(response, status);
-    }
+    } // esse trata das excecoes de status
 
     @ExceptionHandler(UsuarioBanidoException.class)
     public ResponseEntity<Object> handleUsuarioBanido(UsuarioBanidoException ex, WebRequest request) {
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(response, status);
-    }
+    } // resposta caso usuario esteja incluido no banimento
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGlobalExceptions(Exception ex, WebRequest request) {
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(response, status);
-    }
+    } // trata qualquer erro não setado. Escape.
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex, WebRequest request) {
@@ -87,5 +87,5 @@ public class GlobalExceptionHandler {
                 request.getDescription(false).replace("uri=", "")
         );
         return new ResponseEntity<>(response, status);
-    }
+    } // erro de credencial, chamado de "match"
 }
