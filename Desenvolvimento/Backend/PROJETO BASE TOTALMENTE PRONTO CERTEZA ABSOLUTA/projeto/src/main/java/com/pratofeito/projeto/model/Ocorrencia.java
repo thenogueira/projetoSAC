@@ -24,7 +24,7 @@ public class Ocorrencia {
      */
     @Id // Indica que este campo é a chave primária da tabela
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Define a estratégia de geração de valor (auto-incremento)
-    private int id;
+    private Long id;
 
     /**
      * Usuário associado à ocorrência.
@@ -94,11 +94,11 @@ public class Ocorrencia {
     @Column(name = "imagem", length = 30, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String imagem;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

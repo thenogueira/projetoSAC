@@ -44,7 +44,7 @@ public class OcorrenciaService {
      * @return Ocorrência editada
      * @throws RuntimeException Se a ocorrência não for encontrada
      */
-    public Ocorrencia editarOcorrencia(Integer id, OcorrenciaUpdateDTO ocorrenciaDTO) {
+    public Ocorrencia editarOcorrencia(Long id, OcorrenciaUpdateDTO ocorrenciaDTO) {
         return ocorrenciaRepository.findById(id)
                 .map(ocorrencia -> {
                     if (ocorrenciaDTO.getTitulo() != null) {
@@ -64,7 +64,7 @@ public class OcorrenciaService {
      * param id ID da ocorrência a ser deletada
      * throws RuntimeException Se a ocorrência não for encontrada
      */
-    public void deletarOcorrencia(Integer id) {
+    public void deletarOcorrencia(Long id) {
         if (ocorrenciaRepository.existsById(id)) {
             ocorrenciaRepository.deleteById(id);
         } else {

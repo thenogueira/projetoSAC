@@ -8,10 +8,10 @@ public class ComentarioDTO {
     private String texto;
 
     @NotNull
-    private Integer usuarioId;
+    private Long usuarioId;
 
     @NotNull
-    private Integer ocorrenciaId;
+    private Long ocorrenciaId;
 
     public String getTexto() {
         return texto;
@@ -21,19 +21,19 @@ public class ComentarioDTO {
         this.texto = texto;
     }
 
-    public Integer getUsuarioId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(Integer usuarioId) {
+    public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }
 
-    public Integer getOcorrenciaId() {
+    public Long getOcorrenciaId() {
         return ocorrenciaId;
     }
 
-    public void setOcorrenciaId(Integer ocorrenciaId) {
+    public void setOcorrenciaId(Long ocorrenciaId) {
         this.ocorrenciaId = ocorrenciaId;
     }
 

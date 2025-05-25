@@ -92,7 +92,7 @@ public class UsuarioController {
      */
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<?> atualizarUsuario(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
 
         // Verifica se o novo e-mail já está em uso por outro usuário
@@ -121,7 +121,7 @@ public class UsuarioController {
      * @response HTTP 200 (OK) se o usuário for removido com sucesso
      */
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<?> deletarUsuario(@PathVariable Integer id) {
+    public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         try {
             // Chama o serviço para deletar o usuário
             usuarioService.deletarUsuario(id);
@@ -140,7 +140,7 @@ public class UsuarioController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Usuario admin = (Usuario) authentication.getPrincipal();
-            usuarioService.banirUsuario(id, admin.getId(), banirDTO.getMotivo());
+            usuarioService.banirUsuario(id.longValue(), admin.getId().longValue(), banirDTO.getMotivo());
             return ResponseEntity.ok().body("Usuário banido com sucesso");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -153,7 +153,7 @@ public class UsuarioController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("/checar-status/{id}")
-    public ResponseEntity<StatusConta> checarStatus(@PathVariable Integer id) {
+    public ResponseEntity<StatusConta> checarStatus(@PathVariable Long id) {
         try {
             StatusConta status = usuarioService.checarStatus(id);
             return ResponseEntity.ok(status);

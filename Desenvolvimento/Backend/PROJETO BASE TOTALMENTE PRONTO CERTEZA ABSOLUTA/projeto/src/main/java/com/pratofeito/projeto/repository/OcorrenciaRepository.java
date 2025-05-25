@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Repositório responsável por fornecer métodos de acesso aos dados da entidade Ocorrencia.
  * Esta interface estende JpaRepository, que já inclui métodos padrão para operações CRUD.
  */
-public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Integer> {
+public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Long> {
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
  * Repositório responsável por fornecer métodos de acesso aos dados da entidade Usuario.
  * Esta interface estende JpaRepository, que já inclui métodos padrão para operações CRUD.
  */
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     /**
      * Busca um usuário pelo nome.
