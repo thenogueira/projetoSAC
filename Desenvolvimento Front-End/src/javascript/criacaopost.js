@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () { 
     const form = document.getElementById('postForm');
     const toggleLocalizacaoBtn = document.getElementById('toggleLocalizacaoBtn');
     const localizacaoContainer = document.getElementById('localizacaoContainer');
