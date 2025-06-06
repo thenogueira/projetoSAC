@@ -74,18 +74,24 @@
                 <button class="px-4 py-1.5 bg-fundo2 text-black rounded-lg ml-2" type="submit">Filtrar</button>
             </form>
 
+
+            <div class="flex justify-center mt-16">
+                <div class="grid grid-cols-3 gap-20 w-full">
+                    <section class="flex items-center justify-center">
+                        <div id="postsContainer" class="flex items-center justify-center px-6 py-3 w-full">
+                            <!-- Posts will be dynamically loaded here -->
+            
+                        </div>
+                    </section>
+                </div>
+            </div>
+
             <div class="flex justify-center mt-20">
                 <a href="criandoPost.html" class="px-6 py-3 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
                     Criar Postagens
                 </a>
             </div>
 
-            <section class="flex items-center justify-center">
-                <div id="postsContainer" class="flex items-center justify-center px-6 py-3 w-full">
-                    <!-- Posts will be dynamically loaded here -->
-    
-                </div>
-            </section>
         </section>
 
         
@@ -117,7 +123,9 @@
     
         <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
     </footer>
+
     <script src="javascript/postagens.js"></script>
+
 </body>
 </html>
 
