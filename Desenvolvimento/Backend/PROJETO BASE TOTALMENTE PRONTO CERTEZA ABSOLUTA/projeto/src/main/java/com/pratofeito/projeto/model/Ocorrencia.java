@@ -90,8 +90,8 @@ public class Ocorrencia {
      * Imagem associada à ocorrência.
      * Campo com no máximo 30 caracteres (possivelmente o nome ou caminho da imagem).
      */
-    @Size(max = 30, message = "O nome deve ter no máximo 30 caracteres") // Validação: tamanho máximo de 30 caracteres
-    @Column(name = "imagem", length = 30, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
+     // Validação: tamanho máximo de 30 caracteres
+    @Column(name = "imagem", nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String imagem;
 
     public Long getId() {
