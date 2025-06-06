@@ -47,7 +47,7 @@ publicadosB.forEach( (publicadosB) => myObserverB.observe(publicadosB))
 
 async function fetchPostagens() {
     try {
-        const response = await fetch('http://localhost:8080/ocorrencia/listar');
+        const response = await fetch('http://localhost:8080/ocorrencias/listar');
         method: 'GET'
         if (!response.ok) {
             throw new Error('Erro ao buscar postagens');

@@ -91,6 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 data_atualizacao: new Date().toISOString(),
             };
 
+            console.log('Dados do post:', post); // Log para depuração
+            console.log('JSON enviado:', JSON.stringify(post, null, 2));
+
             try {
                 const response = await fetch('http://localhost:8080/ocorrencias/criar', {
                     method: 'POST',
