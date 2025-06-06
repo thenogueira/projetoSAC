@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 /**
  * Classe que representa a entidade Ocorrencia no sistema.
@@ -94,6 +98,14 @@ public class Ocorrencia {
     @Column(name = "imagem", nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String imagem;
 
+    @CreationTimestamp
+    @Column(name = "data_criacao", updatable = false)
+    private LocalDateTime dataCriacao;
+
+    @UpdateTimestamp
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
     public Long getId() {
         return id;
     }
@@ -164,5 +176,21 @@ public class Ocorrencia {
 
     public void setImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 }

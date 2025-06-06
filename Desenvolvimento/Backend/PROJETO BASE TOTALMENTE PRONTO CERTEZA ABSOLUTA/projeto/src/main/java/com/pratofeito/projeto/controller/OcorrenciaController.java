@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.controller;
 
+import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaResponseDTO;
 import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaUpdateDTO;
 import com.pratofeito.projeto.model.Ocorrencia;
 import com.pratofeito.projeto.model.Usuario;
@@ -44,14 +45,16 @@ public class OcorrenciaController {
      * param ocorrencia Objeto Ocorrencia recebido no corpo da requisição.
      * return A ocorrência criada e salva no banco de dados.
      */
-    @PostMapping("/criar") // Mapeia requisições POST para o caminho /ocorrencias/criar
-    public Ocorrencia criarOcorrencia(@Valid @RequestBody Ocorrencia ocorrencia) { // @RequestBody indica que o objeto Ocorrencia é recebido no corpo da requisição
-        // Carrega o usuário completo do banco
+    @PostMapping("/criar")
+    public ResponseEntity<OcorrenciaResponseDTO> criarOcorrencia(@Valid @RequestBody Ocorrencia ocorrencia) {
         Usuario usuario = usuarioRepository.findById(ocorrencia.getUsuario().getId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        ocorrencia.setUsuario(usuario); // Associa o usuário completo
-        return ocorrenciaService.salvarOcorrencia(ocorrencia); // Chama o método do serviço para salvar a ocorrência
+        ocorrencia.setUsuario(usuario);
+
+        Ocorrencia salva = ocorrenciaService.salvarOcorrencia(ocorrencia);
+
+        return ResponseEntity.ok(new OcorrenciaResponseDTO(salva));
     }
 
     /**
