@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const postsContainer = document.getElementById('postsContainer');
 
+    const postsContainerErro = document.querySelector('div#postsContainerErro')
+
     if (!postsContainer) {
         console.error('Elemento postsContainer não encontrado no DOM.');
         return;
@@ -35,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     } catch (error) {
         console.error('Erro ao carregar as ocorrências:', error);
-        postsContainer.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
+        postsContainerErro.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
     }
 
     // Função para definir a classe de cor com base na urgência
