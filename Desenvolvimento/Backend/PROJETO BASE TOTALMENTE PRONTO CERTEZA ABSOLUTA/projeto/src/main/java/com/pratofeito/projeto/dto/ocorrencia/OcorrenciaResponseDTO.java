@@ -30,6 +30,6 @@ public class OcorrenciaResponseDTO {
         this.data_criacao = ocorrencia.getDataCriacao();
         this.data_atualizacao = ocorrencia.getDataAtualizacao();
         this.usuarioId = ocorrencia.getUsuario().getId();
-        this.usuarioNome = ocorrencia.getUsuario().getNome(); // aqui é o que o frontend precisa!
+        this.usuarioNome = ocorrencia.getUsuario().getNome();
     }
 }
