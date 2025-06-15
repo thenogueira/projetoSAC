@@ -43,7 +43,7 @@
 
 .publique{
     opacity: 0;  
-    transform: translateX(-100%); 
+    transform: translateX(-20%); 
     transition: all 1s; 
     color: #5ddb66;
     color: #299431;
@@ -59,7 +59,7 @@
 
 .publiques{
     opacity: 0;  
-    transform: translateX(100%); 
+    transform: translateX(20%); 
     transition: all 1s; 
 
 }

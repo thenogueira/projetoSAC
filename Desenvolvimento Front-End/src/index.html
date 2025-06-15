@@ -16,85 +16,89 @@
 <body class="bg-amber-50 font-alexandria">
 
     <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
-        <div class="flex items-center gap-15">
+        <div class="flex items-center gap-15 ">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
             <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
-            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
             <!-- <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a> -->
+            
+            <div class="menu-grande " id="expandir">
 
-            <div class="menu p-0">
-                <div class="flex gap-3 items-center">
-                    <div class="p-0 rounded-full overflow-hidden w-6 h-6 bg-black ">
-                        <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
-                    </div>
-                    <!-- Foto de Perfil -->
-                    
-                    <div class="flex flex-col">
-                        <span id="profileName">Satoru Gojo</span>
-                        <!-- puxar do banco -->
-                    </div>
-                </div>
+                <div class="menu p-0 flex-col flex" >
+                    <a href="#">
+                        <div class="flex gap-3" >
+                            <div class="p-0 rounded-full overflow-hidden imagem bg-black" id="imagem">
+                                <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
+                            </div>
+                            <!-- Foto de Perfil -->
+                            <div class="flex flex-col">
+                                <span id="profileName">Satoru Gojo</span>
+                                <!-- puxar do banco -->
+                            </div>
+                        </div>
+                        <hr class="my-6">
+                        
+                        <div>
+                            <ul>
+                                <li class="item">
+                                    <a href="perfil.html" class="link">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                            <span class="text">Perfil</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="criandoPost.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                            <span class="text">Criar Postagem</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="#">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                            <span class="text">Configurações</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="#">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                            <span class="text">Sair da Conta</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </a>
 
-                <hr class="my-4">
 
-                <div>
-                    <ul>
-                        <li class="item">
-                            <a href="#" class="link">
-                                <div class="flex items-center">
-                                    <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
-                                    <span class="text">Perfil</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li class="item">
-                            <a href="#">
-                                <div class="flex items-center">
-                                    <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                                    <span class="text">Criar Postagem</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li class="item">
-                            <a href="#">
-                                <div class="flex items-center">
-                                    <span class="icon"><i class="fa-solid fa-gear"></i></span>
-                                    <span class="text">Configurações</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li class="item">
-                            <a href="#">
-                                <div class="flex items-center">
-                                    <span class="icon"><i class="fa-solid fa-door-open"></i></span>
-                                    <span class="text">Sair da Conta</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
                 </div>
             </div>
 
-            
         </div>
     </nav>   
     
     <main>    
-        <section class="w-vw h-dvh bg-fundo1 flex items-center">
-            <div class="px-30">
-                <h1  class="text-5xl text-destaque font-alfa publique delay-400">Bem-vindo ao SAC</h1>
+        <section class="w-vw h-dvh bg-fundo1 flex items-center px-30">
+            <div>
+                <h1 class="text-5xl text-destaque font-alfa publique delay-400">Bem-vindo ao SAC</h1>
                 <p   class="m-4 ml-0 w-150 text-destaque text-2xl publique">Texto sobre quem somos e nosso objetivo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt quia iusto harum repellendus modi explicabo soluta non ut eligendi aperiam quo eos aliquid placeat, pariatur consequatur aut. Voluptatibus, provident mollitia.</p>
 
-                
+
             </div>
         </section>
         
