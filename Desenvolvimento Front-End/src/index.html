@@ -6,6 +6,7 @@
     <title>SAC - Página Inicial</title>
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
 
     <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
     
@@ -22,41 +23,65 @@
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
             <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
-            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
+            <!-- <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a> -->
 
-            <div class="">
-                <ul>
-                    <li>
-                        <a href="#">
-                            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
-                            <span class="text"> </span>
-                        </a>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <a href="#">
-                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                            <span class="text"> </span>
-                        </a>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <a href="#">
-                            <span class="icon"><i class="fa-solid fa-gear"></i></span>
-                            <span class="text"> </span>
-                        </a>
-                    </li>
-                </ul>
-                <ul>
-                    <li>
-                        <a href="#">
-                            <span class="icon"><i class="fa-solid fa-door-open"></i></span>
-                            <span class="text"> </span>
-                        </a>
-                    </li>
-                </ul>
+            <div class="menu p-0">
+                <div class="flex gap-3 items-center">
+                    <div class="p-0 rounded-full overflow-hidden w-6 h-6 bg-black ">
+                        <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
+                    </div>
+                    <!-- Foto de Perfil -->
+                    
+                    <div class="flex flex-col">
+                        <span id="profileName">Satoru Gojo</span>
+                        <!-- puxar do banco -->
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div>
+                    <ul>
+                        <li class="item">
+                            <a href="#" class="link">
+                                <div class="flex items-center">
+                                    <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                    <span class="text">Perfil</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="item">
+                            <a href="#">
+                                <div class="flex items-center">
+                                    <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                    <span class="text">Criar Postagem</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="item">
+                            <a href="#">
+                                <div class="flex items-center">
+                                    <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                    <span class="text">Configurações</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="item">
+                            <a href="#">
+                                <div class="flex items-center">
+                                    <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                    <span class="text">Sair da Conta</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             
@@ -89,10 +114,14 @@
         <section>
             <h1 class="text-center text-4xl mt-15 mb-[-50px]publicadoB">Postagens mais importantes</h1>
 
-            <div class="w-vh h-dvh flex gap-5 items-center px-30 justify-center bg-amber-50 publiqueB" id="postagens-container">
+            <div class="w-vh h-dvh flex gap-5 items-center px-30 justify-center bg-amber-50 publiqueB" id="postsContainer">
+                
                 <!-- As postagens serão carregadas dinamicamente pelo JavaScript -->
+                 
             </div>
         </section>
+
+        
 
         <!-- puxar do banco de dados as postagens acima -->
 

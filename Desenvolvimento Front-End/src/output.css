@@ -12,7 +12,6 @@
     --color-amber-50: oklch(98.7% 0.022 95.277);
     --color-amber-100: oklch(96.2% 0.059 95.617);
     --color-amber-500: oklch(76.9% 0.188 70.08);
-    --color-amber-600: oklch(66.6% 0.179 58.318);
     --color-green-800: oklch(44.8% 0.119 151.328);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-gray-100: oklch(96.7% 0.003 264.542);
@@ -257,6 +256,9 @@
   .mx-auto {
     margin-inline: auto;
   }
+  .my-4 {
+    margin-block: calc(var(--spacing) * 4);
+  }
   .my-8 {
     margin-block: calc(var(--spacing) * 8);
   }
@@ -362,6 +364,9 @@
   .h-5 {
     height: calc(var(--spacing) * 5);
   }
+  .h-6 {
+    height: calc(var(--spacing) * 6);
+  }
   .h-14 {
     height: calc(var(--spacing) * 14);
   }
@@ -391,6 +396,9 @@
   }
   .w-5 {
     width: calc(var(--spacing) * 5);
+  }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
   }
   .w-14 {
     width: calc(var(--spacing) * 14);
@@ -431,11 +439,8 @@
   .max-w-md {
     max-width: var(--container-md);
   }
-  .min-w-\[25\%\] {
-    min-width: 25%;
-  }
-  .flex-1 {
-    flex: 1;
+  .min-w-\[50\%\] {
+    min-width: 50%;
   }
   .flex-2 {
     flex: 2;
@@ -484,9 +489,6 @@
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
-  }
-  .gap-4\.5 {
-    gap: calc(var(--spacing) * 4.5);
   }
   .gap-5 {
     gap: calc(var(--spacing) * 5);
@@ -620,9 +622,6 @@
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
-  .p-30 {
-    padding: calc(var(--spacing) * 30);
-  }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
@@ -750,9 +749,6 @@
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
-  .text-\[16px\] {
-    font-size: 16px;
-  }
   .text-\[32px\] {
     font-size: 32px;
   }
@@ -848,20 +844,8 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
-  .delay-300 {
-    transition-delay: 300ms;
-  }
   .delay-400 {
     transition-delay: 400ms;
-  }
-  .delay-600 {
-    transition-delay: 600ms;
-  }
-  .delay-900 {
-    transition-delay: 900ms;
-  }
-  .delay-1200 {
-    transition-delay: 1200ms;
   }
   .duration-500 {
     --tw-duration: 500ms;

@@ -61,7 +61,7 @@ async function fetchPostagens() {
 }
 
 function renderPostagens(postagens) {
-    const container = document.querySelector('.w-vh.h-dvh.flex.gap-5.items-center.px-30.justify-center.bg-amber-50');
+    const container = document.querySelector('div#postsContainer');
     container.innerHTML = ''; // Limpa o conteúdo existente
 
     postagens.forEach((postagem) => {
