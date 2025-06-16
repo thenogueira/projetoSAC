@@ -1,20 +1,15 @@
-.menu-grande{
-    position: relative;
-    justify-content: end;
-    top: -20px;
 
-}
 
 .menu{
     transition: 0.3s;
     width: 140px;
     padding-top: 8px;
     background-color: #fffbeb;
-    position: absolute;
     height: 40px;
     overflow: hidden;
     border-radius: 20px;
-    
+    top: 8px;
+    position: absolute;
 
 }
 
@@ -27,7 +22,7 @@
 .imagem-dep{
     width: 32px;
     height: 32px;
-    transition: 0.3s;
+    transition: 0.3s; 
 }
 
 .menu.expandir{
@@ -37,6 +32,8 @@
     padding: 8px 20px 16px 20px;
     transition: 0.3s;
     font-size: 20px;
+    position: absolute;
+    
 }
 
 .text{
@@ -50,16 +47,13 @@
     color: rgb(87, 87, 87);  
 }
 
-
-
-
-
 .item:hover{
     padding: 0px 10px;
     border-radius: 3px;
     color: black;
     transition-duration: 0.3s;
 }
+
 
 
 
