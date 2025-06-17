@@ -861,13 +861,6 @@
       border-color: var(--color-destaque);
     }
   }
-  .hover\:absolute {
-    &:hover {
-      @media (hover: hover) {
-        position: absolute;
-      }
-    }
-  }
   .hover\:scale-175 {
     &:hover {
       @media (hover: hover) {
@@ -889,13 +882,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: #1bb125;
-      }
-    }
-  }
-  .hover\:bg-amber-900 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-amber-900);
       }
     }
   }
