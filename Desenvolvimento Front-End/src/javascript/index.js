@@ -1,3 +1,19 @@
+let expandir = document.querySelector('div#expandir')
+
+let menu = document.querySelector('div.menu')
+
+let imagem = document.querySelector('div.imagem')
+
+expandir.addEventListener('click', clicar)
+
+function clicar(){
+    menu.classList.toggle("expandir")
+
+    imagem.classList.toggle("imagem-dep")
+
+}
+
+
 const myObserver = new IntersectionObserver( (adoleta) => {
     adoleta.forEach( (adoleta) => {
         if(adoleta.isIntersecting ){// === true
@@ -45,6 +61,9 @@ const publicadosB = document.querySelectorAll('.publiqueB')
 
 publicadosB.forEach( (publicadosB) => myObserverB.observe(publicadosB))
 
+
+
+
 async function fetchPostagens() {
     try {
         const response = await fetch('http://localhost:8080/ocorrencias/listar');
@@ -61,7 +80,7 @@ async function fetchPostagens() {
 }
 
 function renderPostagens(postagens) {
-    const container = document.querySelector('.w-vh.h-dvh.flex.gap-5.items-center.px-30.justify-center.bg-amber-50');
+    const container = document.querySelector('div#postsContainer');
     container.innerHTML = ''; // Limpa o conteúdo existente
 
     postagens.forEach((postagem) => {

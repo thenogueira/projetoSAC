@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const postsContainerErro = document.querySelector('div#postsContainerErro')
 
+    const postsContainerReal = document.querySelector('div#postsContainerReal')
+
     if (!postsContainer) {
         console.error('Elemento postsContainer não encontrado no DOM.');
         return;
@@ -33,8 +35,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <p class="indent-2 text-xs text-gray-400">Data: ${new Date(post.data).toLocaleDateString()}</p>
                 <p class="indent-2 text-xs text-gray-500">Usuário: ${post.usuario || 'Desconhecido'}</p>
             `;
-            postsContainer.appendChild(postElement); 
+            
+            postsContainerReal.appendChild(postElement); 
+            
         });
+
     } catch (error) {
         console.error('Erro ao carregar as ocorrências:', error);
         postsContainerErro.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
