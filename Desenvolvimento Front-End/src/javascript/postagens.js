@@ -27,14 +27,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Gera o HTML para cada ocorrência
         posts.forEach(post => {
             const postElement = document.createElement('figure'); // <figcaption class="indent-2 pb-4">Urgência: <strong class="${getUrgencyClass(post.urgencia)}">${post.urgencia}</strong></figcaption>
-            postElement.classList.add('shadow-lg', 'drop-shadow-black', 'w-[300px]', 'h-auto', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto');
+
+            postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto'); 
+
+            // const divElement1 = document.createElement('div');
+
+            // divElement1.classList.add('w-75', 'h-50');
+
+            // postElement.appendChild(divElement1);
+
+
             postElement.innerHTML = `
-                <img class="w-100 rounded-t-xl" src="${post.imagem || '../img/default-image.png'}" alt="Imagem da ocorrência">
-                <figcaption class="indent-2 pt-2 pb-0 font-bold">${post.titulo}</figcaption>
-                <p class="indent-2 text-sm text-gray-600">${post.descricao}</p>
-                <p class="indent-2 text-xs text-gray-400">Data: ${new Date(post.data).toLocaleDateString()}</p>
-                <p class="indent-2 text-xs text-gray-500">Usuário: ${post.usuario || 'Desconhecido'}</p>
+                <div class="w-full h-full overflow-hidden rounded-t-xl">
+                    <img class="w-full h-full object-cover" src="${post.imagem || '../img/default-image.png'}" alt="Imagem da ocorrência">
+                </div>
+
+                <div class="rounded-b-xl drop-shadow-black shadow-lg">
+                    <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo}</figcaption>
+
+                    <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${new Date(post.data).toLocaleDateString()}</figcaption>
+
+                    <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${post.usuario || 'Desconhecido'}</figcaption>
+                </div>
             `;
+
+            // <p class="indent-2 text-sm text-neutral-700">${post.descricao}</p>
             
             postsContainerReal.appendChild(postElement); 
             
