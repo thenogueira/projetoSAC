@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             postElement.innerHTML = `
                 <div class="w-full h-full overflow-hidden rounded-t-xl">
-                    <img class="w-full h-full object-cover" src="${post.imagem || '../img/default-image.png'}" alt="Imagem da ocorrência">
+                    <img class="w-full h-full object-cover bg-fundo1" src="${post.imagem || '../img/Sem Foto.png'}" alt="Imagem da ocorrência">
                 </div>
 
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
