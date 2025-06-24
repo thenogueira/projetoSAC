@@ -1,19 +1,3 @@
-let expandir = document.querySelector('div#expandir')
-
-let menu = document.querySelector('div.menu')
-
-let imagem = document.querySelector('div.imagem')
-
-expandir.addEventListener('click', clicar)
-
-function clicar(){
-    menu.classList.toggle("expandir")
-
-    imagem.classList.toggle("imagem-dep")
-
-}
-
-
 const myObserver = new IntersectionObserver( (adoleta) => {
     adoleta.forEach( (adoleta) => {
         if(adoleta.isIntersecting ){// === true
@@ -96,6 +80,21 @@ function renderPostagens(postagens) {
 
         container.appendChild(article);
     });
+}
+
+let expandir = document.querySelector('div#expandir')
+
+let menu = document.querySelector('div.menu')
+
+let imagem = document.querySelector('div.imagem')
+
+expandir.addEventListener('click', clicar)
+
+function clicar(){
+    menu.classList.toggle("expandir")
+
+    imagem.classList.toggle("imagem-dep")
+
 }
 
 // Chama a função para buscar e renderizar as postagens ao carregar a página

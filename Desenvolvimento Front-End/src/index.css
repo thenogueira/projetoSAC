@@ -53,6 +53,49 @@
     transition-duration: 0.3s;
 }
 
+.publique{
+    opacity: 0;  
+    transform: translateX(-20%); 
+    transition: all 1s; 
+    color: #5ddb66;
+    color: #299431;
+
+}
+
+.publicado{
+    opacity: 1; 
+    filter: blur(0); 
+    transform: translateX(0); 
+    transition: all 1s;
+}
+
+.publiques{
+    opacity: 0;  
+    transform: translateX(20%); 
+    transition: all 1s; 
+
+}
+
+.publicados{
+    opacity: 1; 
+    filter: blur(0); 
+    transform: translateX(0); 
+    transition: all 1s;
+}
+
+.publiqueB{
+    opacity: 0;  
+    filter: blur(20px);
+
+    transition: all 2s; 
+
+}
+
+.publicadoB{
+    opacity: 1; 
+    filter: blur(0); 
+    transition: all 1.5s;
+}
 
 
 
