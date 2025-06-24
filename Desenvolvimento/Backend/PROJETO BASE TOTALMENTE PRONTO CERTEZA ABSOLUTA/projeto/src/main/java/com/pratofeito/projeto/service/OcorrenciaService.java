@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Serviço responsável por implementar a lógica de negócio relacionada à entidade Ocorrencia.
@@ -70,6 +71,13 @@ public class OcorrenciaService {
         } else {
             throw new RuntimeException("Ocorrência não encontrada");
         }
+    }
+
+    public List<Ocorrencia> listarRecentes() {
+        return ocorrenciaRepository.findAllByOrderByDataCriacaoDesc()
+                .stream()
+                .limit(5)
+                .collect(Collectors.toList());
     }
 
 }
