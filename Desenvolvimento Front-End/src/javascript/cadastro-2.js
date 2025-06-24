@@ -3,8 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const dadosCadastro = JSON.parse(localStorage.getItem('usuarioCadastro'));
     if (!dadosCadastro) {
-        alert('Erro: Nenhum dado encontrado da primeira etapa. Retornando ao início.');
-        window.location.href = 'cadastro-1.html';
+        mostrarMensagem('Erro: Nenhum dado encontrado da primeira etapa. Retornando ao início.', 'erro');
+        setTimeout(() => {
+            window.location.href = 'cadastro-1.html';
+        }, 2000);
         return;
     }
 
@@ -18,12 +20,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const statusConta = dadosCadastro.statusConta;
 
         if (!email || !senha_hash || !confirmarSenha) {
-            alert('Preencha todos os campos!');
+            mostrarMensagem('Preencha todos os campos!', 'erro');
             return;
         }
 
         if (senha_hash !== confirmarSenha) {
-            alert('As senhas não coincidem!');
+            mostrarMensagem('As senhas não coincidem!', 'erro');
             return;
         }
 
@@ -42,20 +44,36 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (response.ok) {
-                alert('Cadastro concluído com sucesso!');
+                mostrarMensagem('Cadastro concluído com sucesso!', 'sucesso');
                 form.reset();
 
                 // Salvar o ID do usuário no localStorage
                 localStorage.setItem('usuarioLogado', JSON.stringify({ id: userId, email }));
 
-                window.location.href = 'login.html';
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
             } else {
                 const error = await response.json();
-                alert(`Erro ao salvar cadastro: ${error.message}`);
+                mostrarMensagem(`Erro ao salvar cadastro: ${error.message}`, 'erro');
             }
         } catch (error) {
             console.error('Erro ao enviar os dados:', error);
-            alert('Erro ao salvar cadastro. Tente novamente mais tarde.');
+            mostrarMensagem('Erro ao salvar cadastro. Tente novamente mais tarde.', 'erro');
         }
     });
 });
+
+function mostrarMensagem(texto, tipo = 'erro') {
+    const modal = document.getElementById('modalMensagem');
+    const modalTexto = document.getElementById('modalMensagemTexto');
+    modalTexto.textContent = texto;
+    modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50';
+    modalTexto.className = tipo === 'erro'
+        ? 'bg-red-100 text-red-800 px-8 py-6 rounded-xl text-center shadow-lg'
+        : 'bg-green-100 text-green-800 px-8 py-6 rounded-xl text-center shadow-lg';
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 4000);
+}
