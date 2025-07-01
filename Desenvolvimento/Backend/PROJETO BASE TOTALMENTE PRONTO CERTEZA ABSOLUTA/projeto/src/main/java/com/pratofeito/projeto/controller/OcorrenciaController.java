@@ -91,4 +91,16 @@ public class OcorrenciaController {
         }
     }
 
+    /**
+     * Endpoint para listar as 5 ocorrências mais recentes
+     *
+     * @return Lista das 5 ocorrências mais recentes ordenadas por data de criação (decrescente)
+     */
+    @CrossOrigin("*")
+    @GetMapping("/recentes")
+    public ResponseEntity<List<Ocorrencia>> listarRecentes() {
+        List<Ocorrencia> recentes = ocorrenciaService.listarRecentes();
+        return ResponseEntity.ok(recentes);
+    }
+
 }

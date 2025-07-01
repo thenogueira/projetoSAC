@@ -1,0 +1,20 @@
+
+.mensagem-erro {
+  background-color: #ffe5e5;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.mensagem-sucesso {
+  background-color: #e5ffe5;
+  color: #166534;
+  border: 1px solid #4ade80;
+}
+
+#mensagem {
+  transition: opacity 0.3s;
+  font-size: 1.1rem;
+}
+.hidden {
+  display: none;
+}
