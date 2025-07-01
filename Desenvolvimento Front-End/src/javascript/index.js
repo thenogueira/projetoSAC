@@ -100,3 +100,118 @@ function clicar(){
 // Chama a função para buscar e renderizar as postagens ao carregar a página
 document.addEventListener('DOMContentLoaded', fetchPostagens);
 
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // MENU DINÂMICO
+    const menu = document.querySelector('#menu');
+
+    if (1 + 2 == 3) {
+        const menuLogado = document.createElement('div');
+
+        menuLogado.classList.add('flex', 'items-center', 'gap-15', 'relative', 'py-2');
+
+        menuLogado.innerHTML = `<a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+                <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+                <span class="separator">|</span>
+                <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+                <span class="separator">|</span>
+                <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+                <div>
+                    
+                    <a href="#">
+                    <div class="flex gap-3" >
+                        <div class="p-0 rounded-full overflow-hidden imagem bg-black" id="imagem">
+                            <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
+                        </div>
+                            <!-- Foto de Perfil  -->
+                        <div class="flex flex-col">
+                            <span id="profileName">Satoru Gojo</span>
+                                <!-- puxar do banco  -->
+                        </div>
+                    </div>
+                </a>
+
+                <div class="menu-grande" id="expandir">
+                    <div class="menu p-0">
+                        <a href="#">
+                            <div class="flex gap-3" >
+                                <div class="p-0 rounded-full overflow-hidden imagem bg-black" id="imagem">
+                                    <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
+                                </div>
+                                 <!-- Foto de Perfil  -->
+                                <div class="flex flex-col">
+                                    <span id="profileName">Satoru Gojo</span>
+                                     <!-- puxar do banco  -->
+                                </div>
+                            </div>
+                
+                            <hr class="my-6">
+                
+                            <div>
+                                <ul>
+                                    <li class="item">
+                                        <a href="perfil.html" class="link">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                                <span class="text">Perfil</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="item">
+                                        <a href="criandoPost.html">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                                <span class="text">Criar Postagem</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="item">
+                                        <a href="#">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                                <span class="text">Configurações</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="item">
+                                        <a href="#">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                                <span class="text">Sair da Conta</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                </div>
+            </div>`;
+
+        menu.appendChild(menuLogado);
+    } else {
+        const menuDeslogado = document.createElement('div');
+
+        menuDeslogado.classList.add('flex', 'items-center', 'gap-15', 'px-6', 'py-2');
+
+        menuDeslogado.innerHTML = `<a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+                <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+                <span class="separator">|</span>
+                <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+                <span class="separator">|</span>
+                <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+                <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>`;
+
+        menu.appendChild(menuDeslogado);
+    }
+
+});
