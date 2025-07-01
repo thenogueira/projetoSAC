@@ -30,12 +30,22 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto'); 
 
-            // const divElement1 = document.createElement('div');
+            // Corrigir data
+            let dataFormatada = '';
+            if (post.data) {
+                const dataObj = new Date(post.data);
+                dataFormatada = isNaN(dataObj.getTime()) ? '' : dataObj.toLocaleDateString();
+            }
 
-            // divElement1.classList.add('w-75', 'h-50');
-
-            // postElement.appendChild(divElement1);
-
+            // Corrigir nome do usuário
+            let nomeUsuario = '';
+            if (typeof post.nome === 'string') {
+                nomeUsuario = post.nome;
+            } else if (post.usuario && typeof post.usuario.nome === 'string') {
+                nomeUsuario = post.usuario.nome;
+            } else {
+                nomeUsuario = 'Desconhecido';
+            }
 
             postElement.innerHTML = `
                 <div class="w-full h-full overflow-hidden rounded-t-xl">
@@ -43,11 +53,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 </div>
 
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
-                    <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo}</figcaption>
+                    <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
 
-                    <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${new Date(post.data).toLocaleDateString()}</figcaption>
+                    <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${dataFormatada || 'Não informada'}</figcaption>
 
-                    <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${post.usuario || 'Desconhecido'}</figcaption>
+                    <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
                 </div>
             `;
 
