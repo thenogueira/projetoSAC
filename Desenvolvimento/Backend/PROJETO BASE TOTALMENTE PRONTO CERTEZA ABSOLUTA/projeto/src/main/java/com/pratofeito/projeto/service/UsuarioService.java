@@ -7,6 +7,7 @@ import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import com.pratofeito.projeto.repository.UsuarioBanidoRepository;
 import com.pratofeito.projeto.repository.UsuarioRepository;
+import com.pratofeito.projeto.utils.SenhaUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,9 @@ public class UsuarioService implements UserDetails {
      * throws IllegalArgumentException Se o documento do usuário não estiver de acordo com as regras de validação.
      */
     public Usuario salvarUsuario(Usuario usuario) {
-        this.validarDocumento(usuario); // Valida o documento antes de salvar
-        return usuarioRepository.save(usuario); // Chama o método do repositório para salvar o usuário
+        this.validarDocumento(usuario);
+        SenhaUtils.validarForcaSenha(usuario.getSenha_hash());
+        return usuarioRepository.save(usuario);
     }
 
     /**
@@ -111,10 +113,15 @@ public class UsuarioService implements UserDetails {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
-        // Atualiza apenas os campos permitidos
+        // Se a senha foi alterada, validar a nova senha
+        if (usuarioAtualizado.getSenha_hash() != null &&
+                !usuarioAtualizado.getSenha_hash().equals(usuarioExistente.getSenha_hash())) {
+            SenhaUtils.validarForcaSenha(usuarioAtualizado.getSenha_hash());
+            usuarioExistente.setSenha_hash(usuarioAtualizado.getSenha_hash());
+        }
+
         usuarioExistente.setNome(usuarioAtualizado.getNome());
         usuarioExistente.setEmail(usuarioAtualizado.getEmail());
-
 
         return usuarioRepository.save(usuarioExistente);
     }
