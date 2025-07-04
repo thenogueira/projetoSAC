@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', function () {
             mostrarMensagem('As senhas não coincidem!', 'erro');
             return;
         }
+        if (!validarSenha(senha_hash)) {
+            mostrarMensagem('A senha deve conter: 8+ caracteres, 1 letra maiúscula, 1 minúscula, 1 número e 1 caractere especial (@#$%^&+=!)', 'erro');
+            return;
+        }
+
 
         // Gerar um ID único para o usuário
         const userId = `user_${Date.now()}`; // Exemplo: user_1681234567890
