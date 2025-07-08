@@ -5,6 +5,7 @@ import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,12 @@ public class UsuarioCreateDTO {
     private String email;
 
     @NotBlank(message = "A senha é obrigatória!")
-    private String senha; // Note que aqui é "senha", não "senha_hash"
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
+            message = "A senha deve conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número, 1 caractere especial (@#$%^&+=!) e não pode conter espaços"
+    )
+    private String senha;
 
     private TipoDocumento tipo_documento;
 

@@ -6,6 +6,7 @@ import com.pratofeito.projeto.model.enums.TipoDocumento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -73,12 +74,13 @@ public class Usuario implements UserDetails {
     @Column(name = "email", length = 40, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
     private String email;
 
-    /**
-     * Hash da senha do usuário.
-     * Campo obrigatório que armazena a senha criptografada.
-     */
-    @NotBlank(message = "A senha é obrigatória!") // Validação: o campo não pode estar em branco
-    @Column(name = "senha_hash", nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
+    @NotBlank(message = "A senha é obrigatória!")
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
+            message = "A senha deve conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número, 1 caractere especial (@#$%^&+=!) e não pode conter espaços"
+    )
+    @Column(name = "senha_hash", nullable = false)
     private String senha_hash;
 
     /**
