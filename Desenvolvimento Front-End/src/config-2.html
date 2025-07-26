@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAC - Página Inicial</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+
+    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
+
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
+
+</head>
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu">
+        <div class="flex items-center gap-15 px-6 py-2">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1 hover:bg-destaque hover:text-white duration-250">Cadastre-se</a>
+        </div>
+    </nav>
+
+    <hr class="text-minitexto">
+
+    <main class="pr-30 flex gap-20">
+        <section class="pt-10">
+            <p class="ml-20 pb-5 pl-5 text-xl text-minitexto">Configurações</p>
+
+
+            
+                <p class="pl-40 pr-4 pb-5 pt-5 hover:bg-gray-300 rounded-r-2xl w-80"><a href="config-1.html">Dados da Conta</a></p>
+            
+
+            
+                <p class="pl-40 rounded-r-2xl bg-gray-400 pt-5 pr-4 pb-5"><a href="config-2.html">Postagens e <br> Comunicação</a></p>
+        </section>
+
+        <section class="pt-10 pr-10 w-full">
+            <h1 class="font-bold text-xl mb-1">Dados de Postagens</h1>
+
+            <p class="w-150">Pré-defina dados para sua postagens ficarem mais rápidas e salve seus dados de contato</p>
+
+            <hr class="my-8 border-1">
+
+            <form class="flex flex-col gap-2" action="" method="post">
+
+                <label class="text-xl" for="localizacao_padrao">Localização padrão</label> 
+                <input class="border-2 border-minitexto  rounded-md w-140 indent-2 p-1 mb-10" type="text" name="localizacao_padrao" id="localizacao_padrao" placeholder="Adicione uma localização">
+
+                <label class="text-xl" for="tipo_post">Tipo de postagem padrão</label> 
+                
+                <div>
+                    <div class="flex gap-10 mt-2 ml-1 text-minitexto hover:text-black">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="tipo_post" value="doacao" id="doacao" class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                            Doação
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input  type="radio" name="tipo_post" value="pedido" id="pedido" checked class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                            Pedido
+                        </label>
+                    </div>
+                </div>
+
+                <p class="mt-4 mb-15 text-minitexto w-100">Esses dados já serão pré-definidos em todas suas postagens, mas é possível altera-los na criação da mesma.</p>
+
+
+                <div class="w-150 flex justify-center flex-col">
+                    <h1 class="text-2xl mb-7">Meios de Comunicação</h1>
+
+                    <div class="flex items-center w-full gap-2 mb-7">
+                        <label for="email" class="text-xl w-28">Email:</label>
+                        <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="naruto04@gmail.com"
+                        class="flex-1 border-2 rounded-md indent-2 p-1 border-minitexto placeholder:text-gray-950"
+                        />
+                    </div>
+
+                    <div class="flex items-center w-full gap-2">
+                        <label for="telefone" class="text-xl w-28">Telefone:</label>
+                        <input
+                        type="number"
+                        id="telefone"
+                        name="telefone"
+                        placeholder="(21) 97229-9774"
+                        class="flex-1 border-2 rounded-md indent-2 p-1 border-minitexto placeholder:text-gray-950"
+                        />
+                    </div>
+                </div>
+
+                <hr class="my-8 border-1">
+
+                <div class="w-150 flex justify-center flex-col mb-30">
+                    <h1 class="text-xl mb-7">Outros Meios de Comunicação</h1>
+
+                    <div class="flex items-center w-full gap-2 mb-7">
+                        <label for="instagram" class="text-xl w-28">Instagram</label>
+                        <input
+                        type="text"
+                        id="instagram"
+                        name="instagram"
+                        placeholder="naruto04@gmail.com"
+                        class="flex-1 border-2 rounded-md indent-2 p-1 border-minitexto placeholder:text-gray-950"
+                        />
+                    </div>
+
+                    <div class="flex items-center w-full gap-2 mb-7">
+                        <label for="facebook" class="text-xl w-28">Facebook</label>
+                        <input
+                        type="text"
+                        id="facebook"
+                        name="facebook"
+                        placeholder="(21) 97229-9774"
+                        class="flex-1 border-2 rounded-md indent-2 p-1 border-minitexto placeholder:text-gray-950"
+                        />
+                    </div>
+
+                    <div class="flex items-center w-full gap-2">
+                        <label for="telegram" class="text-xl w-28">Telegram</label>
+                        <input
+                        type="text"
+                        id="telegram"
+                        name="telegram"
+                        placeholder="(21) 97229-9774"
+                        class="flex-1 border-2 rounded-md indent-2 p-1 border-minitexto placeholder:text-gray-950"
+                        />
+                    </div>
+                </div>
+
+                
+
+            </form>
+
+        </section>
+    </main>
+
+    <hr class="text-minitexto">
+
+    <footer class="px-30 pt-10 pb-5 ">
+
+        <div class="flex gap-10">
+            <div class="flex flex-col">
+                <h3 class="text-lg">Sobre</h3>
+                <ul>
+                    <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
+                    <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col">
+                <h3 class="text-lg">Doações</h3>
+                <ul>
+                    <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
+                </ul>
+            </div>
+        </div>
+        
+    
+        <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
+    </footer>
+    
+</body>
+</html>

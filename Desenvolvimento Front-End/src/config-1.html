@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAC - Página Inicial</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+
+    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
+
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
+
+</head>
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu">
+        <div class="flex items-center gap-15 px-6 py-2">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1 hover:bg-destaque hover:text-white duration-250">Cadastre-se</a>
+        </div>
+    </nav>
+
+    <hr class="text-minitexto">
+
+    <main class="pr-30 flex gap-20">
+        <section class="pt-10">
+            <p class="ml-20 pb-5 pl-5 text-xl text-minitexto">Configurações</p>
+
+
+            
+                <p class="pl-40 pr-4 pb-5 pt-5 bg-gray-400 rounded-r-2xl w-80"><a href="config-1.html">Dados da Conta</a></p>
+            
+
+            
+                <p class="pl-40 rounded-r-2xl pt-5 pr-4 hover:bg-gray-300  pb-5"><a href="config-2.html">Postagens e <br> Comunicação</a></p>
+        </section>
+
+        <section class="pt-10 pr-10 w-full">
+            <h1 class="font-bold text-xl mb-1">Atenção!!!</h1>
+
+            <p class="w-150">Seus dados de conta, exceto FOCO DA CONTA e SENHA, só podem ser alterado uma única vez. Caso seja necessário outras alterações é preciso contatar o suporte.</p>
+
+            <hr class="my-8 border-1">
+
+            <form class="flex flex-col gap-2" action="" method="post">
+
+                <label class="text-xl" for="nome_conta">Alterar nome da conta</label> 
+                <input class="border-2 border-minitexto  rounded-md w-140 indent-2 p-1 mb-10" type="text" name="nome_conta" id="nome_conta" placeholder="Nome da conta">
+
+                <label class="text-xl" for="novoTipoDocumento">Alterar nome da conta</label> 
+                
+                <div class="mb-10">
+                    <div class="flex gap-10 mt-2 ml-1 text-minitexto hover:text-black">
+                        <label class="flex items-center gap-2">
+                            <input  type="radio" name="novoTipoDocumento" value="CPF" id="novoCpfOption" checked class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                            CPF
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="novoTipoDocumento" value="CNPJ" id="novoCnpjOption " class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                            CNPJ
+                        </label>
+                    </div>
+                </div>
+
+                <!-- fazer aparecer essa opção caso queiram trocar, mandar mensagem de TEM CERTEZA? e ai confirmar e tals -->
+
+                <label class="text-xl" for="troca">Insira o CPF/CNPJ</label> 
+                <input class="border-2 border-minitexto rounded-md w-140 indent-2 p-1 mb-10" type="text" name="troca" id="troca" placeholder="Novo CPF/CNPJ">
+
+
+                <label class="text-xl" for="foco_conta">Alterar foco da conta</label> 
+                
+                <div>
+                    <div class="flex gap-10 mt-2 ml-1 text-minitexto hover:text-black">
+                        <label class="flex items-center gap-2">
+                            <input type="radio" name="foco_conta" value="doador" id="doador" class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                            Doador
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input  type="radio" name="foco_conta" value="recebedor" id="recebedor" checked class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                            Recebedor
+                        </label>
+                    </div>
+                </div>
+
+                <p class="mt-4 mb-15 text-minitexto w-100">Essa informação apenas altera as postagens que aparecem para você</p>
+
+
+                <h1 class="text-2xl mb-5">Alterar Senha</h1>
+
+                <label class="text-xl" for="senha_atual">Digite sua senha atual:</label> 
+                <input class="border-2 rounded-md w-140 indent-2 p-1 mb-10 border-minitexto" type="text" name="senha_atual" id="senha_atual" placeholder="Senha atual">
+
+                <label class="text-xl" for="senha_nova">Digite sua nova senha:</label> 
+                <input class="border-2 rounded-md w-140 indent-2 p-1 mb-50 border-minitexto" type="text" name="senha_nova" id="senha_nova" placeholder="Senha nova">
+
+            </form>
+
+        </section>
+    </main>
+
+    <hr class="text-minitexto">
+
+    <footer class="px-30 pt-10 pb-5 ">
+
+        <div class="flex gap-10">
+            <div class="flex flex-col">
+                <h3 class="text-lg">Sobre</h3>
+                <ul>
+                    <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
+                    <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col">
+                <h3 class="text-lg">Doações</h3>
+                <ul>
+                    <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
+                </ul>
+            </div>
+        </div>
+        
+    
+        <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
+    </footer>
+    
+</body>
+</html>

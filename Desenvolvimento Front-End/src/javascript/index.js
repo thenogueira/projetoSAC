@@ -233,6 +233,3 @@ function formatarData(dataString) {
         return dataString;
     }
 }
-
-// Inicializa a busca de postagens quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', fetchPostagens);
