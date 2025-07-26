@@ -12,38 +12,43 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Controlador responsável por gerenciar as requisições relacionadas à entidade Ocorrencia.
- * Este controlador expõe endpoints para listar e criar ocorrências.
+ * Controlador REST para operações relacionadas a ocorrências.
+ * Expõe endpoints para CRUD de ocorrências e consultas específicas.
+ * Todos os endpoints são acessíveis sob o caminho base '/ocorrencias'.
  */
-@RestController // Indica que esta classe é um controlador REST
-@CrossOrigin("*") // Permite requisições de qualquer origem (CORS)
-@RequestMapping("/ocorrencias") // Define o caminho base para os endpoints deste controlador
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/ocorrencias")
 public class OcorrenciaController {
 
-    @Autowired // Injeção de dependência automática do serviço OcorrenciaService
+    @Autowired
     private OcorrenciaService ocorrenciaService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     /**
-     * Endpoint para listar todas as ocorrências cadastradas no sistema.
+     * Recupera todas as ocorrências cadastradas no sistema.
      *
-     * return Uma lista de objetos Ocorrencia.
+     * @return Lista de todas as ocorrências em formato JSON
+     * @see Ocorrencia
      */
     @CrossOrigin("*")
-    @GetMapping("/listar") // Mapeia requisições GET para o caminho /ocorrencias/listar
+    @GetMapping("/listar")
     public List<Ocorrencia> listarOcorrencias() {
-        return ocorrenciaService.listarOcorrencias(); // Chama o método do serviço para obter a lista de ocorrências
+        return ocorrenciaService.listarOcorrencias();
     }
 
     /**
-     * Endpoint para criar uma nova ocorrência.
+     * Cria uma nova ocorrência no sistema.
      *
-     * param ocorrencia Objeto Ocorrencia recebido no corpo da requisição.
-     * return A ocorrência criada e salva no banco de dados.
+     * @param ocorrencia Objeto Ocorrencia contendo os dados da nova ocorrência
+     * @return ResponseEntity com a ocorrência criada (em DTO) e status HTTP 200
+     * @throws RuntimeException Se o usuário associado não for encontrado
+     * @see OcorrenciaResponseDTO
      */
     @PostMapping("/criar")
     public ResponseEntity<OcorrenciaResponseDTO> criarOcorrencia(@Valid @RequestBody Ocorrencia ocorrencia) {
@@ -58,10 +63,13 @@ public class OcorrenciaController {
     }
 
     /**
-     * Endpoint para editar uma ocorrência existente
-     * param id ID da ocorrência a ser editada
-     * param ocorrenciaAtualizada Objeto com os novos dados
-     * return Ocorrência atualizada
+     * Atualiza uma ocorrência existente.
+     *
+     * @param id ID da ocorrência a ser atualizada
+     * @param ocorrenciaDTO DTO com os campos atualizáveis da ocorrência
+     * @return ResponseEntity com a ocorrência atualizada e status HTTP 200,
+     *         ou status 404 se a ocorrência não for encontrada
+     * @see OcorrenciaUpdateDTO
      */
     @PutMapping("/editar/{id}")
     public ResponseEntity<Ocorrencia> editarOcorrencia(
@@ -77,9 +85,11 @@ public class OcorrenciaController {
     }
 
     /**
-     * Endpoint para deletar uma ocorrência existente
-     * param id ID da ocorrência a ser deletada
-     * return ResponseEntity com status 200 (OK) se deletado com sucesso, ou 404 (Not Found) se não encontrado
+     * Remove uma ocorrência do sistema.
+     *
+     * @param id ID da ocorrência a ser removida
+     * @return ResponseEntity com status HTTP 200 se bem-sucedido,
+     *         ou status 404 se a ocorrência não for encontrada
      */
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Void> deletarOcorrencia(@PathVariable Long id) {
@@ -92,15 +102,19 @@ public class OcorrenciaController {
     }
 
     /**
-     * Endpoint para listar as 5 ocorrências mais recentes
+     * Recupera as 5 ocorrências mais recentes, ordenadas por data de criação decrescente.
      *
-     * @return Lista das 5 ocorrências mais recentes ordenadas por data de criação (decrescente)
+     * @return ResponseEntity contendo lista de DTOs das ocorrências recentes
+     *         e status HTTP 200
+     * @see OcorrenciaResponseDTO
      */
     @CrossOrigin("*")
     @GetMapping("/recentes")
-    public ResponseEntity<List<Ocorrencia>> listarRecentes() {
+    public ResponseEntity<List<OcorrenciaResponseDTO>> listarRecentes() {
         List<Ocorrencia> recentes = ocorrenciaService.listarRecentes();
-        return ResponseEntity.ok(recentes);
+        List<OcorrenciaResponseDTO> dtos = recentes.stream()
+                .map(OcorrenciaResponseDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
-
 }
