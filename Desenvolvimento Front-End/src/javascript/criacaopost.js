@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleLocalizacaoBtn.textContent = 'Inserir Localização';
         }
     });
-
+    
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
 
@@ -23,20 +23,20 @@ document.addEventListener('DOMContentLoaded', function () {
             usuarioData = JSON.parse(usuarioDataRaw);
         } catch (error) {
             console.error('Erro ao analisar os dados do usuário:', error);
-            alert('Usuário não identificado. Faça login ou cadastre-se.');
+            mostrarMensagem(`Erro ao analisar os dados do usuário: ${error.message}`, 'error');
             window.location.href = 'login.html';
             return;
         }
 
         if (!usuarioData || !usuarioData.id) {
-            alert('Usuário não identificado. Faça login ou cadastre-se.');
+            mostrarMensage(`Usuário não identificado. Faça login ou cadastre-se.`, 'erro');
             window.location.href = 'login.html';
             return;
         }
 
         const token = localStorage.getItem('authToken');
         if (!token) {
-            alert('Usuário não autenticado. Faça login novamente.');
+            mostrarMensagem(`Usuário não autenticado. Faça login novamente.`, 'erro');
             window.location.href = 'login.html';
             return;
         }
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const imagem = document.getElementById('imagem').files[0];
 
         if (!titulo || !categoria || !tipo || !estado || !lugar || !descricao) {
-            alert('Preencha todos os campos!');
+            mostrarMensagem(`Preencha todos os campos!`, 'erro');
             return;
         }
 
@@ -105,16 +105,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (response.ok) {
-                    alert('Postagem criada com sucesso!');
+                    mostrarMensagem(`Postagem criada com sucesso!`, 'sucesso');
                     form.reset();
                     window.location.href = 'postagens.html';
+
                 } else {
                     const error = await response.json();
-                    alert(`Erro ao criar postagem: ${error.message}`);
+                    mostrarMensagem(`Erro ao criar postagem: ${error.message}`, 'erro');
                 }
             } catch (error) {
                 console.error('Erro ao enviar os dados:', error);
-                alert('Erro ao criar postagem. Tente novamente mais tarde.');
+                mostrarMensagem(`Erro ao criar postagem. Tente novamente mais tarde.`, 'erro');
             }
         }
     });

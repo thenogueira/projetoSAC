@@ -1,3 +1,4 @@
+
 // Elementos do modal
 const modalElements = {
     modal: null,
