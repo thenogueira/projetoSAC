@@ -1,6 +1,8 @@
 package com.pratofeito.projeto.exception;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 public class ErroResponse {
     private LocalDateTime timestamp;
@@ -8,6 +10,7 @@ public class ErroResponse {
     private String error;
     private String message;
     private String path;
+    private Map<String, List<String>> validationErrors;
 
     public ErroResponse(int status, String error, String message, String path) {
         this.timestamp = LocalDateTime.now();
@@ -15,6 +18,12 @@ public class ErroResponse {
         this.error = error;
         this.message = message;
         this.path = path;
+    }
+
+    public ErroResponse(int status, String error, String message, String path,
+                        Map<String, List<String>> validationErrors) {
+        this(status, error, message, path);
+        this.validationErrors = validationErrors;
     }
 
     public LocalDateTime getTimestamp() {
@@ -55,5 +64,13 @@ public class ErroResponse {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public Map<String, List<String>> getValidationErrors() {
+        return validationErrors;
+    }
+
+    public void setValidationErrors(Map<String, List<String>> validationErrors) {
+        this.validationErrors = validationErrors;
     }
 }
