@@ -1,16 +1,25 @@
 function mostrarMensagem(texto, tipo = 'erro') {
-    const modal = document.getElementById('modalMensagem');
-    const modalTexto = document.getElementById('modalMensagemTexto');
+    const modalFundo = document.getElementById('fundo');
+    const modalCaixa = document.getElementById('modalCaixa');
+    const modalTexto = document.getElementById('modalMensagem');
     modalTexto.textContent = texto;
-    modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50';
+    modalFundo.className = 'w-dvw h-dvh bg-black absolute opacity-50'
+    modalCaixa.className = 'fixed inset-0 flex items-center justify-center z-50';
     modalTexto.className = tipo === 'erro'
-        ? 'bg-red-100 text-red-800 px-8 py-6 rounded-xl text-center shadow-lg'
+        ? 'bg-red-100 text-red-800 px-8 py-6 rounded-xl text-center shadow-lg '
         : 'bg-green-100 text-green-800 px-8 py-6 rounded-xl text-center shadow-lg';
-    modal.classList.remove('hidden');
+    modalCaixa.classList.remove('hidden');
     setTimeout(() => {
-        modal.classList.add('hidden');
+        modalCaixa.classList.add('hidden');
+    }, 4000);
+
+    modalFundo.classList.remove('hidden');
+    setTimeout(() => {
+        modalFundo.classList.add('hidden');
     }, 4000);
 }
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const toggleDocumentoBtn = document.getElementById('toggleDocumentoBtn');
