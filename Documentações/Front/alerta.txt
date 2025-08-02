@@ -1,0 +1,20 @@
+no geral é pra colocar as descriçoes brutas de CAMINHOS!!
+por exemplo
+ PARA O ARQUIVO GERAL.DOCX:
+Crud.js:
+- Função para salvar os dados;
+- Função para listar os dados;
+- Função para atualizar um cadastro [...]
+
+Index.js: 
+....
+-------------------------
+PARA OS ARQUIVOS INDIVIDUAIS:
+
+Será explicado o funcionamento, de "como" cada coisa é realizada. 
+Por exemplo, no arquivo Crud.js:
+
+- Função para salvar os dados: 
+ Através do savebtn.addEventListener, um gatilho é disparado para a execução de três declarações, email, senha e confirmar senha............................
+
+ESTE .TXT FOI ESCRITO POR CAIO, E O MESMO FARÁ. ESTÁ REGISTRADO PARA FINS DE LEMBRANÇA. 
