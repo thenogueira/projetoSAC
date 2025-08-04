@@ -1,4 +1,62 @@
-document.addEventListener('DOMContentLoaded', function () { 
+document.addEventListener('DOMContentLoaded', function(){
+    /**
+     * Objeto que armazena referências aos elementos do modal de mensagem
+     * @type {Object}
+     * @property {HTMLElement} modal - Elemento do modal principal
+     * @property {HTMLElement} content - Elemento do conteúdo da mensagem
+     * @property {HTMLElement} title - Elemento do título do modal
+     * @property {HTMLElement} icon - Elemento do ícone do modal
+     * @property {HTMLElement} closeBtn - Botão de fechar o modal
+     */
+    const modalElements = {
+        modal: document.getElementById('modalMensagem'),
+        content: document.getElementById('modalContent'),
+        title: document.getElementById('modalTitle'),
+        icon: document.getElementById('modalIcon'),
+        closeBtn: document.getElementById('modalCloseBtn')
+        
+    };
+
+    /**
+     * Exibe uma mensagem no modal personalizado
+     * @function mostrarMensagem
+     * @param {string} titulo - Título da mensagem
+     * @param {string} texto - Corpo da mensagem
+     * @param {string} [tipo='erro'] - Tipo da mensagem ('erro' ou outro valor para sucesso)
+     */
+    function mostrarMensagem(titulo, texto, tipo = 'erro') {
+        // Verifica se todos os elementos do modal existem
+        if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
+            console.error('Elementos do modal não encontrados!');
+            alert(`${titulo}: ${texto}`); // Fallback básico
+            return;
+        }
+
+        // Configura o ícone e cores baseado no tipo de mensagem
+        modalElements.icon.className = tipo === 'erro' 
+            ? 'fas fa-exclamation-circle text-red-500 text-2xl mr-3 mt-1'
+            : 'fas fa-check-circle text-green-500 text-2xl mr-3 mt-1';
+
+        // Define o conteúdo do modal
+        modalElements.title.textContent = titulo;
+        modalElements.content.textContent = texto;
+
+        // Exibe o modal
+        modalElements.modal.classList.remove('hidden');
+
+        // Fecha automaticamente após 5 segundos
+        setTimeout(() => {
+            modalElements.modal.classList.add('hidden');
+        }, 5000);
+    }
+
+    // Configura o botão de fechar o modal se existir
+    if (modalElements.closeBtn) {
+        modalElements.closeBtn.addEventListener('click', () => {
+            modalElements.modal.classList.add('hidden');
+        });
+    }
+ 
     const form = document.getElementById('postForm');
     const toggleLocalizacaoBtn = document.getElementById('toggleLocalizacaoBtn');
     const localizacaoContainer = document.getElementById('localizacaoContainer');
@@ -23,20 +81,20 @@ document.addEventListener('DOMContentLoaded', function () {
             usuarioData = JSON.parse(usuarioDataRaw);
         } catch (error) {
             console.error('Erro ao analisar os dados do usuário:', error);
-            mostrarMensagem(`Erro ao analisar os dados do usuário: ${error.message}`, 'error');
+            mostrarMensagem('Erro', 'Erro ao analisar os dados do usuário: ${error.message}', 'erro');
             window.location.href = 'login.html';
             return;
         }
 
         if (!usuarioData || !usuarioData.id) {
-            mostrarMensage(`Usuário não identificado. Faça login ou cadastre-se.`, 'erro');
+            mostrarMensagem('Erro', `Usuário não identificado. Faça login ou cadastre-se.`, 'erro');
             window.location.href = 'login.html';
             return;
         }
 
         const token = localStorage.getItem('authToken');
         if (!token) {
-            mostrarMensagem(`Usuário não autenticado. Faça login novamente.`, 'erro');
+            mostrarMensagem('erro ', `Usuário não autenticado. Faça login novamente.`, 'erro');
             window.location.href = 'login.html';
             return;
         }
@@ -59,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const imagem = document.getElementById('imagem').files[0];
 
         if (!titulo || !categoria || !tipo || !estado || !lugar || !descricao) {
-            mostrarMensagem(`Preencha todos os campos!`, 'erro');
+            mostrarMensagem('Erro', `Preencha todos os campos!`, 'erro');
             return;
         }
 
@@ -105,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (response.ok) {
-                    mostrarMensagem(`Postagem criada com sucesso!`, 'sucesso');
+                    mostrarMensagem('sucesso',`Postagem criada com sucesso!`, 'sucesso');
                     form.reset();
                     window.location.href = 'postagens.html';
 
@@ -115,8 +173,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 console.error('Erro ao enviar os dados:', error);
-                mostrarMensagem(`Erro ao criar postagem. Tente novamente mais tarde.`, 'erro');
+                mostrarMensagem('erro', `Erro ao criar postagem. Tente novamente mais tarde.`, 'erro');
             }
         }
+
+        
     });
 });

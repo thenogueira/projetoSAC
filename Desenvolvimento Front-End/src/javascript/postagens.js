@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (!modalDetalhes) {
         modalDetalhes = document.createElement('div');
         modalDetalhes.id = 'modalDetalhesPost';
-        modalDetalhes.className = 'hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50';
+        modalDetalhes.className = 'hidden fixed inset-0 flex items-center justify-center bg-bla-40 z-50';
         modalDetalhes.innerHTML = `
             <div id="modalConteudoPost" class="bg-white max-w-lg w-full rounded-xl p-8 relative shadow-2xl">
                 <button id="fecharModalDetalhes" class="absolute top-2 right-4 text-2xl text-gray-500 hover:text-black">&times;</button>

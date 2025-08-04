@@ -52,6 +52,11 @@ const myObserverB = new IntersectionObserver((entries) => {
 const publicadosB = document.querySelectorAll('.publiqueB')
 publicadosB.forEach((element) => myObserverB.observe(element))
 
+
+
+
+
+
 /**
  * Busca postagens recentes da API.
  * @async
@@ -232,4 +237,19 @@ function formatarData(dataString) {
         console.error("Erro ao formatar data:", e);
         return dataString;
     }
+}
+
+let expandir = document.querySelector('div#expandir')
+
+let menu = document.querySelector('div.menu')
+
+let imagem = document.querySelector('div.imagem')
+
+expandir.addEventListener('click', clicar)
+
+function clicar(){
+    menu.classList.toggle("expandir")
+
+    imagem.classList.toggle("imagem-dep")
+
 }

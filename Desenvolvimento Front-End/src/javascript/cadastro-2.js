@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         title: document.getElementById('modalTitle'),
         icon: document.getElementById('modalIcon'),
         closeBtn: document.getElementById('modalCloseBtn')
+        
     };
 
     /**
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modalElements.modal.classList.add('hidden');
         });
     }
+    
 
     // Obtém referência ao formulário de cadastro
     const form = document.getElementById('cadastroForm');
