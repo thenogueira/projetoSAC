@@ -10,8 +10,7 @@ import lombok.Setter;
  * Esta classe é mapeada para uma tabela no banco de dados e armazena informações
  * sobre avaliações feitas por um usuário (avaliador) a outro usuário (avaliado).
  */
-@Getter // Lombok: gera automaticamente os métodos getters
-@Setter // Lombok: gera automaticamente os métodos setters
+
 @Entity // Indica que esta classe é uma entidade JPA
 public class Avaliacao {
 
@@ -53,4 +52,44 @@ public class Avaliacao {
      */
     @Column(name = "comentario") // Define o nome da coluna no banco de dados
     private String comentario;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Usuario getUsuarioAvaliado() {
+        return usuarioAvaliado;
+    }
+
+    public void setUsuarioAvaliado(Usuario usuarioAvaliado) {
+        this.usuarioAvaliado = usuarioAvaliado;
+    }
+
+    public Usuario getUsuarioAvaliador() {
+        return usuarioAvaliador;
+    }
+
+    public void setUsuarioAvaliador(Usuario usuarioAvaliador) {
+        this.usuarioAvaliador = usuarioAvaliador;
+    }
+
+    public int getNota() {
+        return nota;
+    }
+
+    public void setNota(int nota) {
+        this.nota = nota;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 }
