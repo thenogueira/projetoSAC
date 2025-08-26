@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Postagem - SAC</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+</head>
+<body class="bg-amber-50 font-alexandria">
+    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
+        <div class="flex items-center gap-15">
+            <a href="postagens.html" class="hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class="hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class="hover:text-gray-800">Ajuda</a>
+            <div id="userTopBar" class="flex gap-3 items-center ml-8 hidden">
+                <div class="p-0 rounded-full overflow-hidden imagem bg-black w-8 h-8">
+                    <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil">
+                </div>
+                <span id="profileName" class="font-bold"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="px-30 py-10">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div id="postDetails" class="space-y-6">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            
+            <div class="mt-8 flex justify-between">
+                <button onclick="history.back()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                    Voltar
+                </button>
+                <button id="contatarButton" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
+                    Contatar Usuário
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script src="javascript/detalhePost.js"></script>
+</body>
+</html>

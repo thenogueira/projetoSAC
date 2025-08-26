@@ -22,6 +22,13 @@
             <span class="separator">|</span>
             <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
             <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
+            <!-- Usuário logado -->
+            <div id="userTopBar" class="flex gap-3 items-center ml-8 hidden">
+                <div class="p-0 rounded-full overflow-hidden imagem bg-black w-8 h-8">
+                    <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil">
+                </div>
+                <span id="profileName" class="font-bold"></span>
+            </div>
         </div>
     </nav>
 
@@ -69,8 +76,19 @@
         </div>
         
     
-        <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
+        <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
     </footer>
        
+    <script>
+// Preenche nome e foto do usuário logado no topo
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (user && user.nome) {
+        document.getElementById('profileName').textContent = user.nome;
+        document.getElementById('userTopBar').classList.remove('hidden');
+        document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
+    }
+});
+</script>
 </body>
 </html>

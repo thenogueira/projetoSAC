@@ -88,9 +88,22 @@ document.addEventListener('DOMContentLoaded', function(){
         }
 
         if (!usuarioData || !usuarioData.id) {
+
             mostrarMensagem('Erro', `Usuário não identificado. Faça login ou cadastre-se.`, 'erro');
+
+            mostrarMensagem(`Usuário não identificado. Faça login ou cadastre-se.`, 'erro');
+
             window.location.href = 'login.html';
             return;
+        }
+        // Garante nome e imagem no localStorage
+        if (!usuarioData.nome) {
+            usuarioData.nome = usuarioData.email || '';
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioData));
+        }
+        if (!usuarioData.profileImage) {
+            usuarioData.profileImage = '../img/default-profile.png';
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioData));
         }
 
         const token = localStorage.getItem('authToken');

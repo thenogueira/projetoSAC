@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
 
+
     // Cria o modal de detalhes (apenas uma vez)
     let modalDetalhes = document.getElementById('modalDetalhesPost');
     if (!modalDetalhes) {
@@ -72,6 +73,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             <p class="mb-3"><strong>Descrição:</strong><br>${descricao}</p>
         `;
         modalDetalhes.classList.remove('hidden');
+
+    function abrirDetalhesPost(post) {
+        window.location.href = `detalhePost.html?id=${post.id}`;
+
     }
 
     try {
@@ -121,8 +126,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 </div>
             `;
 
-            // Ao clicar, abre o modal de detalhes
-            postElement.addEventListener('click', () => abrirModalDetalhes(post));
+            // Ao clicar, abre a página de detalhes
+            postElement.addEventListener('click', () => abrirDetalhesPost(post));
 
             postsContainerReal.appendChild(postElement); 
             
@@ -132,6 +137,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Erro ao carregar as ocorrências:', error);
         postsContainerErro.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
     }
+
 
 
     
@@ -162,4 +168,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     //             return 'text-gray-500 font-medium'; // Classe padrão para valores inválidos
     //     }
     // }
+
 });

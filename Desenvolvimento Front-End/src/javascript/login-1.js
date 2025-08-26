@@ -1,5 +1,16 @@
 
 
+
+// Elementos do modal
+const modalElements = {
+    modal: null,
+    icon: null,
+    title: null,
+    content: null,
+    closeBtn: null
+};
+
+
 // Inicializa os elementos do modal
 function initModal() {
     modalElements.modal = document.getElementById('modalMensagem');
@@ -103,7 +114,13 @@ async function handleLogin(event) {
         // Sucesso
         const data = await response.json();
         localStorage.setItem('authToken', data.token);
-        localStorage.setItem('usuarioLogado', JSON.stringify(data.usuario));
+        // Garante que o objeto salvo tem nome e profileImage
+        const usuario = {
+            ...data.usuario,
+            nome: data.usuario.nome || data.usuario.email || '',
+            profileImage: data.usuario.profileImage || '../img/default-profile.png'
+        };
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
         
         mostrarMensagem('Sucesso', 'Login realizado com sucesso!', 'sucesso');
         setTimeout(() => {
