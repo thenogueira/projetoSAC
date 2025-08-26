@@ -1,36 +1,130 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postagens - SAC</title>
-    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Postagens - Rede de Doações</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <h1>SAC</h1>
-            </div>
-            <div class="user-profile">
-                <img src="profile-placeholder.jpg" alt="Foto de Perfil" class="profile-pic">
-                <span class="username">Nome do Usuário</span>
-                <div class="dropdown-content">
-                    <a href="#" id="editProfile">Editar Perfil</a>
-                    <a href="#" id="settings">Configurações</a>
-                    <a href="index.html" id="logout">Sair</a>
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="logado">
+        <div class="flex items-center gap-15 py-2 relative">
+            <a href="postagens.html" class="hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class="hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class="hover:text-gray-800">Ajuda</a>
+
+            <div>
+                <a href="#">
+                    <div class="flex gap-3">
+                        <div class="p-0 rounded-full overflow-hidden imagem bg-black w-8 h-8">
+                            <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil">
+                        </div>
+                        <div class="flex flex-col">
+                            <span id="profileName">Usuário</span>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="menu-grande" id="expandir">
+                    <div class="menu p-0">
+                        <!-- Menu dropdown similar ao index-logado.html -->
+                        <div>
+                            <ul>
+                                <li class="item">
+                                    <a href="perfil.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                            <span class="text">Perfil</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="item">
+                                    <a href="criandoPost.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                            <span class="text">Criar Postagem</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="item">
+                                    <a href="config-1.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                            <span class="text">Configurações</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="item">
+                                    <a href="#" id="logoutBtn">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                            <span class="text">Sair da Conta</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <div class="posts-content">
-            <h2>Todas as Postagens</h2>
-            <!-- Lista de postagens -->
-        </div>
+    <main class="px-30">
+        <!-- ... rest of the content from postagens.html ... -->
+        <section>
+            <h2 class="text-black text-5xl my-10 text-center">Postagens</h2>
+            <!-- ... filters section ... -->
+            <section id="postsContainer" class="flex justify-center px-6 py-10">
+                <div class="grid grid-cols-3 gap-20 w-full" id="postsContainerReal">
+                    <!-- Posts will be loaded here -->
+                </div>
+            </section>
+
+            <div class="flex justify-center mt-20">
+                <a href="criandoPost.html" class="px-6 py-3 hover:bg-destaque hover:text-white rounded-lg hover:bg-destaque-dark bg-fundo2 text-black duration-250">
+                    Criar Postagens
+                </a>
+            </div>
+        </section>
+
+        <section class="flex items-center justify-center">
+            <div id="postsContainerErro" class="flex items-center justify-center px-6 py-3 w-full">
+                <!-- Error messages will appear here -->
+            </div>
+        </section>
     </main>
 
-    <script src="script.js"></script>
+    <!-- ... footer from postagens.html ... -->
+
+    <script src="javascript/postagens.js"></script>
+    <script src="javascript/menu.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update profile info
+            document.getElementById('profileName').textContent = user.nome;
+            document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
+
+            // Handle logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('usuarioLogado');
+                localStorage.removeItem('authToken');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
 </body>
 </html>

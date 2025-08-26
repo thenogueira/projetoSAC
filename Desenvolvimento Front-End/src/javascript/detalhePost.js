@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 function renderPostDetails(post) {
     const dataFormatada = post.data_criacao ? new Date(post.data_criacao).toLocaleDateString() : 'Não informada';
     const nomeUsuario = post.usuario?.nome || 'Usuário não identificado';
+    const loggedUser = JSON.parse(localStorage.getItem('usuarioLogado'));
+    const isOwner = loggedUser && loggedUser.id === post.usuario?.id;
 
     document.getElementById('postDetails').innerHTML = `
         <h1 class="text-3xl font-bold mb-6">${post.titulo}</h1>
@@ -54,18 +56,22 @@ function renderPostDetails(post) {
             <h2 class="text-xl font-semibold mb-4">Descrição</h2>
             <p class="text-gray-700 whitespace-pre-wrap">${post.descricao}</p>
         </div>
+
+        ${isOwner ? `
+        <div class="flex gap-4 mt-6">
+            <a href="editarPost.html?id=${post.id}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                Editar Postagem
+            </a>
+            <button id="deletePost" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                Deletar Postagem
+            </button>
+        </div>
+        ` : ''}
     `;
 
-    // Setup contatar button
-    document.getElementById('contatarButton').addEventListener('click', () => {
-        const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
-        if (!usuarioLogado) {
-            alert('Você precisa estar logado para contatar o usuário.');
-            window.location.href = 'login.html';
-            return;
-        }
-        // Add contact logic here
-    });
+    if (isOwner) {
+        document.getElementById('deletePost')?.addEventListener('click', () => deletePost(post.id));
+    }
 }
 
 function getUrgencyClass(urgencia) {
@@ -78,4 +84,27 @@ function getUrgencyClass(urgencia) {
     };
     
     return classes[urgencia.toUpperCase()] || 'text-gray-500';
+}
+
+async function deletePost(postId) {
+    if (!confirm('Tem certeza que deseja deletar esta postagem?')) return;
+
+    const token = localStorage.getItem('authToken');
+    try {
+        const response = await fetch(`http://localhost:8080/ocorrencias/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            alert('Postagem deletada com sucesso!');
+            window.location.href = 'postagens.html';
+        } else {
+            throw new Error('Erro ao deletar postagem');
+        }
+    } catch (error) {
+        alert('Erro ao deletar postagem: ' + error.message);
+    }
 }

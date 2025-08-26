@@ -15,18 +15,25 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     try {
-        // Busca as ocorrências do backend
+        console.log('Iniciando busca de posts...');
         const response = await fetch('http://localhost:8080/ocorrencias/listar');
+        console.log('Status da resposta:', response.status);
+        
         if (!response.ok) {
-            throw new Error('Erro ao buscar ocorrências do backend');
+            console.error('Erro na resposta:', response.statusText);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const posts = await response.json();
+        console.log('Posts recebidos:', posts);
 
-        if (posts.length === 0) {
-            postsContainer.innerHTML = '<p class="text-center text-gray-500">Nenhuma postagem encontrada.</p>';
+        if (!posts || posts.length === 0) {
+            postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
             return;
         }
+
+        // Clear existing content
+        postsContainerReal.innerHTML = '';
 
         // Gera o HTML para cada ocorrência
         posts.forEach(post => {
@@ -69,7 +76,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
     } catch (error) {
-        console.error('Erro ao carregar as ocorrências:', error);
-        postsContainerErro.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
+        console.error('Erro detalhado:', error);
+        postsContainerErro.innerHTML = `
+            <p class="text-center text-red-500">
+                Erro ao carregar as postagens. Detalhes: ${error.message}
+            </p>
+        `;
     }
 });
