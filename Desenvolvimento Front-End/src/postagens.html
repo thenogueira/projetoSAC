@@ -94,15 +94,11 @@
                 
 
 
-            <div class="flex justify-center mt-20">
-                <a href="criandoPost.html" class="px-6 py-3 hover:bg-destaque hover:text-white rounded-lg hover:bg-destaque-dark bg-fundo2 text-black duration-250">
-                    Criar Postagens
-                </a>
-            </div>
+            
 
         </section>
 
-        <section class="flex items-center justify-center">
+        <section class="flex items-center justify-center mt-20">
             <div id="postsContainerErro" class="flex items-center justify-center px-6 py-3 w-full">
                 <!-- Posts will be dynamically loaded here -->
 
@@ -111,9 +107,13 @@
 
         
 
-        
+        <div class="flex justify-center mb-20 relative px-6 py-3">
+                <a href="criandoPost.html" id="linkCriar" class="px-6 py-3 hover:bg-destaque hover:text-white rounded-lg absolute bg-fundo2 text-black duration-100">
+                    Criar Postagens
+                </a>
+        </div>
 
-        <button class="px-6 py-3 border-1 border-black indent-0.5 mt-10 mb-40 text-center m-auto block rounded-xl hover:bg-gray-300 duration-250" id="carregarMais">Mostrar Mais Postagens</button>
+        <button class="px-6 py-3 border-1 border-black indent-0.5 mb-40 text-center m-auto block rounded-xl hover:bg-gray-300 duration-250" id="carregarMais">Mostrar Mais Postagens</button>
 
     </main>
     
@@ -142,7 +142,10 @@
         <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
     </footer>
 
-    <script src="javascript/postagens.js"></script>
+    <script src="javascript/postagens.js">
+        
+        
+    </script>
 
 </body>
 </html>

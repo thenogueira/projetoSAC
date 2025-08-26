@@ -80,10 +80,12 @@
                         <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" type="text" name="numeroDocumento" id="numeroDocumento" placeholder="Digite o número do documento" required>
 
 
-                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white">
-        <p><button type="button" id="continueBtn" class="bg-destaque px-4 py-2 rounded-xl text-white">Continuar</button></p>
-    </div>
-    <div id="mensagem" class="hidden px-4 py-2 rounded-xl mt-4 text-center"></div>
+                        <div class="relative py-4 rounded-xl mt-2 lg:mt-6">
+                            <button type="button" id="continueBtn" class=" bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100">Continuar</button>
+                        </div>
+                       
+                        
+                        <div id="mensagem" class="hidden px-4 py-2 rounded-xl mt-4 text-center"></div>
 
                     </form>
                 </div>
@@ -91,7 +93,9 @@
         </div>
     </div>
 
-    <script src="javascript/cadastro-1.js"></script>
+    <script src="javascript/cadastro-1.js">
+        
+    </script>
 
     
     <!-- Modal de mensagem (inicialmente oculto) -->

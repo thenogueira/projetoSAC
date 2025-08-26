@@ -133,6 +133,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         postsContainerErro.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
     }
 
+
+    
+
+    let linkCriar = document.querySelector('#linkCriar')
+
+    linkCriar.addEventListener("mousedown", function (){
+        linkCriar.classList.add('text-[14px]')
+    })
+
+    linkCriar.addEventListener("mouseup", function (){
+        linkCriar.classList.remove('text-[14px]')
+    })
+
     // Função para definir a classe de cor com base na urgência
     // function getUrgencyClass(urgencia) {
     //     if (!urgencia) {

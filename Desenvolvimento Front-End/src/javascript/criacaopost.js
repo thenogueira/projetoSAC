@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){
+
     /**
      * Objeto que armazena referências aos elementos do modal de mensagem
      * @type {Object}
@@ -179,4 +180,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
         
     });
+
+    let criarBtn = document.querySelector('#criarBtn')
+
+    criarBtn.addEventListener("mousedown", function (){
+        criarBtn.classList.remove('text-[18px]')
+        criarBtn.classList.add('text-[16px]')
+    })
+
+    criarBtn.addEventListener("mouseup", function (){
+        criarBtn.classList.remove('text-[16px]')
+        criarBtn.classList.add('text-[18px]')
+    })
 });

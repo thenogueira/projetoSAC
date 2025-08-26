@@ -146,6 +146,16 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarMensagem('Erro', 'Erro ao conectar com o servidor', 'erro');
         }
     });
+
+    let saveBtn = document.querySelector('#saveBtn')
+
+    saveBtn.addEventListener("mousedown", function (){
+        saveBtn.classList.add('text-[16px]')
+    })
+
+    saveBtn.addEventListener("mouseup", function (){
+        saveBtn.classList.remove('text-[16px]')
+    })
 });
 
 /**

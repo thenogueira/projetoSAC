@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const numeroDocumento = document.getElementById('numeroDocumento').value.trim();
         const tipoDocumento = document.querySelector('input[name="tipoDocumento"]:checked').value;
 
+
+
+
         
         if (!nome || !numeroDocumento || 
            (tipoDocumento === "CPF" && numeroDocumento.length !== 11) || 
@@ -102,4 +105,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     });
+
+    continueBtn.addEventListener("mousedown", function (){
+        continueBtn.classList.add('text-[16px]')
+    })
+
+    continueBtn.addEventListener("mouseup", function (){
+        continueBtn.classList.remove('text-[16px]')
+    })
 });

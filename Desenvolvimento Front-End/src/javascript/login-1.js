@@ -175,4 +175,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeBtn) {
         closeBtn.addEventListener('click', fecharModal);
     }
+
+    let entrarBtn = document.querySelector('#entrarBtn')
+
+    entrarBtn.addEventListener("mousedown", function (){
+        entrarBtn.classList.add('text-[16px]')
+    })
+
+    entrarBtn.addEventListener("mouseup", function (){
+        entrarBtn.classList.remove('text-[16px]')
+    })
 });
