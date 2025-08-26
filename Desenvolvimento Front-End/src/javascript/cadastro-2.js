@@ -127,7 +127,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 // Cadastro bem-sucedido
                 mostrarMensagem('Sucesso', 'Cadastro concluído com sucesso!', 'sucesso');
-                localStorage.setItem('usuarioLogado', JSON.stringify({ id: userId, email }));
+                localStorage.setItem('usuarioLogado', JSON.stringify({ 
+                    id: userId, 
+                    email, 
+                    nome: dadosCadastro.nome || email,
+                    profileImage: dadosCadastro.profileImage || '../img/default-profile.png'
+                }));
                 
                 // Redireciona para página de login após 1.5 segundos
                 setTimeout(() => {
