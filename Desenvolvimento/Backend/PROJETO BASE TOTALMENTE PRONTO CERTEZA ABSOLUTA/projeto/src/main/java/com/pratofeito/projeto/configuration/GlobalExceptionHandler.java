@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -161,6 +162,22 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest().body(erroResponse);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErroResponse> handleNoResourceFoundException(
+            NoResourceFoundException ex, WebRequest request) {
+
+        String path = request.getDescription(false).replace("uri=", "");
+
+        ErroResponse error = new ErroResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso não encontrado",
+                "A página ou recurso solicitado não existe",
+                path
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
 }

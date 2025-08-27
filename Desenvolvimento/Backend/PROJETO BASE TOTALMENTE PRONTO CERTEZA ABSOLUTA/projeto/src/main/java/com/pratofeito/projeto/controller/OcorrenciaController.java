@@ -8,9 +8,12 @@ import com.pratofeito.projeto.repository.UsuarioRepository;
 import com.pratofeito.projeto.service.OcorrenciaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +43,42 @@ public class OcorrenciaController {
     @GetMapping("/listar")
     public List<Ocorrencia> listarOcorrencias() {
         return ocorrenciaService.listarOcorrencias();
+    }
+
+    /**
+     * Recupera ocorrências criadas em uma data específica.
+     *
+     * @param data Data no formato YYYY-MM-DD (ex: 2024-01-15)
+     * @return ResponseEntity contendo lista de DTOs das ocorrências da data especificada
+     *         e status HTTP 200, ou status 400 se a data for inválida
+     * @see OcorrenciaResponseDTO
+     */
+    @CrossOrigin("*")
+    @GetMapping("/por-data")
+    public ResponseEntity<List<OcorrenciaResponseDTO>> listarPorData(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+
+        try {
+            List<Ocorrencia> ocorrencias = ocorrenciaService.listarPorData(data);
+            List<OcorrenciaResponseDTO> dtos = ocorrencias.stream()
+                    .map(OcorrenciaResponseDTO::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(dtos);
+        } catch (DateTimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OcorrenciaResponseDTO> buscarPorId(@PathVariable Long id) {
+        try {
+            Ocorrencia ocorrencia = ocorrenciaService.buscarPorId(id);
+            return ResponseEntity.ok(new OcorrenciaResponseDTO(ocorrencia));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
