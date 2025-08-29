@@ -4,6 +4,7 @@ import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaResponseDTO;
 import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaUpdateDTO;
 import com.pratofeito.projeto.model.Ocorrencia;
 import com.pratofeito.projeto.model.Usuario;
+import com.pratofeito.projeto.model.enums.TipoOcorrencia;
 import com.pratofeito.projeto.repository.UsuarioRepository;
 import com.pratofeito.projeto.service.OcorrenciaService;
 import jakarta.validation.Valid;
@@ -154,6 +155,32 @@ public class OcorrenciaController {
         List<OcorrenciaResponseDTO> dtos = recentes.stream()
                 .map(OcorrenciaResponseDTO::new)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
+     * Recupera ocorrências por tipo específico (DOACAO ou PEDIDO).
+     *
+     * @param tipo Tipo da ocorrência para filtrar (DOACAO ou PEDIDO)
+     * @return ResponseEntity contendo lista de DTOs das ocorrências do tipo especificado
+     *         e status HTTP 200, ou status 404 se nenhuma ocorrência for encontrada
+     * @see OcorrenciaResponseDTO
+     */
+    @CrossOrigin("*")
+    @GetMapping("/por-tipo")
+    public ResponseEntity<List<OcorrenciaResponseDTO>> listarPorTipo(
+            @RequestParam TipoOcorrencia tipo) {
+
+        List<Ocorrencia> ocorrencias = ocorrenciaService.listarPorTipo(tipo);
+
+        if (ocorrencias.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<OcorrenciaResponseDTO> dtos = ocorrencias.stream()
+                .map(OcorrenciaResponseDTO::new)
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(dtos);
     }
 }
