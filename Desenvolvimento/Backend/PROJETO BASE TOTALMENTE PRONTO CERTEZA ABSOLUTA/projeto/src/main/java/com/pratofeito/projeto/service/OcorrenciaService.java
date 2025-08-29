@@ -2,6 +2,7 @@ package com.pratofeito.projeto.service;
 
 import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaUpdateDTO;
 import com.pratofeito.projeto.model.Ocorrencia;
+import com.pratofeito.projeto.model.enums.TipoOcorrencia;
 import com.pratofeito.projeto.repository.OcorrenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,10 @@ public class OcorrenciaService {
     public Ocorrencia buscarPorId(Long id) {
         return ocorrenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
+    }
+
+    public List<Ocorrencia> listarPorTipo(TipoOcorrencia tipo) {
+        return ocorrenciaRepository.findByTipo(tipo);
     }
 
 }
