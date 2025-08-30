@@ -1,17 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
     const menuAntigo = document.getElementById('menu-antigo');
     const menuNovo = document.getElementById('menu-novo');
+    const profileName = document.getElementById('profileName');
+    const profileImage = document.getElementById('profileImage');
 
-    // Pega o usuário logado do localStorage
-    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+    // Recupera o usuário do localStorage
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
 
-    if (user && user.nome) {
-        // Está logado: esconde menu antigo, mostra novo
-        if (menuAntigo) menuAntigo.style.display = 'none';
-        if (menuNovo) menuNovo.style.display = 'flex'; // ou 'block' conforme layout
+    if (usuarioLogado && usuarioLogado.nome) {
+        // Usuário logado → mostra menu novo
+        if (menuAntigo) {
+            menuAntigo.classList.remove('flex');
+            menuAntigo.classList.add('hidden');
+        }
+        if (menuNovo) {
+            menuNovo.classList.remove('hidden');
+            menuNovo.classList.add('flex');
+        }
+
+        // Preenche nome e imagem do usuário, se existir
+        if (profileName && usuarioLogado.nome) {
+            profileName.textContent = usuarioLogado.nome;
+        }
+        if (profileImage && usuarioLogado.foto) {
+            profileImage.src = usuarioLogado.foto;
+        }
+
     } else {
-        // Não está logado: mostra menu antigo, esconde novo
-        if (menuAntigo) menuAntigo.style.display = 'flex'; // ou 'block'
-        if (menuNovo) menuNovo.style.display = 'none';
+        // Usuário não logado → mostra menu antigo
+        if (menuAntigo) {
+            menuAntigo.classList.remove('hidden');
+            menuAntigo.classList.add('flex');
+        }
+        if (menuNovo) {
+            menuNovo.classList.remove('flex');
+            menuNovo.classList.add('hidden');
+        }
     }
 });
+

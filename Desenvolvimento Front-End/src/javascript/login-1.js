@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.remove('border-red-500', 'shake');
         });
     }
-    
+    usuario
     if (senhaField) {
         senhaField.addEventListener('input', function() {
             this.classList.remove('border-red-500', 'shake');

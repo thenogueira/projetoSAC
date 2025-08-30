@@ -128,16 +128,35 @@ function formatarData(dataString) {
 // MENU DO USUÁRIO
 // ================================
 // Seleciona o botão que abre o menu (a div que contém a foto e o nome)
-const usuarioButton = document.querySelector('#logado > div > div > a > div.flex.gap-3');
+let expandir = document.querySelector('div#expandir')
 
-// Seleciona o menu que vai aparecer
-const menu = document.querySelector('#expandir .menu');
+let menu = document.querySelector('div#menu')
 
-// Evento de clique no usuário
-usuarioButton.addEventListener('click', function(e){
-    e.preventDefault(); // previne o href "#"
-    menu.classList.toggle('expandir'); // adiciona ou remove a classe expandir
-});
+let imagem = document.querySelector('div#imagem')
+
+menu.addEventListener('click', clicar)
+
+function clicar(){
+
+    menu.classList.toggle("expandir")
+
+    imagem.classList.toggle("dep")
+
+}
+
+
+// const usuarioButton = document.querySelector('#logado > div > div > a > div.flex.gap-3');
+
+// // Seleciona o menu que vai aparecer
+// const menu = document.querySelector('#expandir .menu');
+
+// // Evento de clique no usuário
+// usuarioButton.addEventListener('click', function(e){
+//     e.preventDefault(); // previne o href "#"
+//     menu.classList.toggle('expandir'); // adiciona ou remove a classe expandir
+// });
+
+
 
 // ================================
 // INICIA FETCH AUTOMATICAMENTE
