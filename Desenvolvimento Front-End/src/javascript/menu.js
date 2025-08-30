@@ -1,25 +1,17 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const userMenu = document.getElementById('expandir');
-    const userProfileLink = document.querySelector('#logado .flex.gap-3');
+document.addEventListener('DOMContentLoaded', () => {
+    const menuAntigo = document.getElementById('menu-antigo');
+    const menuNovo = document.getElementById('menu-novo');
 
-    // Toggle menu visibility
-    userProfileLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        userMenu.classList.toggle('active');
-    });
+    // Pega o usuário logado do localStorage
+    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
 
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!userProfileLink.contains(e.target) && !userMenu.contains(e.target)) {
-            userMenu.classList.remove('active');
-        }
-    });
-
-    // Handle logout
-    document.querySelector('.menu a[href="#"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        localStorage.removeItem('usuarioLogado');
-        localStorage.removeItem('authToken');
-        window.location.href = 'index.html';
-    });
+    if (user && user.nome) {
+        // Está logado: esconde menu antigo, mostra novo
+        if (menuAntigo) menuAntigo.style.display = 'none';
+        if (menuNovo) menuNovo.style.display = 'flex'; // ou 'block' conforme layout
+    } else {
+        // Não está logado: mostra menu antigo, esconde novo
+        if (menuAntigo) menuAntigo.style.display = 'flex'; // ou 'block'
+        if (menuNovo) menuNovo.style.display = 'none';
+    }
 });

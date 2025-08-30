@@ -1,12 +1,9 @@
-
-
 .menu{
     transition: 0.3s;
     width: 140px;
     padding-top: 8px;
     background-color: #fffbeb;
     height: 40px;
-    overflow: hidden;
     border-radius: 20px;
     top: 8px;
     position: absolute;

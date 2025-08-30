@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Postagem - SAC</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+</head>
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
+        <div class="flex items-center gap-15">
+            <a href="postagens.html" class="hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class="hover:text-gray-800">Dúvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class="hover:text-gray-800">Ajuda</a>
+        </div>
+    </nav>
+
+    <main class="px-30 py-10">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+
+            <h1 class="text-2xl font-bold text-center mb-6">Editar Postagem</h1>
+
+            <form id="editPostForm" class="space-y-4">
+                <label class="block">
+                    Título:
+                    <input type="text" id="titulo" class="w-full border rounded-md p-2">
+                </label>
+
+                <label class="block">
+                    Descrição:
+                    <textarea id="descricao" class="w-full border rounded-md p-2 h-32"></textarea>
+                </label>
+
+                <label class="block">
+                    Categoria:
+                    <select id="categoria" class="w-full border rounded-md p-2">
+                        <option value="todas">Todas</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="roupas">Roupas</option>
+                    </select>
+                </label>
+
+                <label class="block">
+                    Tipo:
+                    <select id="tipo" class="w-full border rounded-md p-2">
+                        <option value="todos">Todos</option>
+                        <option value="doacao">Doação</option>
+                        <option value="pedido">Pedido</option>
+                    </select>
+                </label>
+
+                <label class="block">
+                    Localização:
+                    <select id="localizacao" class="w-full border rounded-md p-2">
+                        <option value="RJ">RJ</option>
+                        <option value="SP">SP</option>
+                        <option value="MG">MG</option>
+                    </select>
+                </label>
+
+                <label class="block">
+                    Urgência:
+                    <select id="urgencia" class="w-full border rounded-md p-2">
+                        <option value="todas">Todas</option>
+                        <option value="alta">Alta</option>
+                        <option value="media">Média</option>
+                        <option value="baixa">Baixa</option>
+                    </select>
+                </label>
+
+                <div class="flex justify-between mt-6">
+                    <button type="button" onclick="history.back()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
+                        Salvar Alterações
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+    <script src="javascript/editPost.js"></script>
+</body>
+</html>
