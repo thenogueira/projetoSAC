@@ -7,13 +7,26 @@
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="menu.css">
 
     <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
     
     <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
-<body class="bg-amber-50 font-alexandria"> 
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
+        <div class="flex items-center gap-15 px-6 py-2">
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1 hover:bg-destaque hover:text-white duration-250">Cadastre-se</a>
+        </div>
+    </nav>
 
     <nav class="bg-amber-50 text-black justify-center items-center hidden" id="menu-novo">
         <div class="flex items-center gap-15 py-2">
@@ -29,7 +42,7 @@
                 <div class="p-0">
                     <a href="#">
                         <div class="flex gap-3" >
-                            <div class="p-0 rounded-full overflow-hidden" id="imagem">
+                            <div class="p-0 rounded-full overflow-hidden" id="imagem2">
                                 <img id="" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
 
                             </div>
@@ -92,7 +105,7 @@
                                 </li>
                             </ul>
                             <ul>
-                                <li class="item">
+                                <li class="item" id="logout">
                                     <a href="#">
                                         <div class="flex items-center">
                                             <span class="icon"><i class="fa-solid fa-door-open"></i></span>
