@@ -183,4 +183,21 @@ public class OcorrenciaController {
 
         return ResponseEntity.ok(dtos);
     }
+    @CrossOrigin("*")
+    @GetMapping("/por-categoria")
+    public ResponseEntity<List<OcorrenciaResponseDTO>> listarPorCategoria(
+            @RequestParam String categoria) {
+
+        List<Ocorrencia> ocorrencias = ocorrenciaService.listarPorCategoria(categoria);
+
+        if (ocorrencias.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<OcorrenciaResponseDTO> dtos = ocorrencias.stream()
+                .map(OcorrenciaResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
 }
