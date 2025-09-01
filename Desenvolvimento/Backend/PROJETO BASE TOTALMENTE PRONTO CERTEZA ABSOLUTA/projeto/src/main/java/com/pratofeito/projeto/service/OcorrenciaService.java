@@ -95,4 +95,8 @@ public class OcorrenciaService {
         return ocorrenciaRepository.findByTipo(tipo);
     }
 
+    public List<Ocorrencia> listarPorCategoria(String categoria) {
+        return ocorrenciaRepository.findByCategoria(categoria);
+    }
+
 }

@@ -19,4 +19,5 @@ public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Long> {
     @Query("SELECT o FROM Ocorrencia o WHERE DATE(o.dataCriacao) = :data")
     List<Ocorrencia> findByDataCriacao(@Param("data") LocalDate data);
     List<Ocorrencia> findByTipo(TipoOcorrencia tipo);
+    List<Ocorrencia> findByCategoria(String categoria);
 }
