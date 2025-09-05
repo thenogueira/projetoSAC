@@ -140,17 +140,7 @@
 
     <!-- Scripts -->
     <script src="javascript/detalhePost.js"></script>
-    <script>
-        // Preenche nome e foto do usuário logado no topo
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = JSON.parse(localStorage.getItem('usuarioLogado'));
-            if (user && user.nome) {
-                document.getElementById('profileName').textContent = user.nome;
-                document.getElementById('userTopBar').classList.remove('hidden');
-                document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
-            }
-        });
-    </script>
+    
     <script src="javascript/menu.js"></script>
 
 
