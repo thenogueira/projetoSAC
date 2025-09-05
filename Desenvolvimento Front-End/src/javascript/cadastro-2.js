@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         title: document.getElementById('modalTitle'),
         icon: document.getElementById('modalIcon'),
         closeBtn: document.getElementById('modalCloseBtn')
+        
     };
 
     /**
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modalElements.modal.classList.add('hidden');
         });
     }
+    
 
     // Obtém referência ao formulário de cadastro
     const form = document.getElementById('cadastroForm');
@@ -149,6 +151,16 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarMensagem('Erro', 'Erro ao conectar com o servidor', 'erro');
         }
     });
+
+    let saveBtn = document.querySelector('#saveBtn')
+
+    saveBtn.addEventListener("mousedown", function (){
+        saveBtn.classList.add('text-[16px]')
+    })
+
+    saveBtn.addEventListener("mouseup", function (){
+        saveBtn.classList.remove('text-[16px]')
+    })
 });
 
 /**

@@ -28,8 +28,9 @@
             <div>
                 <a href="#">
                     <div class="flex gap-3" >
-                        <div class="p-0 rounded-full overflow-hidden imagem bg-black" id="imagem">
-                            <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
+                        <div class="p-0 rounded-full overflow-hidden imagem" id="imagem">
+                            <img id="profileImage" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
+
                         </div>
                             <!-- Foto de Perfil  -->
                         <div class="flex flex-col">
@@ -43,8 +44,8 @@
                     <div class="menu p-0">
                         <a href="#">
                             <div class="flex gap-3" >
-                                <div class="p-0 rounded-full overflow-hidden imagem bg-black" id="imagem">
-                                    <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil" width="10" height="10">
+                                <div class="p-0 rounded-full overflow-hidden imagem" id="imagem">
+                                    <img id="profileImage" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
                                 </div>
                                  <!-- Foto de Perfil  -->
                                 <div class="flex flex-col">
@@ -110,7 +111,7 @@
         <section class="w-vw h-dvh bg-fundo1 flex items-center px-30">
             <div>
                 <h1 class="text-5xl text-destaque font-alfa publique delay-400">Bem-vindo ao SAC</h1>
-                <p   class="m-4 ml-0 w-150 text-destaque text-2xl publique">Texto sobre quem somos e nosso objetivo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt quia iusto harum repellendus modi explicabo soluta non ut eligendi aperiam quo eos aliquid placeat, pariatur consequatur aut. Voluptatibus, provident mollitia.</p>
+                <p   class="m-4 ml-0 w-150 text-destaque text-2xl publique">Somos uma plataforma comunitária dedicada a conectar pessoas que precisam de ajuda com aquelas dispostas a doar e apoiar. Nosso objetivo é criar um espaço seguro e acessível para facilitar essa comunicação, sempre valorizando o respeito e a transparência.</p>
 
 
             </div>
@@ -122,7 +123,7 @@
             </div>
             <div class="">
                 <h2 class="text-5xl text-destaque font-alfa publiques">Importância de Doar</h2>
-                <p class="m-4 ml-0 w-120 text-destaque text-2xl publiques">Texto explicando a importância de doações. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam consequuntur nobis, consectetur nulla iure eos similique esse optio rerum consequatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet enim eligendi non 
+                <p class="m-4 ml-0 w-120 text-destaque text-2xl publiques">As doações são fundamentais para atender necessidades de pessoas em situação de vulnerabilidade. Elas ajudam a suprir faltas imediatas e facilitam o acesso a recursos básicos. Através do SAC, é possível promover uma resposta rápida e eficaz a essas problematicas.
                 </p>
             </div>
          </section> 
@@ -169,11 +170,22 @@
         </div>
         
     
-        <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
+        <p class="text-sm mt-8">©Sistema de Ajudas Comunitárias (SAC)</p>
     </footer>
 
+    <script src="javascript/index.js"></script>
+
+    <script>
+// Preenche nome e foto do usuário logado no topo
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (user && user.nome) {
+        document.getElementById('profileName').textContent = user.nome;
+        document.getElementById('userTopBar').classList.remove('hidden');
+        document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
+    }
+});
+</script>
+
 </body>
-
-<script src="javascript/index.js"></script>
-
 </html>

@@ -7,27 +7,117 @@
     <title>duvidas</title>
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
+    <link rel="stylesheet" href="menu.css">
+
+    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
     
     <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
 <body class="bg-amber-50 font-alexandria">
-    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
-        <div class="flex items-center gap-15">
+
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
+        <div class="flex items-center gap-15 px-6 py-2">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
             <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
-            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
-            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
-            <!-- Usuário logado -->
-            <div id="userTopBar" class="flex gap-3 items-center ml-8 hidden">
-                <div class="p-0 rounded-full overflow-hidden imagem bg-black w-8 h-8">
-                    <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil">
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1 hover:bg-destaque hover:text-white duration-250">Cadastre-se</a>
+        </div>
+    </nav>
+
+    <nav class="bg-amber-50 text-black justify-center items-center hidden" id="menu-novo">
+        <div class="flex items-center gap-15 py-2">
+
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+
+            <div>
+                <div class="p-0">
+                    <a href="#">
+                        <div class="flex gap-3" >
+                            <div class="p-0 rounded-full overflow-hidden" id="imagem2">
+                                <img id="" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
+
+                            </div>
+                                <!-- Foto de Perfil  -->
+                            <div class="flex flex-col">
+                                <span id=""></span>
+                                    <!-- puxar do banco  -->
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <span id="profileName" class="font-bold"></span>
-            </div>
+
+                <div id="menu">
+                    <div class="p-0">
+                        <a href="#">
+                            <div class="flex gap-3" >
+                                <div class="p-0 rounded-full overflow-hidden" id="imagem">
+                                    <img id="profileImage" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
+
+                                </div>
+                                    <!-- Foto de Perfil  -->
+                                <div class="flex flex-col">
+                                    <span id="profileName"></span>
+                                        <!-- puxar do banco  -->
+                                </div>
+                            </div>
+                        </a>
+            
+                        <hr class="my-6">
+            
+                        <div>
+                            <ul>
+                                <li class="item">
+                                    <a href="perfil.html" class="link">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                            <span class="text">Perfil</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="criandoPost.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                            <span class="text">Criar Postagem</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="config-1.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                            <span class="text">Configurações</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item" id="logout">
+                                    <a href="#">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                            <span class="text">Sair da Conta</span>
+                                        </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
+                </div>
         </div>
     </nav> 
 
@@ -43,15 +133,20 @@
 
             <section class="bg-amber-50 px-30 py-20 flex items-center">
                 <div>
-                    <summary class="w-200 mb-12">Nosso site não se envolve com nenhum tipo de transação de dinheiro ou entrega de produto Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
 
-                    </summary>
+                    <summary class="w-200 mb-12">Nosso site não se envolve com nenhum tipo de transação de dinheiro ou entrega de produto. Toda negociação ou entrega deve ser combinada diretamente entre os usuários, sem envolvimento da plataforma.</summary>
 
-                    <summary class="w-200 mb-8">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae culpa dignissimos tempora minima molestias harum modi aliquam sint, eos accusamus, ipsa repellat debitis odit nihil, amet quia eligendi commodi laborum?</summary>
+                    <summary class="w-200 mb-12">Todas as doações são gratuitas e voluntárias. Não é permitido vender, trocar ou cobrar por qualquer item ou serviço dentro da plataforma.</summary>
 
-                    <summary class="w-200 mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, repellat animi voluptatibus optio, id ad cum nemo pariatur ipsum earum alias odio qui exercitationem quas consectetur reprehenderit. Placeat, quibusdam harum.</summary>
+                    <summary class="w-200 mb-12">Nosso papel é somente intermediar a comunicação entre quem precisa e quem quer ajudar. Não garantimos o sucesso ou a conclusão das interações.</summary>
 
-                    <summary class="w-200">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Animi nobis similique molestias, expedita provident, quibusdam optio minima non nam consequatur veritatis repellendus? Magni ut quod maiores quasi cupiditate doloribus saepe?.</summary>
+                    <summary class="w-200 mb-12">Caso você perceba alguma postagem estranha, abusiva ou suspeita, é possível fazer uma denúncia diretamente no site, e nossa equipe fará a análise.</summary>
+
+                    <summary class="w-200 mb-12">Só é possível avaliar outro usuário após um contato real, ou seja, quando você efetivamente recebeu ou ofereceu ajuda.</summary>
+
+                    <summary class="w-200 mb-12">Se você identificar uma avaliação falsa ou ofensiva, também poderá denunciá-la para que seja verificada e removida se necessário.</summary>
+
+                    <summary class="w-200 mb-12">O uso da plataforma deve sempre seguir os princípios de respeito, empatia e responsabilidade, lembrando que o objetivo aqui é o bem coletivo.</summary>
                 </div>                
             </section>
 
@@ -133,6 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<script src="javascript/menu.js"></script>
+
 </html>
 
 
