@@ -1,36 +1,218 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang=”pt-BR”>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dúvidas - SAC</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset=”UTF-8”>
+    <meta name=”viewport” content=”width=device-width, initial-scale=1.0”>
+    <meta http-equiv=”X-UA-Compatible” content=”ie=edge”>
+    <title>duvidas</title>
+    <link href="./output.css" rel="stylesheet">
+    <link href="./input.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    
+    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
+
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <h1>SAC</h1>
-            </div>
-            <div class="user-profile">
-                <img src="profile-placeholder.jpg" alt="Foto de Perfil" class="profile-pic">
-                <span class="username">Nome do Usuário</span>
-                <div class="dropdown-content">
-                    <a href="#" id="editProfile">Editar Perfil</a>
-                    <a href="#" id="settings">Configurações</a>
-                    <a href="index.html" id="logout">Sair</a>
+<body class="bg-amber-50 font-alexandria">
+
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="logado">
+        <div class="flex items-center gap-15 py-2 relative">
+
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+
+            <div>
+                <a href="#">
+                    <div class="flex gap-3" >
+                        <div class="p-0 rounded-full overflow-hidden imagem" id="imagem">
+                            <img id="profileImage" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
+
+                        </div>
+                            <!-- Foto de Perfil  -->
+                        <div class="flex flex-col">
+                            <span id="profileName">Satoru Gojo</span>
+                                <!-- puxar do banco  -->
+                        </div>
+                    </div>
+                </a>
+
+                <div class="menu-grande" id="expandir">
+                    <div class="menu p-0">
+                        <a href="#">
+                            <div class="flex gap-3" >
+                                <div class="p-0 rounded-full overflow-hidden imagem" id="imagem">
+                                    <img id="profileImage" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="10" height="10">
+                                </div>
+                                 <!-- Foto de Perfil  -->
+                                <div class="flex flex-col">
+                                    <span id="profileName">Satoru Gojo</span>
+                                     <!-- puxar do banco  -->
+                                </div>
+                            </div>
+                
+                            <hr class="my-6">
+                
+                            <div>
+                                <ul>
+                                    <li class="item">
+                                        <a href="perfil.html" class="link">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                                <span class="text">Perfil</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="item">
+                                        <a href="criandoPost.html">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                                <span class="text">Criar Postagem</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="item">
+                                        <a href="config-1.html">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                                <span class="text">Configurações</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="item">
+                                        <a href="#">
+                                            <div class="flex items-center">
+                                                <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                                <span class="text">Sair da Conta</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
+
+
         </div>
-    </header>
+    </nav> 
 
     <main>
-        <div class="questions-content">
-            <h2>Dúvidas Frequentes</h2>
-            <!-- Lista de dúvidas frequentes -->
-        </div>
+        <section class="text-xl">
+            <section class="py-30 bg-fundo1 px-30 py flex items-center">
+                <div class="text-2xl">
+                    <h2 class="text-black text-5xl font-alfa mb-6">Informações Importantes</h2>
+                        <p class="w-200">Aqui estão algumas informações sobre nosso site e duvidas frequentes que podem te ajudar, se ainda se mantiver com alguma duvida após ler, clique em <a class="text-links hover:underline" href="ajuda.html">Ajuda</a> para contactar nosso suporte</p>
+
+                </div>
+            </section>
+
+            <section class="bg-amber-50 px-30 py-20 flex items-center">
+                <div>
+
+                    <summary class="w-200 mb-12">Nosso site não se envolve com nenhum tipo de transação de dinheiro ou entrega de produto. Toda negociação ou entrega deve ser combinada diretamente entre os usuários, sem envolvimento da plataforma.</summary>
+
+                    <summary class="w-200 mb-12">Todas as doações são gratuitas e voluntárias. Não é permitido vender, trocar ou cobrar por qualquer item ou serviço dentro da plataforma.</summary>
+
+                    <summary class="w-200 mb-12">Nosso papel é somente intermediar a comunicação entre quem precisa e quem quer ajudar. Não garantimos o sucesso ou a conclusão das interações.</summary>
+
+                    <summary class="w-200 mb-12">Caso você perceba alguma postagem estranha, abusiva ou suspeita, é possível fazer uma denúncia diretamente no site, e nossa equipe fará a análise.</summary>
+
+                    <summary class="w-200 mb-12">Só é possível avaliar outro usuário após um contato real, ou seja, quando você efetivamente recebeu ou ofereceu ajuda.</summary>
+
+                    <summary class="w-200 mb-12">Se você identificar uma avaliação falsa ou ofensiva, também poderá denunciá-la para que seja verificada e removida se necessário.</summary>
+
+                    <summary class="w-200 mb-12">O uso da plataforma deve sempre seguir os princípios de respeito, empatia e responsabilidade, lembrando que o objetivo aqui é o bem coletivo.</summary>
+                </div>                
+            </section>
+
+            <hr class="mx-30">
+       
+            <section class="bg-amber-50 px-30 py-20 flex items-center">
+                <div class="w-full">
+
+                    <h2 class="text-black text-5xl mb-10">Duvidas Frequentes</h2>
+
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Como posso fazer uma doação?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Você pode se cadastrar e acessar a seção de postagens para encontrar pedidos de ajuda ou oferecer doações diretamente.</p>
+                    </details>
+
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Posso pedir ajuda anonimamente?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Sim, você pode escolher manter seu nome em sigilo ao criar uma postagem solicitando ajuda.</p>
+                    </details>
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Quais tipos de doações são aceitas?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Alimentos, roupas, brinquedos, produtos de higiene e outros itens essenciais são bem-vindos.</p>
+                    </details>
+
+                    <details class="mb-4 border-textos rounded-xl border-1">
+                        <summary class="p-4">Como entrar em contato com o suporte?</summary>
+
+                        <hr>
+
+                        <p class="p-4">Você pode acessar a seção de Ajuda e enviar uma mensagem diretamente para nossa equipe.</p>
+                    </details>
+                </div>
+            </section>
+        </section>
     </main>
 
-    <script src="script.js"></script>
-</body>
+    <hr class="text-minitexto">
+    
+    <footer class="px-30 pt-10 pb-5 ">
+
+        <div class="flex gap-10">
+            <div class="flex flex-col">
+                <h3 class="text-lg">Sobre</h3>
+                <ul>
+                    <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
+                    <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col">
+                <h3 class="text-lg">Doações</h3>
+                <ul>
+                    <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
+                </ul>
+            </div>
+        </div>
+        
+    
+        <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
+    </footer>
+    
+    <script>
+// Preenche nome e foto do usuário logado no topo
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (user && user.nome) {
+        document.getElementById('profileName').textContent = user.nome;
+        document.getElementById('userTopBar').classList.remove('hidden');
+        document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
+    }
+});
+</script>
 </html>
+
+

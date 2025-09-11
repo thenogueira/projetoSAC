@@ -2,10 +2,12 @@ package com.pratofeito.projeto.service;
 
 import com.pratofeito.projeto.dto.ocorrencia.OcorrenciaUpdateDTO;
 import com.pratofeito.projeto.model.Ocorrencia;
+import com.pratofeito.projeto.model.enums.TipoOcorrencia;
 import com.pratofeito.projeto.repository.OcorrenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,10 @@ public class OcorrenciaService {
      */
     public List<Ocorrencia> listarOcorrencias() {
         return ocorrenciaRepository.findAll(); // Chama o método do repositório para obter todas as ocorrências
+    }
+
+    public List<Ocorrencia> listarPorData(LocalDate data) {
+        return ocorrenciaRepository.findByDataCriacao(data);
     }
 
     /**
@@ -78,6 +84,19 @@ public class OcorrenciaService {
                 .stream()
                 .limit(5)
                 .collect(Collectors.toList());
+    }
+
+    public Ocorrencia buscarPorId(Long id) {
+        return ocorrenciaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
+    }
+
+    public List<Ocorrencia> listarPorTipo(TipoOcorrencia tipo) {
+        return ocorrenciaRepository.findByTipo(tipo);
+    }
+
+    public List<Ocorrencia> listarPorCategoria(String categoria) {
+        return ocorrenciaRepository.findByCategoria(categoria);
     }
 
 }

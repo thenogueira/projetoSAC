@@ -81,9 +81,10 @@
                                type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar" required><br>
 
                         <!-- Botão de submit -->
-                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white">
-                            <button type="submit" id="saveBtn" class="bg-destaque px-4 py-2 rounded-xl text-white">Continuar</button>
+                        <div class="relative py-4 rounded-xl mt-2 lg:mt-6">
+                            <button type="submit" id="saveBtn" class="bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100">Cadastrar-se</button>
                         </div>
+                      
                         
                         <!-- Container para mensagens de feedback -->
                         <div id="mensagem" class="hidden px-4 py-2 rounded-xl mt-4 text-center"></div>
@@ -93,12 +94,10 @@
         </div>
     </div>
 
-    <!-- Script JavaScript -->
-    <script src="javascript/cadastro-2.js"></script>
+
+
     
-
-   
-
+    <script src="javascript/cadastro-2.js"></script>
 
     <!-- Modal de mensagem (inicialmente oculto) -->
     <div id="modalMensagem" class="hidden fixed inset-0 z-50">
@@ -111,7 +110,7 @@
                 <div class="p-6">
                     <!-- Cabeçalho do modal com ícone -->
                     <div class="flex items-start">
-                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1"></i>
+                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1 "></i>
                         <div>
                             <h3 id="modalTitle" class="font-bold text-lg"></h3>
                             <p id="modalContent" class="mt-1 text-gray-600"></p>
@@ -127,7 +126,7 @@
                 </div>
             </div>
         </div>
-
     </div>
+    
 </body>
 </html>
