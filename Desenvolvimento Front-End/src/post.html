@@ -121,75 +121,12 @@
     </nav> 
 
     <main class="mx-30 my-10">
-        <section class="bg-amber-50 px-15 py-8 rounded-2xl"> 
-            <h1 class="text-4xl mb-1">Titulo Postagem</h1>
-            <!-- puxar do BD -->
+    <section class="bg-amber-50 px-15 py-8 rounded-2xl" id="postDetails">
+        <!-- O JS vai preencher esse container -->
+        <p class="text-center text-gray-500">Carregando postagem...</p>
+    </section>
 
-            <p class="text-minitexto">Data da postagem: 00/00/0000</p>
-            <!-- puxar do BD -->
-            
-            <div class="flex items-center justify-end mb-6 w-full mt-8">
-
-                <div class="flex gap-5 items-center w-full">
-
-                    <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                        <img id="profileImage" class="object-cover w-full h-full" src="../img/pessoa sem foto.png" alt="Foto de Perfil" width="50" height="50">
-
-                    </div>
-                    <!-- Foto de Perfil -->
-                    
-                    <div class="flex flex-col">
-                        <span id="profileName" class="text-2xl ">Satoru Gojo</span>
-                        <span class="text-xl">☆☆☆☆☆</span>
-
-                        <!-- puxar do banco -->
-                    </div>
-                </div>
-
-                <button class="bg-fundo1 border-1 border-black py-2 px-4 rounded-xl">Contactar</button>
-
-            </div>
-
-            <hr class="text-minitexto my-12">
-
-            <div>
-
-                <ul class="text-xl mb-8">
-                    <li class="flex items-center gap-2 mb-4"><p class="font-bold tracking-wide">Tipo:</p> <p>Doação</p></li>
-                    <li class="flex items-center gap-2 mb-4"><p class="font-bold tracking-wide ">Categoria:</p> <p>Comida</p></li>
-                    <li class="flex items-center gap-2 mb-4"><p class="font-bold tracking-wide ">Localização:</p> <p>Shibuya</p></li>
-                    <li class="flex items-center gap-2 mb-4"><p class="font-bold tracking-wide ">Estado da doação:</p> <p>Boa</p></li>
-                </ul>
-
-                <label class="text-xl font-bold tracking-wide ">Descrição</label>
-                <p name="descricaoPost" id="descricaoPost" class="border-1  border-black w-full rounded-xl py-2 px-4 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. A dicta cupiditate debitis perspiciatis fugit tenetur explicabo, accusantium corporis ipsa deserunt sit aliquam molestiae sapiente rerum nemo quidem fugiat. Ex, ad. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quo voluptatem libero asperiores eum impedit officia ipsa eaque veniam, modi debitis, dolorem omnis. Ratione possimus in tempora mollitia. Dolor, id!</p>
-
-            </div>
-
-            <hr class="text-minitexto my-12">
-
-            <section class="flex gap-10 items-center justify-end relative">
-                <div class="w-55 h-55 bg-fundo2 rounded-3xl overflow-hidden">
-                    <img class="w-full h-full object-cover" src="../img/Erro.png" alt="">
-                </div>
-                <div class="w-55 h-55 bg-fundo2 rounded-3xl overflow-hidden">
-                    <img class="w-full h-full object-cover" src="../img/Erro.png" alt=""></div>
-                <div class="w-55 h-55 bg-fundo2 rounded-3xl overflow-hidden"><img class="w-full h-full object-cover" src="../img/Erro.png" alt="">
-                </div>
-                <div class="w-55 h-55 bg-fundo2 rounded-3xl overflow-hidden">
-                    <img class="w-full h-full object-cover" src="../img/Erro.png" alt="">
-                </div>
-
-                <!-- adicionar quantas imagens o usuario colocar na postagem só, não quatro ou mais -->
-
-                <button class="absolute right-[-20px] rounded-4xl"><i class="fa-solid fa-arrow-left bg-fundo2 border-1 border-black p-3 rounded-4xl scale-x-[-1] "></i></button>
-
-                <!-- botão só aparece se tiver mais de 4 imagens aqui -->
-            </section>
-
-        </section>
-
-    </main>
+</main>
 
     <footer class="px-30 pt-10 pb-5 bg-amber-50">
 
@@ -227,6 +164,7 @@
         </script>
 
     <script src="javascript/menu.js"></script>
+    <script src="javascript/detalhePost.js"></script>
 
 </body>
 </html>

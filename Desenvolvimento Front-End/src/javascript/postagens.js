@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const user = JSON.parse(localStorage.getItem('usuarioLogado'));
 
     function abrirDetalhesPost(post) {
-        window.location.href = `detalhePost.html?id=${post.id}`;
+        window.location.href = `post.html?id=${post.id}`;
     }
 
     async function carregarPosts(filtros = {}) {
@@ -50,35 +50,49 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function renderizarPosts(listaPosts) {
-        postsContainerReal.innerHTML = '';
+    postsContainerReal.innerHTML = '';
 
-        if (!listaPosts.length) {
-            postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
-            return;
+    if (!listaPosts.length) {
+        postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
+        return;
+    }
+
+    listaPosts.forEach(post => {
+        const postElement = document.createElement('figure');
+        postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
+
+        const dataFormatada = post.data ? new Date(post.data).toLocaleDateString() : 'Não informada';
+        const nomeUsuario = post.nome || (post.usuario && post.usuario.nome) || 'Desconhecido';
+
+        // =========================
+        // Definindo imagem segura
+        // =========================
+        let imagemSrc = '../img/Sem Foto.png'; // fallback padrão
+        if (post.imagem) {
+            if (post.imagem.startsWith('data:')) {
+                // imagem Base64
+                imagemSrc = post.imagem;
+            } else if (post.imagem.startsWith('http') || post.imagem.startsWith('/')) {
+                // URL completa ou caminho relativo
+                imagemSrc = post.imagem;
+            }
         }
 
-        listaPosts.forEach(post => {
-            const postElement = document.createElement('figure');
-            postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
+        postElement.innerHTML = `
+            <div class="w-full h-full overflow-hidden rounded-t-xl">
+                <img class="w-full h-full object-cover bg-fundo1" src="${imagemSrc}" alt="Imagem da ocorrência">
+            </div>
+            <div class="rounded-b-xl drop-shadow-black shadow-lg">
+                <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
+                <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
+                <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
+            </div>
+        `;
 
-            const dataFormatada = post.data ? new Date(post.data).toLocaleDateString() : 'Não informada';
-            const nomeUsuario = post.nome || (post.usuario && post.usuario.nome) || 'Desconhecido';
-
-            postElement.innerHTML = `
-                <div class="w-full h-full overflow-hidden rounded-t-xl">
-                    <img class="w-full h-full object-cover bg-fundo1" src="${post.imagem || '../img/Sem Foto.png'}" alt="Imagem da ocorrência">
-                </div>
-                <div class="rounded-b-xl drop-shadow-black shadow-lg">
-                    <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
-                    <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
-                    <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
-                </div>
-            `;
-
-            postElement.addEventListener('click', () => abrirDetalhesPost(post));
-            postsContainerReal.appendChild(postElement);
-        });
-    }
+        postElement.addEventListener('click', () => abrirDetalhesPost(post));
+        postsContainerReal.appendChild(postElement);
+    });
+}
 
     // Carrega posts inicialmente
     carregarPosts();
