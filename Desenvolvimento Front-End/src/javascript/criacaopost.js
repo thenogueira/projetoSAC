@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const estado_doacao = "DISPONIVEL";
 
             // Input de imagem seguro
-            const imagemInput = document.getElementById('imagem');
+            const imagemInput = document.getElementById('imagem2');
             let imagem = null;
             if (imagemInput && imagemInput.files) {
                 imagem = imagemInput.files.length > 0 ? imagemInput.files[0] : null;
