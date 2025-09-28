@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="./output.css" rel="stylesheet">
-    <link href="./input.css" rel="stylesheet">
-    <link rel="stylesheet" href="menu.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postagem Completa</title>
+  <link href="./output.css" rel="stylesheet">
+  <link href="./input.css" rel="stylesheet">
+  <link rel="stylesheet" href="menu.css">
 
-    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
-    
-    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
-
+  <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-fundo1 font-alexandria">
 
-    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
+  <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
         <div class="flex items-center gap-15 px-6 py-2">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
             <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
@@ -120,51 +117,35 @@
         </div>
     </nav> 
 
-    <main class="mx-30 my-10">
+  <main class="mx-30 my-10">
     <section class="bg-amber-50 px-15 py-8 rounded-2xl" id="postDetails">
-        <!-- O JS vai preencher esse container -->
-        <p class="text-center text-gray-500">Carregando postagem...</p>
+      <p class="text-center text-gray-500">Carregando postagem...</p>
     </section>
+  </main>
 
-</main>
+  <footer class="px-30 pt-10 pb-5 bg-amber-50">
+    <div class="flex gap-10">
+      <div class="flex flex-col">
+        <h3 class="text-lg">Sobre</h3>
+        <ul>
+          <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
+          <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
+        </ul>
+      </div>
+      <div class="flex flex-col">
+        <h3 class="text-lg">Doações</h3>
+        <ul>
+          <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="text-sm mt-8">© Sistema de Apoio Comunitário (SAC)</p>
+  </footer>
 
-    <footer class="px-30 pt-10 pb-5 bg-amber-50">
+  <!-- Scripts -->
+  <script src="javascript/menu.js"></script>
+  <script src="javascript/detalhePost.js"></script>
 
-        <div class="flex gap-10">
-            <div class="flex flex-col">
-                <h3 class="text-lg">Sobre</h3>
-                <ul>
-                    <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
-                    <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
-                </ul>
-            </div>
-            
-            <div class="flex flex-col">
-                <h3 class="text-lg">Doações</h3>
-                <ul>
-                    <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
-                </ul>
-            </div>
-        </div>
-        
-    
-        <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
-    </footer>
-
-    <script>
-        // Preenche nome e foto do usuário logado no topo
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = JSON.parse(localStorage.getItem('usuarioLogado'));
-            if (user && user.nome) {
-                document.getElementById('profileName').textContent = user.nome;
-                document.getElementById('userTopBar').classList.remove('hidden');
-                document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
-            }
-        });
-        </script>
-
-    <script src="javascript/menu.js"></script>
-    <script src="javascript/detalhePost.js"></script>
-
+  
 </body>
 </html>

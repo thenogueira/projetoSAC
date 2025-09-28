@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sobrenomeSpan.textContent = " " + primeiroSobrenome;
                     sobrenomeSpan.style.opacity = 1; // fade-in
                 }
-            }, 250);
+            }, 175);
         } else {
             // remove o sobrenome imediatamente ao fechar, sem fade-out
             if (sobrenomeSpan) {
