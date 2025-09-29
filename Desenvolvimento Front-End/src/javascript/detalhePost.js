@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('menu-novo').classList.remove('hidden');
     document.getElementById('profileName').textContent = userLogado.nome;
     document.getElementById('profileImage').src =
-      userLogado.profileImage || '../img/pessoa sem foto.png';
+      userLogado.profileImage || '../img/defaultPhoto.png';
   }
 
   if (!postId) {
@@ -39,14 +39,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 2. Galeria de imagens
     let imagensHtml = '';
     if (Array.isArray(post.imagens) && post.imagens.length > 0) {
-      const imagensValidas = post.imagens.filter(img => img && img !== '../img/Sem Foto.png');
+      const imagensValidas = post.imagens.filter(img => img && img !== '../img/defaultPhoto.png');
       if (imagensValidas.length > 0) {
         imagensHtml = `
           <hr class="text-minitexto my-12">
           <section class="flex gap-10 items-center justify-end relative flex-wrap">
             ${imagensValidas.map(img => `
               <div class="w-55 h-55 bg-fundo2 rounded-3xl overflow-hidden">
-                <img class="w-full h-full object-cover" src="${img}" alt="Imagem da ocorrência">
+                <img class="w-full h-full object-cover" src="${img}" 
+                     alt="Imagem da ocorrência"
+                     onerror="this.src='../img/defaultPhoto.png'">
               </div>
             `).join('')}
           </section>
@@ -62,7 +64,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="flex items-center justify-between mb-6 w-full mt-8">
         <div class="flex gap-5 items-center">
           <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-            <img class="object-cover w-full h-full" src="${post.imagem || '../img/pessoa sem foto.png'}" alt="Foto de Perfil">
+            <img class="object-cover w-full h-full" 
+                 src="${post.imagem || '../img/defaultPhoto.png'}" 
+                 alt="Foto de Perfil"
+                 onerror="this.src='../img/defaultPhoto.png'">
           </div>
           <div class="flex flex-col">
             <span class="text-2xl font-bold">${nomeUsuario}</span>
@@ -71,9 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
         <div class="flex gap-3">
           ${
-            emailUsuario
-              ? `<button id="contatarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Contactar</button>`
-              : `<button disabled class="bg-gray-300 py-2 px-4 rounded-xl opacity-50 cursor-not-allowed">Contactar</button>`
+            // Só mostra o botão "Contactar" se NÃO for o dono do post
+            idLogado && post.usuarioId === idLogado
+              ? ""
+              : emailUsuario
+                ? `<button id="contatarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Contactar</button>`
+                : `<button disabled class="bg-gray-300 py-2 px-4 rounded-xl opacity-50 cursor-not-allowed">Contactar</button>`
           }
           ${
             idLogado && post.usuarioId === idLogado
@@ -105,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
 
     // Botão de contato
-    if (emailUsuario) {
+    if (emailUsuario && !(idLogado && post.usuarioId === idLogado)) {
       document.getElementById('contatarButton')?.addEventListener('click', () => {
         const mailtoLink = `mailto:${emailUsuario}?subject=Contato sobre sua postagem no SAC&body=Olá ${nomeUsuario}, vi sua postagem e gostaria de conversar.`;
         window.location.href = mailtoLink;
