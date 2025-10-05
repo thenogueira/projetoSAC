@@ -36,16 +36,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emailUsuario = ""; // Email não está vindo no backend
     const idLogado = userLogado?.id || userLogado?.idUsuario || null;
 
-    // 2. Galeria de imagens
-    let imagensHtml = '';
-    if (Array.isArray(post.imagens) && post.imagens.length > 0) {
+    // 2. Imagem da postagem (abaixo da descrição)
+    let imagemPostHtml = '';
+    if (post.imagem && post.imagem !== '../img/defaultPhoto.png') {
+      imagemPostHtml = `
+        <hr class="text-minitexto my-12">
+        <section class="flex justify-center mt-8">
+          <div class="w-80 h-80 bg-fundo2 rounded-3xl overflow-hidden">
+            <img class="w-full h-full object-cover" 
+                 src="${post.imagem}" 
+                 alt="Imagem da postagem"
+                 onerror="this.src='../img/defaultPhoto.png'">
+          </div>
+        </section>
+      `;
+    } else if (Array.isArray(post.imagens) && post.imagens.length > 0) {
       const imagensValidas = post.imagens.filter(img => img && img !== '../img/defaultPhoto.png');
       if (imagensValidas.length > 0) {
-        imagensHtml = `
+        imagemPostHtml = `
           <hr class="text-minitexto my-12">
-          <section class="flex gap-10 items-center justify-end relative flex-wrap">
+          <section class="flex gap-10 items-center justify-center flex-wrap">
             ${imagensValidas.map(img => `
-              <div class="w-55 h-55 bg-fundo2 rounded-3xl overflow-hidden">
+              <div class="w-64 h-64 bg-fundo2 rounded-3xl overflow-hidden">
                 <img class="w-full h-full object-cover" src="${img}" 
                      alt="Imagem da ocorrência"
                      onerror="this.src='../img/defaultPhoto.png'">
@@ -56,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
 
-    // 3. Renderizar HTML
+    // 3. Renderizar HTML principal
     postDetails.innerHTML = `
       <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
       <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
@@ -64,8 +76,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="flex items-center justify-between mb-6 w-full mt-8">
         <div class="flex gap-5 items-center">
           <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
+            <!-- ✅ Foto de perfil padrão -->
             <img class="object-cover w-full h-full" 
-                 src="${post.imagem || '../img/defaultPhoto.png'}" 
+                 src="${post.usuarioImagem || '../img/defaultPhoto.png'}" 
                  alt="Foto de Perfil"
                  onerror="this.src='../img/defaultPhoto.png'">
           </div>
@@ -109,7 +122,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         </p>
       </div>
 
-      ${imagensHtml}
+      <!-- ✅ Imagem da postagem abaixo da descrição -->
+      ${imagemPostHtml}
     `;
 
     // Botão de contato
