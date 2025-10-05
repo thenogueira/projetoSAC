@@ -14,14 +14,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     const user = JSON.parse(localStorage.getItem('usuarioLogado'));
 
     function abrirDetalhesPost(post) {
-        window.location.href = `detalhePost.html?id=${post.id}`;
+        window.location.href = `post.html?id=${post.id}`;
     }
 
     async function carregarPosts(filtros = {}) {
         try {
             let url = 'http://localhost:8080/ocorrencias/listar';
             
-            // Adiciona query string se houver filtros
             const params = new URLSearchParams(filtros).toString();
             if (params) url += `?${params}`;
 
@@ -31,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             posts = await response.json();
             renderizarPosts(posts);
 
-            // Atualiza post editado recentemente
             const postAtualizado = JSON.parse(localStorage.getItem('postAtualizado'));
             if (postAtualizado) {
                 const postElement = Array.from(postsContainerReal.children).find(p =>
@@ -61,12 +59,35 @@ document.addEventListener('DOMContentLoaded', async function () {
             const postElement = document.createElement('figure');
             postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
 
-            const dataFormatada = post.data ? new Date(post.data).toLocaleDateString() : 'Não informada';
+            // === Corrigir formatação da data ===
+            let dataFormatada = "Data não informada";
+            const dataCampo = post.data_criacao || post.data;
+            if (dataCampo) {
+                const data = new Date(dataCampo);
+                if (!isNaN(data.getTime())) {
+                    dataFormatada = data.toLocaleDateString('pt-BR', {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    });
+                }
+            }
+
             const nomeUsuario = post.nome || (post.usuario && post.usuario.nome) || 'Desconhecido';
+
+            // === Imagem padrão mantém como antes ===
+            let imagemSrc = '../img/Sem Foto.png';
+            if (post.imagem) {
+                if (post.imagem.startsWith('data:')) {
+                    imagemSrc = post.imagem;
+                } else if (post.imagem.startsWith('http') || post.imagem.startsWith('/')) {
+                    imagemSrc = post.imagem;
+                }
+            }
 
             postElement.innerHTML = `
                 <div class="w-full h-full overflow-hidden rounded-t-xl">
-                    <img class="w-full h-full object-cover bg-fundo1" src="${post.imagem || '../img/Sem Foto.png'}" alt="Imagem da ocorrência">
+                    <img class="w-full h-full object-cover bg-fundo1" src="${imagemSrc}" alt="Imagem da ocorrência">
                 </div>
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
                     <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
@@ -80,16 +101,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Carrega posts inicialmente
     carregarPosts();
 
-    // Listener do formulário de filtro
     if (filtroForm) {
         filtroForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const filtros = {
                 categoria: filtroForm.categoria.value,
-                data: filtroForm.data.value,
+                data: filtroForm.dataFormatada.value,
                 tipo: filtroForm.tipo.value,
                 localizacao: filtroForm.localizacao.value,
                 urgencia: filtroForm.urgencia.value
