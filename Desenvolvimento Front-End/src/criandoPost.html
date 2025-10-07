@@ -105,6 +105,16 @@
                                 </li>
                             </ul>
                             <ul>
+                                <li class="item">
+                                    <a href="denuncias.html ">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                                            <span class="text">Denúncias</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
                                 <li class="item" id="logout">
                                     <a href="#">
                                         <div class="flex items-center">
@@ -209,14 +219,37 @@
                     <label for="descricao" class="block text-xl mb-1">Descrição:</label>
                     <textarea id="descricao" class="w-full px-3 py-2 border rounded-lg" placeholder="Descrição da postagem" required></textarea>
                 </div>
-                <div class="my-8">
-                    <label for="imagem2" class="block text-xl mb-1">Imagem:</label>
-                    <input type="file" id="imagem2" accept="image/*">
+
+
+
+
+
+                
+                <div class="my-8 relative flex flex-col gap-4">
+                    <label for="imagem3" class="block text-xl mb-1 ">Imagens:</label>
+
+                    <!-- ✅ Botão de escolher imagem -->
+                    <button type="button" id="botaoSelecionarImagem"
+                        class="self-start bg-destaque text-white px-4 py-2 rounded-xl hover:opacity-90 transition w-100 ">
+                        Escolher Imagem
+                    </button>
+
+                    <!-- Área de miniaturas -->
+                    <section id="previewContainer" class="flex gap-2 flex-wrap items-start justify-start mt-2"></section>
+
+
+                    <!-- Input escondido -->
+                    <input type="file" id="imagem3" accept="image/*" multiple class="hidden">
                 </div>
+
+
+
+
                 
                 <div class="flex justify-end mt-16 mb-8 relative">
                     <button id="criarBtn" type="submit" class="bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100 text-[18px]">Criar Postagem</button>
                 </div>
+                
             </form>
         </section>
     </main>

@@ -36,37 +36,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emailUsuario = ""; // Email não está vindo no backend
     const idLogado = userLogado?.id || userLogado?.idUsuario || null;
 
-    // 2. Imagem da postagem (abaixo da descrição)
-    let imagemPostHtml = '';
-    if (post.imagem && post.imagem !== '../img/defaultPhoto.png') {
-      imagemPostHtml = `
-        <hr class="text-minitexto my-12">
-        <section class="flex justify-center mt-8">
-          <div class="w-80 h-80 bg-fundo2 rounded-3xl overflow-hidden">
-            <img class="w-full h-full object-cover" 
-                 src="${post.imagem}" 
-                 alt="Imagem da postagem"
-                 onerror="this.src='../img/defaultPhoto.png'">
-          </div>
-        </section>
-      `;
-    } else if (Array.isArray(post.imagens) && post.imagens.length > 0) {
-      const imagensValidas = post.imagens.filter(img => img && img !== '../img/defaultPhoto.png');
-      if (imagensValidas.length > 0) {
-        imagemPostHtml = `
-          <hr class="text-minitexto my-12">
-          <section class="flex gap-10 items-center justify-center flex-wrap">
-            ${imagensValidas.map(img => `
-              <div class="w-64 h-64 bg-fundo2 rounded-3xl overflow-hidden">
-                <img class="w-full h-full object-cover" src="${img}" 
-                     alt="Imagem da ocorrência"
-                     onerror="this.src='../img/defaultPhoto.png'">
-              </div>
-            `).join('')}
-          </section>
-        `;
-      }
+// --- GALERIA DE IMAGENS ---
+let imagemPostHtml = '';
+
+const todasImagens = [];
+
+// Adiciona a imagem principal se existir
+if (post.imagem && post.imagem !== '../img/defaultPhoto.png') {
+  todasImagens.push(post.imagem);
+}
+
+// Adiciona imagens extras se existirem
+if (Array.isArray(post.imagens) && post.imagens.length > 0) {
+  post.imagens.forEach(img => {
+    if (img && img !== '../img/defaultPhoto.png') {
+      todasImagens.push(img);
     }
+  });
+}
+
+if (todasImagens.length > 0) {
+  const mostrarBotao = todasImagens.length > 4;
+
+  imagemPostHtml = `
+    <hr class="text-minitexto my-8">
+
+    <section class="flex gap-10 items-center justify-start relative overflow-hidden imagem-container">
+      ${todasImagens.map(img => `
+        <div class="w-55 h-55 bg-fundo2 rounded-2xl overflow-hidden flex-shrink-0">
+          <img class="w-full h-full object-cover" 
+               src="${img}" 
+               alt="Imagem da postagem" 
+               onerror="this.src='../img/defaultPhoto.png'">
+        </div>
+      `).join('')}
+
+      ${mostrarBotao ? `
+        <button id="botaoRolarImagens" class="absolute right-[-15px] bg-black rounded-4xl p-2 hover:bg-destaque transition">
+          <img src="../img/right.png" alt="Ver mais">
+        </button>
+      ` : ''}
+    </section>
+  `;
+}
+    // --- FIM DA GALERIA DE IMAGENS ---
 
     // 3. Renderizar HTML principal
     postDetails.innerHTML = `
@@ -76,7 +89,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="flex items-center justify-between mb-6 w-full mt-8">
         <div class="flex gap-5 items-center">
           <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-            <!-- ✅ Foto de perfil padrão -->
             <img class="object-cover w-full h-full" 
                  src="${post.usuarioImagem || '../img/defaultPhoto.png'}" 
                  alt="Foto de Perfil"
@@ -89,7 +101,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
         <div class="flex gap-3">
           ${
-            // Só mostra o botão "Contactar" se NÃO for o dono do post
             idLogado && post.usuarioId === idLogado
               ? ""
               : emailUsuario
