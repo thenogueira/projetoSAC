@@ -44,41 +44,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let arquivosSelecionados = []; // Array de File objects
 
-  // Segurança: só procede se elementos existem
   if (botaoSelecionarImagem && imagemInput) {
-    // Abre o seletor ao clicar no botão
     botaoSelecionarImagem.addEventListener('click', (e) => {
-      // evita comportamento indesejado de submit
       e.preventDefault();
       imagemInput.click();
     });
 
-    // Ao selecionar arquivos pelo input principal
     imagemInput.addEventListener('change', (event) => {
       const novosArquivos = Array.from(event.target.files || []);
       if (novosArquivos.length > 0) {
         arquivosSelecionados.push(...novosArquivos);
         atualizarPreview();
       }
-      // limpa o input para permitir re-seleção do mesmo arquivo depois
       imagemInput.value = '';
     });
   }
 
-  // Atualiza a área de preview com as miniaturas
+  // Atualiza a área de preview com Tailwind
   function atualizarPreview() {
     if (!previewContainer) return;
     previewContainer.innerHTML = '';
 
+    previewContainer.className = 'flex flex-wrap gap-6 justify-start items-start';
+
     arquivosSelecionados.forEach((arquivo, index) => {
       const reader = new FileReader();
       reader.onload = e => {
-        // cria o bloco da miniatura
         const divImagem = document.createElement('div');
-        // classes tailwind / utilitárias; respete suas classes w-55/h-55
-        divImagem.className = 'relative bg-fundo2 overflow-hidden rounded-xl flex-shrink-0 w-55 h-55';
+        divImagem.className = 'relative bg-fundo2 overflow-hidden rounded-xl flex-shrink-0 w-50 h-50';
 
-        // innerHTML com botões type="button"
         divImagem.innerHTML = `
           <img src="${e.target.result}" class="w-full h-full object-cover rounded-xl" alt="Pré-visualização">
           <div class="absolute top-2 right-2 flex gap-1">
@@ -93,12 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // =========================
-  // Event delegation (funciona para qualquer número de imagens)
-  // =========================
+  // Event delegation para botões
   if (previewContainer) {
     previewContainer.addEventListener('click', (e) => {
-      // procura o botão mais próximo que tenha as classes desejadas
       const excluirBtn = e.target.closest('.botao-excluir');
       const trocarBtn = e.target.closest('.botao-trocar');
 
@@ -121,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Trocar imagem específica usando um input temporário
+  // Função trocar imagem
   function trocarImagem(index) {
     const tempInput = document.createElement('input');
     tempInput.type = 'file';
@@ -129,14 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
     tempInput.onchange = (event) => {
       const arquivo = event.target.files && event.target.files[0];
       if (arquivo) {
-        // substitui no array e atualiza preview
         arquivosSelecionados[index] = arquivo;
         atualizarPreview();
       }
-      // desaloca o input temporário (opcional)
       tempInput.remove();
     };
-    // abre o seletor
     tempInput.click();
   }
 
@@ -187,11 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      let usuarioId = usuarioData.id;
-      if (typeof usuarioId === 'string' && usuarioId.startsWith('user_')) {
-        usuarioId = parseInt(usuarioId.replace('user_', ''), 10);
-      }
-
       const titulo = document.getElementById('titulo')?.value.trim() || '';
       const categoria = document.getElementById('categoria')?.value.trim() || '';
       const tipo = document.getElementById('tipo')?.value.trim() || '';
@@ -205,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      // Converter todas as imagens selecionadas em Base64
       async function converterImagensParaBase64(arquivos) {
         return Promise.all(
           arquivos.map(arquivo => new Promise((resolve, reject) => {
@@ -218,16 +200,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       async function saveAndSendPost(imagensBase64 = []) {
+        // Salva TODAS as imagens como JSON string no campo "imagem"
         const post = {
-          usuario: { id: usuarioId },
+          usuario: { id: usuarioData.id },
           titulo,
           descricao,
           tipo,
           categoria,
           localizacao: `${estado}, ${lugar}`,
           estado_doacao,
-          imagem: imagensBase64[0] || null,
-          imagens: imagensBase64,
+          imagem: JSON.stringify(imagensBase64),
           data_criacao: new Date().toISOString(),
           data_atualizacao: new Date().toISOString(),
         };
@@ -258,12 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
-      if (arquivosSelecionados.length > 0) {
-        const imagensBase64 = await converterImagensParaBase64(arquivosSelecionados);
-        saveAndSendPost(imagensBase64);
-      } else {
-        saveAndSendPost([]);
-      }
+      const imagensBase64 = arquivosSelecionados.length > 0 
+        ? await converterImagensParaBase64(arquivosSelecionados)
+        : [];
+      saveAndSendPost(imagensBase64);
     });
   }
 
@@ -283,3 +263,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 });
+
+

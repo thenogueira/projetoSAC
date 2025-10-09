@@ -235,7 +235,7 @@
                     </button>
 
                     <!-- Área de miniaturas -->
-                    <section id="previewContainer" class="flex gap-2 flex-wrap items-start justify-start mt-2"></section>
+                    <section id="previewContainer" class="flex gap-2 flex-wrap items-start justify-start"></section>
 
 
                     <!-- Input escondido -->
@@ -312,18 +312,6 @@
     </div>
 
 </body>
-
-    <script>
-// Preenche nome e foto do usuário logado no topo
-document.addEventListener('DOMContentLoaded', function() {
-    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
-    if (user && user.nome) {
-        document.getElementById('profileName').textContent = user.nome;
-        document.getElementById('userTopBar').classList.remove('hidden');
-        document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
-    }
-});
-</script>
 
 <script src="javascript/menu.js"></script>
 
