@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             const params = new URLSearchParams(filtros).toString();
             if (params) url += `?${params}`;
 
+            console.log('🔗 URL chamada:', url);
+
             const response = await fetch(url);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
@@ -73,15 +75,19 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             }
 
-            const nomeUsuario = post.nome || (post.usuario && post.usuario.nome) || 'Desconhecido';
+            const nomeUsuario = post.usuario?.nome || 'Desconhecido';
 
-            // === Imagem padrão mantém como antes ===
+            // === Capturar a primeira imagem do array JSON ===
             let imagemSrc = '../img/Sem Foto.png';
             if (post.imagem) {
-                if (post.imagem.startsWith('data:')) {
-                    imagemSrc = post.imagem;
-                } else if (post.imagem.startsWith('http') || post.imagem.startsWith('/')) {
-                    imagemSrc = post.imagem;
+                try {
+                    const imagensArray = JSON.parse(post.imagem);
+                    if (Array.isArray(imagensArray) && imagensArray.length > 0) {
+                        imagemSrc = imagensArray[0]; // Pega a primeira imagem como capa
+                    }
+                } catch (e) {
+                    console.warn('Erro ao ler imagens do post', e);
+                    imagemSrc = post.imagem; // fallback
                 }
             }
 
@@ -90,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <img class="w-full h-full object-cover bg-fundo1" src="${imagemSrc}" alt="Imagem da ocorrência">
                 </div>
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
-                    <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
+                    <figcaption class="pl-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
                     <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
                     <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
                 </div>
@@ -100,6 +106,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             postsContainerReal.appendChild(postElement);
         });
     }
+
 
     carregarPosts();
 
