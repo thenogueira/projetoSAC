@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       <div>
         <ul class="text-xl mb-8">
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${post.tipo || 'Não informado'}</p></li>
+          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${formatarTipo(post.tipo)}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
         </ul>
@@ -125,6 +125,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- ✅ Imagem da postagem abaixo da descrição -->
       ${imagemPostHtml}
     `;
+
+    function formatarTipo(str) {
+  if (!str) return 'Não informado';
+  return str.charAt(0) + str.slice(1).toLowerCase();
+}
+
 
     // Botão de contato
     if (emailUsuario && !(idLogado && post.usuarioId === idLogado)) {
