@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       <div>
         <ul class="text-xl mb-8">
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${post.tipo || 'Não informado'}</p></li>
+          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${formatarTipo(post.tipo)}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
         </ul>
@@ -224,6 +224,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       ${imagemPostHtml}
     `;
 
+
     // Botão rolar imagens
     const botaoRolar = document.getElementById('botaoRolarImagens');
     if (botaoRolar) {
@@ -236,6 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Botões de contato, editar e excluir
+
     if (emailUsuario && !(idLogado && post.usuarioId === idLogado)) {
       document.getElementById('contatarButton')?.addEventListener('click', () => {
         const mailtoLink = `mailto:${emailUsuario}?subject=Contato sobre sua postagem no SAC&body=Olá ${nomeUsuario}, vi sua postagem e gostaria de conversar.`;
