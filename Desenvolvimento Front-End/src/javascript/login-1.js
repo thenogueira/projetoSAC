@@ -120,7 +120,7 @@ async function handleLogin(event) {
             nome: data.usuario.nome || data.usuario.email || '',
             profileImage: data.usuario.profileImage || '../img/default-profile.png'
         };
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario)); senha
         
         mostrarMensagem('Sucesso', 'Login realizado com sucesso!', 'sucesso');
         setTimeout(() => {

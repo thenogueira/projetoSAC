@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 </div>
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
                     <figcaption class="pl-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
-                    <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
-                    <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
+                    <figcaption class="pl-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
+                    <figcaption class="pl-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
                 </div>
             `;
 

@@ -4,14 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const postId = urlParams.get('id');
   const userLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
 
-  // Controle do menu
-  if (userLogado) {
-    document.getElementById('menu-antigo').classList.add('hidden');
-    document.getElementById('menu-novo').classList.remove('hidden');
-    document.getElementById('profileName').textContent = userLogado.nome;
-    document.getElementById('profileImage').src =
-      userLogado.profileImage || '../img/defaultPhoto.png';
-  }
 
   if (!postId) {
     postDetails.innerHTML = `<p class="text-center text-red-500">
@@ -184,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
           <div class="flex flex-col">
             <span class="text-2xl font-bold">${nomeUsuario}</span>
-            <span class="text-xl">☆☆☆☆☆</span>
+            <span class="text-xl"><strong>ID Postagem:</strong> ${post.id}</span>
           </div>
         </div>
         <div class="flex gap-3">
@@ -198,15 +190,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           ${
             idLogado && post.usuarioId === idLogado
               ? `
-              <button id="editarButton" class="px-4 py-2 bg-yellow-400 rounded-lg hover:bg-yellow-500">Editar</button>
-              <button id="excluirButton" class="px-4 py-2 bg-red-500 rounded-lg hover:bg-red-600 text-white">Excluir</button>
+              <button id="editarButton" class="px-4 py-2 border-1 rounded-lg hover:bg-gray-300">Editar</button>
+              
               `
               : ''
           }
         </div>
       </div>
 
-      <hr class="text-minitexto my-12">
+      <hr class="text-minitexto mt-6 mb-10">
 
       <div>
         <ul class="text-xl mb-8">
@@ -249,22 +241,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.location.href = `editPost.html?id=${post.id}`;
     });
 
-    document.getElementById('excluirButton')?.addEventListener('click', async () => {
-      if (confirm('Deseja realmente excluir este post?')) {
-        try {
-          const delResponse = await fetch(`http://localhost:8080/ocorrencias/deletar/${post.id}`, {
-            method: 'DELETE'
-          });
-
-          if (!delResponse.ok) throw new Error(`Erro ao deletar post. Status: ${delResponse.status}`);
-
-          alert('Post excluído com sucesso!');
-          window.location.href = 'postagens.html';
-        } catch (err) {
-          alert('Erro ao deletar post: ' + err.message);
-        }
-      }
-    });
 
   } catch (error) {
     postDetails.innerHTML = `<p class="text-center text-red-500">
