@@ -2,13 +2,6 @@
 
 
 // Elementos do modal
-const modalElements = {
-    modal: null,
-    icon: null,
-    title: null,
-    content: null,
-    closeBtn: null
-};
 
 
 // Inicializa os elementos do modal
@@ -180,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.remove('border-red-500', 'shake');
         });
     }
-    usuario
+    
     if (senhaField) {
         senhaField.addEventListener('input', function() {
             this.classList.remove('border-red-500', 'shake');

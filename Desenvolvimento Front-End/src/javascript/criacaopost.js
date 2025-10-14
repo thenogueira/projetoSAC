@@ -264,4 +264,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+async function buscarCEP() {
+      const cep = document.getElementById("cep").value.replace(/\D/g, "");
 
+      const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+      try {
+        const response = await fetch(url);
+        const dados = await response.json();
+
+        if ("erro" in dados) {
+          alert("CEP não encontrado!");
+          return;
+        }
+
+        // Preenche os campos
+        document.getElementById("casa").value = dados.logradouro;
+        document.getElementById("bairro").value = dados.bairro;
+        document.getElementById("estado").value = dados.uf;
+
+      } catch (error) {
+       
+      }
+    }

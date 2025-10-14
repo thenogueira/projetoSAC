@@ -38,17 +38,6 @@ CREATE TABLE ocorrencia (
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
 
-CREATE TABLE avaliacao (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    usuario_avaliado_id INT UNSIGNED NOT NULL,
-    usuario_avaliador_id INT UNSIGNED NOT NULL,
-    nota INT UNSIGNED NOT NULL,
-    CHECK (nota BETWEEN 1 AND 5),
-    comentario VARCHAR(255),
-    FOREIGN KEY(usuario_avaliado_id) REFERENCES usuario(id) ON DELETE CASCADE,
-    FOREIGN KEY(usuario_avaliador_id) REFERENCES usuario(id) ON DELETE CASCADE
-);
-
 CREATE TABLE comentario (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     texto TEXT NOT NULL, 
