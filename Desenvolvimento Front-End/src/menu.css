@@ -26,6 +26,7 @@
     top: 8px;
     position: absolute;
     overflow: hidden;
+    z-index: 9999;
 
 }
 
@@ -36,6 +37,8 @@
     padding: 8px 20px 16px 20px;
     transition: 0.3s;
     font-size: 20px;
+    z-index: 9999;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.329);
     
 }
 
