@@ -35,10 +35,22 @@
                         <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full border border-gray-300 focus:border-destaque focus:ring-1 focus:ring-destaque" type="email" id="email" name="email" placeholder="Email" required>
                         
                         <p class="mt-2 lg:mt-4 mb-1">Senha</p>
-                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full border border-gray-300 focus:border-destaque focus:ring-1 focus:ring-destaque" type="password" id="senha_hash" name="senha_hash" placeholder="Senha" required>
-                        
+                        <div class="relative w-full mb-5">
+                          <input 
+                            class="bg-amber-50 indent-1 p-1 rounded-md w-full pr-10"
+                            type="password" id="senha" name="senha" placeholder="Senha" required minlength="6" autocomplete="new-password"
+                            aria-describedby="senhaHelp">
+                            <button 
+                            type="button"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            data-toggle="senha"
+                            aria-label="Mostrar ou ocultar senha">
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                          </button>
+                        </div>
 
                         <div class="relative py-4 rounded-xl mt-2 lg:mt-6">
+                            
                             <button id="entrarBtn" type="submit" class="bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100">Entrar</button>
                         </div>
 

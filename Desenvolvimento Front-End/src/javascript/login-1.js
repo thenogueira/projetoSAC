@@ -203,3 +203,21 @@ document.addEventListener('DOMContentLoaded', function() {
         entrarBtn.classList.remove('text-[16px]')
     })
 });
+
+
+// olhinho da senha
+ document.querySelectorAll('button[data-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-toggle');
+          const input = document.getElementById(targetId);
+          if (!input) return;
+          const isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          // alterna o ícone
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+          }
+        });
+      });
