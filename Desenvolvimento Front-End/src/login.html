@@ -8,8 +8,10 @@
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
     <meta name="fido2-page-script" content="no-script">
-    <!-- Adicione o Font Awesome para os ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
+
+
 </head>
 <body class="bg-amber-50 font-alexandria flex flex-col lg:flex-row">
 
@@ -33,11 +35,25 @@
                         <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full border border-gray-300 focus:border-destaque focus:ring-1 focus:ring-destaque" type="email" id="email" name="email" placeholder="Email" required>
                         
                         <p class="mt-2 lg:mt-4 mb-1">Senha</p>
-                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full border border-gray-300 focus:border-destaque focus:ring-1 focus:ring-destaque" type="password" id="senha_hash" name="senha_hash" placeholder="Senha" required>
-                        
-                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white hover:bg-destaque-dark transition-colors">
-                            <button type="submit" class="w-full">Entrar</button>
+                        <div class="relative w-full mb-5">
+                          <input 
+                            class="bg-amber-50 indent-1 p-1 rounded-md w-full pr-10"
+                            type="password" id="senha_hash" name="senha" placeholder="Senha" required minlength="6" autocomplete="new-password"
+                            aria-describedby="senhaHelp">
+                            <button 
+                            type="button"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            data-toggle="senha"
+                            aria-label="Mostrar ou ocultar senha">
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                          </button>
                         </div>
+
+                        <div class="relative py-4 rounded-xl mt-2 lg:mt-6">
+                            
+                            <button id="entrarBtn" type="submit" class="bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100">Entrar</button>
+                        </div>
+
                     </form>
                 </div>
             </div>
@@ -46,29 +62,37 @@
 
     <script src="./javascript/login-1.js"></script>
 
-    <!-- Modal de Mensagem - Centralizado e responsivo -->
-    <div id="modalMensagem" class="fixed inset-0 z-[9999] grid place-items-center p-4">
-    <div class="absolute inset-0 bg-black opacity-50"></div>
-    <div class="relative w-full max-w-md">
-        <div id="modalMensagemConteudo" class="bg-white p-6 rounded-lg shadow-xl">
-            <div class="flex items-start gap-3">
-                <i id="modalIcon" class="fas fa-exclamation-circle text-red-500 text-2xl mt-1"></i>
-                <div>
-                    <h3 id="modalTitle" class="font-bold text-lg">Credenciais inválidas</h3>
-                    <p id="modalContent" class="mt-1 text-gray-600">E-mail ou senha incorretos. Por favor, tente novamente.</p>
+    <div id="modalMensagem" class="hidden fixed inset-0 z-50">
+        <!-- Overlay escuro -->
+        <div class="fixed inset-0 bg-black opacity-50"></div>
+        
+        <!-- Conteúdo do modal -->
+        <div class="relative z-50 flex items-center justify-center min-h-screen p-4">
+            <div id="modalMensagemConteudo" class="bg-white rounded-lg shadow-xl w-full max-w-md">
+                <div class="p-6">
+                    <!-- Cabeçalho do modal com ícone -->
+                    <div class="flex items-start">
+                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1 "></i>
+                        <div>
+                            <h3 id="modalTitle" class="font-bold text-lg"></h3>
+                            <p id="modalContent" class="mt-1 text-gray-600"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão de fechar -->
+                    <div class="mt-6 text-right">
+                        <button id="modalCloseBtn" class="px-4 py-2 bg-destaque text-white rounded-md">
+                            OK
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="mt-6 text-right">
-                <button id="modalCloseBtn" class="px-4 py-2 bg-destaque text-white rounded-md hover:opacity-90">
-                    OK
-                </button>
             </div>
         </div>
     </div>
-    </div>
 
     <script src="./javascript/login-1.js"></script>
-    <script>
+    
+    <!-- <script>
         // Função para mostrar o modal
         function mostrarMensagem(titulo, conteudo, tipo = 'erro') {
             const modal = document.getElementById('modalMensagem');
@@ -95,7 +119,7 @@
             // Mostra o modal com animação
             modal.classList.remove('hidden');
             setTimeout(() => {
-                modalContent.classList.remove('opacity-0', 'translate-y-4');
+                modalContent.classList.remove('opacity-0');
             }, 10);
             
             // Configura o timeout para fechar automaticamente
@@ -117,6 +141,60 @@
 
         // Configura o botão de fechar
         document.getElementById('modalCloseBtn')?.addEventListener('click', fecharModal);
+    </script> -->
+
+    <script>
+        
+    const modalElements = {
+        modal: document.getElementById('modalMensagem'),
+        content: document.getElementById('modalContent'),
+        title: document.getElementById('modalTitle'),
+        icon: document.getElementById('modalIcon'),
+        closeBtn: document.getElementById('modalCloseBtn')
+    };
+
+    /**
+     * Exibe uma mensagem no modal personalizado
+     * @function mostrarMensagem
+     * @param {string} titulo - Título da mensagem
+     * @param {string} texto - Corpo da mensagem
+     * @param {string} [tipo='erro'] - Tipo da mensagem ('erro' ou outro valor para sucesso)
+     */
+
+    function mostrarMensagem(titulo, texto, tipo = 'erro') {
+        // Verifica se todos os elementos do modal existem
+        if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
+            console.error('Elementos do modal não encontrados!');
+            alert(`${titulo}: ${texto}`); // Fallback básico
+            return;
+        }
+
+        // Configura o ícone e cores baseado no tipo de mensagem
+        modalElements.icon.className = tipo === 'erro' 
+            ? 'fas fa-exclamation-circle text-red-500 text-2xl mr-3 mt-1'
+            : 'fas fa-check-circle text-green-500 text-2xl mr-3 mt-1';
+
+        // Define o conteúdo do modal
+        modalElements.title.textContent = titulo;
+        modalElements.content.textContent = texto;
+
+        // Exibe o modal
+        modalElements.modal.classList.remove('hidden');
+
+        // Fecha automaticamente após 5 segundos
+        setTimeout(() => {
+            modalElements.modal.classList.add('hidden');
+        }, 5000);
+    }
+
+    // Botão de fechar "OK"
+    if (modalElements.closeBtn) {
+        modalElements.closeBtn.addEventListener('click', () => {
+            modalElements.modal.classList.add('hidden');
+        });
+    }
+
     </script>
+    
 </body>
 </html>

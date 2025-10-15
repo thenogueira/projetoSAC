@@ -7,32 +7,134 @@
     <title>Ajuda</title>
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
+    <link rel="stylesheet" href="menu.css">
+
+    <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
     
     <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
 
 </head>
+
 <body class="bg-amber-50 font-alexandria text-textos">
 
-    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
-        <div class="flex items-center gap-15">
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
+        <div class="flex items-center gap-15 px-6 py-2">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
             <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
-            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
-            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
-            <!-- Usuário logado -->
-            <div id="userTopBar" class="flex gap-3 items-center ml-8 hidden">
-                <div class="p-0 rounded-full overflow-hidden imagem bg-black w-8 h-8">
-                    <img id="profileImage" class="object-cover w-full h-full" src="" alt="Foto de Perfil">
-                </div>
-                <span id="profileName" class="font-bold"></span>
-            </div>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1 hover:bg-destaque hover:text-white duration-250">Cadastre-se</a>
         </div>
     </nav>
 
+    <nav class="bg-amber-50 text-black justify-center items-center hidden" id="menu-novo">
+        <div class="flex items-center gap-15 py-2">
+
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+
+            <div>
+                <div class="p-0">
+                    <a href="#">
+                        <div class="flex gap-3" >
+                            <div class="p-0 rounded-full overflow-hidden" id="imagem">
+                                <img id="profileImage" class="object-cover w-full h-full" src="../img/defaultPhoto.png" alt="Foto de Perfil" width="10" height="10">
+
+                            </div>
+                                <!-- Foto de Perfil  -->
+                            <div class="flex flex-col">
+                                <span id=""></span>
+                                    <!-- puxar do banco  -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div id="menu">
+                    <div class="p-0">
+                        <a href="#">
+                            <div class="flex gap-3" >
+                                <div class="p-0 rounded-full overflow-hidden" id="imagem">
+                                    <img id="profileImage" class="object-cover w-full h-full" src="../img/defaultPhoto.png" alt="Foto de Perfil" width="10" height="10">
+
+                                </div>
+                                    <!-- Foto de Perfil  -->
+                                <div class="flex flex-col">
+                                    <span id="profileName"></span>
+                                        <!-- puxar do banco  -->
+                                </div>
+                            </div>
+                        </a>
+            
+                        <hr class="my-6">
+            
+                        <div>
+                            <ul>
+                                <li class="item">
+                                    <a href="perfil.html" class="link">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                            <span class="text">Perfil</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="criandoPost.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                            <span class="text">Criar Postagem</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="config-1.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                            <span class="text">Configurações</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="denuncias.html ">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                                            <span class="text">Denúncias</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item" id="logout">
+                                    <a href="#">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                            <span class="text">Sair da Conta</span>
+                                        </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+        </div>
+  </nav> 
+
+
     <hr class="text-minitexto">
+
 
     <main class="px-30 py-20 flex items-center text-xl">
         <div>
@@ -41,16 +143,16 @@
                 <p class="w-200 mb-4">Você também pode entrar em contato através dos seguintes canais:</p>
                 <ul>
                     <li class="text-2xl mb-4">Email: <strong class=" hover:underline text-links">suporte@SAC.com</strong></li>
-                    <li class="text-2xl">WhatsApp: <strong class="hover:underline text-links">(11) 98888-8888</strong></li>
+                    <li class="text-2xl">WhatsApp: <strong class="hover:underline text-links">(21) 98633-5359</strong></li>
                 </ul>
             </section>
-            <section class="mt-16">
+            <!-- <section class="mt-16">
                 <h2 class="text-black text-4xl font-alfa mb-6">Nossas Redes Sociais</h2>
                 <ul>
                     <li>Youtube: <a class="font-bold hover:underline text-links" href="" target="_blank">youtube.com/SAC</a></li>
                     <li>Instagram: <a class="font-bold hover:underline text-links" href="" target="_blank">@SAC</a></li>
                 </ul>
-            </section>
+            </section> -->
         </div>
     </main>
 
@@ -78,24 +180,20 @@
     
         <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
     </footer>
-       
+
     <script>
-// Preenche nome e foto do usuário logado no topo
-document.addEventListener('DOMContentLoaded', function() {
-    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
-    if (user && user.nome) {
-        document.getElementById('profileName').textContent = user.nome;
-        document.getElementById('userTopBar').classList.remove('hidden');
-        document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
-    }
-});
-</script>
+        // Preenche nome e foto do usuário logado no topo
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+            if (user && user.nome) {
+                document.getElementById('profileName').textContent = user.nome;
+                document.getElementById('userTopBar').classList.remove('hidden');
+                document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
+            }
+        });
+        </script>
+    
+<script src="javascript/menu.js"></script>
+
 </body>
 </html>
-
-
-
-
-
-
-

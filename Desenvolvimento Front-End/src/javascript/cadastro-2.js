@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         title: document.getElementById('modalTitle'),
         icon: document.getElementById('modalIcon'),
         closeBtn: document.getElementById('modalCloseBtn')
+        
     };
 
     /**
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modalElements.modal.classList.add('hidden');
         });
     }
+    
 
     // Obtém referência ao formulário de cadastro
     const form = document.getElementById('cadastroForm');
@@ -66,6 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
         mostrarMensagem('Erro', 'Formulário não encontrado', 'erro');
         return;
     }
+    
+
+
+    
 
     // Recupera dados da etapa anterior do cadastro
     const dadosCadastro = JSON.parse(localStorage.getItem('usuarioCadastro'));
@@ -149,6 +155,16 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarMensagem('Erro', 'Erro ao conectar com o servidor', 'erro');
         }
     });
+
+    let saveBtn = document.querySelector('#saveBtn')
+
+    saveBtn.addEventListener("mousedown", function (){
+        saveBtn.classList.add('text-[16px]')
+    })
+
+    saveBtn.addEventListener("mouseup", function (){
+        saveBtn.classList.remove('text-[16px]')
+    })
 });
 
 /**
@@ -166,3 +182,20 @@ function validarSenha(senha) {
     return true;
 
 }
+
+// olhinho da senha
+ document.querySelectorAll('button[data-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-toggle');
+          const input = document.getElementById(targetId);
+          if (!input) return;
+          const isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          // alterna o ícone
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+          }
+        });
+      });

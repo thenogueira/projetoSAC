@@ -1,121 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="./output.css" rel="stylesheet">
-    <link href="./input.css" rel="stylesheet">
-    
-    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postagem Completa</title>
+  <link href="./output.css" rel="stylesheet">
+  <link href="./input.css" rel="stylesheet">
+  <link rel="stylesheet" href="menu.css">
 
+  <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
+
+  
 </head>
 <body class="bg-fundo1 font-alexandria">
 
-    <nav class="bg-amber-50 px-6 py-2 text-black flex justify-center items-center">
-        <div class="flex items-center gap-15">
+    <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
+        <div class="flex items-center gap-15 px-6 py-2">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
             <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
-            <a href="ajuda.html" class=" hover:text-gray-800">Ajuda</a>
-            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1">Cadastre-se</a>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
+            <a href="cadastro-1.html" class="py-1.25 px-2 rounded-lg bg-fundo1 hover:bg-destaque hover:text-white duration-250">Cadastre-se</a>
         </div>
+    </nav>
 
-    </nav> 
+    <nav class="bg-amber-50 text-black justify-center items-center hidden" id="menu-novo">
+        <div class="flex items-center gap-15 py-2">
 
-    <main class="mx-30 my-10">
-        <section class="bg-amber-50 px-15 py-8 rounded-2xl"> 
-            <h1 class="text-4xl mb-1">Titulo Postagem</h1>
-            <!-- puxar do BD -->
+            <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <span class="separator">|</span>
+            <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
+            <span class="separator">|</span>
+            <a href="ajuda.html" class=" hover:text-gray-800 ">Ajuda</a>
 
-            <p class="text-minitexto">Data da postagem: 00/00/0000</p>
-            <!-- puxar do BD -->
+            <div>
+                <div class="p-0">
+                    <a href="#">
+                        <div class="flex gap-3" >
+                            <div class="p-0 rounded-full overflow-hidden" id="imagem">
+                                <img id="profileImage" class="object-cover w-full h-full" src="../img/defaultPhoto.png" alt="Foto de Perfil" width="10" height="10">
+
+                            </div>
+                                <!-- Foto de Perfil  -->
+                            <div class="flex flex-col">
+                                <span id=""></span>
+                                    <!-- puxar do banco  -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div id="menu">
+                    <div class="p-0">
+                        <a href="#">
+                            <div class="flex gap-3" >
+                                <div class="p-0 rounded-full overflow-hidden" id="imagem">
+                                    <img id="profileImage" class="object-cover w-full h-full" src="../img/defaultPhoto.png" alt="Foto de Perfil" width="10" height="10">
+
+                                </div>
+                                    <!-- Foto de Perfil  -->
+                                <div class="flex flex-col">
+                                    <span id="profileName"></span>
+                                        <!-- puxar do banco  -->
+                                </div>
+                            </div>
+                        </a>
             
-            <div class="flex items-center justify-end mb-6 w-full mt-8">
-
-                <div class="flex gap-5 items-center w-full">
-
-                    <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                        <img id="profileImage" class="object-cover w-full h-full" src="../img/right.png" alt="Foto de Perfil" width="50" height="50">
-
-                    </div>
-                    <!-- Foto de Perfil -->
-                    
-                    <div class="flex flex-col">
-                        <span id="profileName" class="text-xl">Satoru Gojo</span>
-                        <span>☆☆☆☆☆</span>
-
-                        <!-- puxar do banco -->
-                    </div>
-                </div>
-
-                <button class="bg-fundo1 border-1 border-black py-2 px-4 rounded-xl">Contactar</button>
-
-            </div>
-
-            <hr class="text-minitexto">
-
-            <div class="mt-6">
-
-                <p class="mb-1 text-xl">Tipo: </p>
-                <p class="mb-1 text-xl">Categoria: </p>
-                <p class="mb-1 text-xl">Localização: </p>
-                <p class="mb-6 text-xl">Estado da doação: </p>
-
-                <label class="text-xl">Descrição</label>
-                <p name="descricaoPost" id="descricaoPost" class="border-1 mt-1  border-black w-full rounded-xl py-1 px-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. A dicta cupiditate debitis perspiciatis fugit tenetur explicabo, accusantium corporis ipsa deserunt sit aliquam molestiae sapiente rerum nemo quidem fugiat. Ex, ad. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quo voluptatem libero asperiores eum impedit officia ipsa eaque veniam, modi debitis, dolorem omnis. Ratione possimus in tempora mollitia. Dolor, id!</p>
-
-            </div>
-
-            <hr class="text-minitexto my-8">
-
-            <section class="flex gap-10 items-center justify-end relative">
-                <div class="w-55 h-55 bg-fundo2 ">
-                    <img class="w-full h-full object-cover" src="../img/fundo-1.png" alt="">
-                </div>
-                <div class="w-55 h-55 bg-fundo2">
-                    <img class="w-full h-full object-cover" src="../img/fundo-1.png" alt=""></div>
-                <div class="w-55 h-55 bg-fundo2"><img class="w-full h-full object-cover" src="../img/fundo-1.png" alt="">
-                </div>
-                <div class="w-55 h-55 bg-fundo2">
-                    <img class="w-full h-full object-cover" src="../img/fundo-1.png" alt="">
-                </div>
-
-                <!-- adicionar quantas imagens o usuario colocar na postagem só, não quatro ou mais -->
-
-                <button class="absolute right-[-15px] bg-black rounded-4xl"><img src="../img/right.png" alt=""></button>
-
-                <!-- botão só aparece se tiver mais de 4 imagens aqui -->
-            </section>
-
-        </section>
-
-    </main>
-
-    <footer class="px-30 pt-10 pb-5 ">
-
-        <div class="flex gap-10">
-            <div class="flex flex-col">
-                <h3 class="text-lg">Sobre</h3>
-                <ul>
-                    <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
-                    <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
-                </ul>
-            </div>
+                        <hr class="my-6">
             
-            <div class="flex flex-col">
-                <h3 class="text-lg">Doações</h3>
-                <ul>
-                    <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
-                </ul>
-            </div>
+                        <div>
+                            <ul>
+                                <li class="item">
+                                    <a href="perfil.html" class="link">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+                                            <span class="text">Perfil</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="criandoPost.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                            <span class="text">Criar Postagem</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="config-1.html">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-gear"></i></span>
+                                            <span class="text">Configurações</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item">
+                                    <a href="denuncias.html ">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                                            <span class="text">Denúncias</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li class="item" id="logout">
+                                    <a href="#">
+                                        <div class="flex items-center">
+                                            <span class="icon"><i class="fa-solid fa-door-open"></i></span>
+                                            <span class="text">Sair da Conta</span>
+                                        </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
+                </div>
         </div>
-        
-    
-        <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
-    </footer>
+  </nav>
 
+  <main class="mx-30 my-10">
+    <section class="bg-amber-50 px-15 py-8 rounded-2xl" id="postDetails">
+      <p class="text-center text-gray-500">Carregando postagem...</p>
+    </section>
+  </main>
+
+  <footer class="px-30 pt-10 pb-5 bg-amber-50">
+    <div class="flex gap-10">
+      <div class="flex flex-col">
+        <h3 class="text-lg">Sobre</h3>
+        <ul>
+          <li><a href="duvidas.html" class="text-sm hover:text-black text-minitexto duration-500">Como o SAC funciona</a></li>
+          <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
+        </ul>
+      </div>
+      <div class="flex flex-col">
+        <h3 class="text-lg">Doações</h3>
+        <ul>
+          <li><a href="postagens.html" class="text-sm hover:text-black text-minitexto duration-500">Postagens</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="text-sm mt-8">© Sistema de Apoio Comunitário (SAC)</p>
+  </footer>
+
+
+  <script src="javascript/menu.js"></script>
+  <script src="javascript/detalhePost.js"></script>
+
+  
 </body>
 </html>

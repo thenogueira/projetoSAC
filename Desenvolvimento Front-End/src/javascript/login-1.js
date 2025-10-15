@@ -1,11 +1,8 @@
+
+
+
 // Elementos do modal
-const modalElements = {
-    modal: null,
-    icon: null,
-    title: null,
-    content: null,
-    closeBtn: null
-};
+
 
 // Inicializa os elementos do modal
 function initModal() {
@@ -21,6 +18,9 @@ function initModal() {
     }
     return true;
 }
+
+
+
 
 // Mostra mensagem personalizada
 function mostrarMensagem(titulo, conteudo, tipo = 'erro') {
@@ -82,7 +82,7 @@ async function handleLogin(event) {
         if (response.status === 401) {
             mostrarMensagem(
                 'Credenciais inválidas', 
-                'E-mail ou senha incorretos. Por favor, tente novamente.', 
+                'Complete o cadastro primeiro', 
                 'erro'
             );
             if (senhaField) {
@@ -113,7 +113,7 @@ async function handleLogin(event) {
             nome: data.usuario.nome || data.usuario.email || '',
             profileImage: data.usuario.profileImage || '../img/default-profile.png'
         };
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario)); senha
         
         mostrarMensagem('Sucesso', 'Login realizado com sucesso!', 'sucesso');
         setTimeout(() => {
@@ -132,6 +132,32 @@ async function handleLogin(event) {
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
+
+    /**
+     * Objeto que armazena referências aos elementos do modal de mensagem
+     * @type {Object}
+     * @property {HTMLElement} modal - Elemento do modal principal
+     * @property {HTMLElement} content - Elemento do conteúdo da mensagem
+     * @property {HTMLElement} title - Elemento do título do modal
+     * @property {HTMLElement} icon - Elemento do ícone do modal
+     * @property {HTMLElement} closeBtn - Botão de fechar o modal
+     */
+    const modalElements = {
+        modal: document.getElementById('modalMensagem'),
+        content: document.getElementById('modalContent'),
+        title: document.getElementById('modalTitle'),
+        icon: document.getElementById('modalIcon'),
+        closeBtn: document.getElementById('modalCloseBtn')
+    };
+
+    /**
+     * Exibe uma mensagem no modal personalizado
+     * @function mostrarMensagem
+     * @param {string} titulo - Título da mensagem
+     * @param {string} texto - Corpo da mensagem
+     * @param {string} [tipo='erro'] - Tipo da mensagem ('erro' ou outro valor para sucesso)
+     */
+    
     // Configura listeners
     const form = document.getElementById('loginForm');
     if (form) {
@@ -159,4 +185,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeBtn) {
         closeBtn.addEventListener('click', fecharModal);
     }
+
+    let entrarBtn = document.querySelector('#entrarBtn')
+
+    entrarBtn.addEventListener("mousedown", function (){
+        entrarBtn.classList.add('text-[16px]')
+    })
+
+    entrarBtn.addEventListener("mouseup", function (){
+        entrarBtn.classList.remove('text-[16px]')
+    })
 });
+
+
+// olhinho da senha
+ document.querySelectorAll('button[data-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-toggle');
+          const input = document.getElementById(targetId);
+          if (!input) return;
+          const isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          // alterna o ícone
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+          }
+        });
+      });

@@ -70,20 +70,48 @@
                         <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" 
                                type="email" id="email" name="email" placeholder="Email" required><br>
 
+                        
                         <!-- Campo de senha -->
                         <p class="mt-2 lg:mt-4 mb-1">Senha</p>
-                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" 
-                               type="password" id="senha" name="senha" placeholder="Senha" required><br>
+                        <div class="relative w-full mb-5">
+                          <input 
+                            class="bg-amber-50 indent-1 p-1 rounded-md w-full pr-10"
+                            type="password" id="senha" name="senha" placeholder="Senha" required minlength="6" autocomplete="new-password"
+                            aria-describedby="senhaHelp">
+                          
+                          <!-- Botão do olhinho para o campo senha -->
+                          <button 
+                            type="button"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            data-toggle="senha"
+                            aria-label="Mostrar ou ocultar senha">
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                          </button>
+                        </div>
 
                         <!-- Campo de confirmação de senha -->
-                        <p class="mt-2 lg:mt-4 mb-1">Confirmar Senha</p>
-                        <input class="bg-amber-50 indent-1 p-1 rounded-md mb-5 w-full" 
-                               type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar" required><br>
+                        <p class="mt-2 lg:mt-4 mb-1">Confirmar senha</p>
+                        <div class="relative w-full mb-5">
+                          <input 
+                            class="bg-amber-50 indent-1 p-1 rounded-md w-full pr-10"
+                            type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirmar" required minlength="6" autocomplete="new-password"
+                            aria-describedby="confirmHelp">
+                          
+                          <!-- Botão do olhinho para confirmar senha -->
+                          <button 
+                            type="button"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            data-toggle="confirmarSenha"
+                            aria-label="Mostrar ou ocultar confirmação de senha">
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                          </button>
+                        </div>
 
                         <!-- Botão de submit -->
-                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white">
-                            <button type="submit" id="saveBtn" class="bg-destaque px-4 py-2 rounded-xl text-white">Continuar</button>
+                        <div class="relative py-4 rounded-xl mt-2 lg:mt-6">
+                            <button type="submit" id="saveBtn" class="bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100">Cadastrar-se</button>
                         </div>
+                      
                         
                         <!-- Container para mensagens de feedback -->
                         <div id="mensagem" class="hidden px-4 py-2 rounded-xl mt-4 text-center"></div>
@@ -93,12 +121,10 @@
         </div>
     </div>
 
-    <!-- Script JavaScript -->
-    <script src="javascript/cadastro-2.js"></script>
+
+
     
-
-   
-
+    <script src="javascript/cadastro-2.js"></script>
 
     <!-- Modal de mensagem (inicialmente oculto) -->
     <div id="modalMensagem" class="hidden fixed inset-0 z-50">
@@ -111,7 +137,7 @@
                 <div class="p-6">
                     <!-- Cabeçalho do modal com ícone -->
                     <div class="flex items-start">
-                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1"></i>
+                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1 "></i>
                         <div>
                             <h3 id="modalTitle" class="font-bold text-lg"></h3>
                             <p id="modalContent" class="mt-1 text-gray-600"></p>
@@ -127,7 +153,7 @@
                 </div>
             </div>
         </div>
-
     </div>
+    
 </body>
 </html>

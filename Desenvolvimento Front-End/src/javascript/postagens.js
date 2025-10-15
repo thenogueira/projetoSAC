@@ -1,75 +1,126 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const postsContainer = document.getElementById('postsContainer');
-
-    const postsContainerErro = document.querySelector('div#postsContainerErro')
-
-    const postsContainerReal = document.querySelector('div#postsContainerReal')
+    const postsContainerErro = document.getElementById('postsContainerErro');
+    const postsContainerReal = document.getElementById('postsContainerReal');
+    const filtroForm = document.getElementById('filtroForm');
 
     if (!postsContainer) {
         console.error('Elemento postsContainer não encontrado no DOM.');
         return;
     }
 
+    let posts = [];
+
+    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+
     function abrirDetalhesPost(post) {
-        window.location.href = `detalhePost.html?id=${post.id}`;
+        window.location.href = `post.html?id=${post.id}`;
     }
 
-    try {
-        // Busca as ocorrências do backend
-        const response = await fetch('http://localhost:8080/ocorrencias/listar');
-        if (!response.ok) {
-            throw new Error('Erro ao buscar ocorrências do backend');
+    async function carregarPosts(filtros = {}) {
+        try {
+            let url = 'http://localhost:8080/ocorrencias/listar';
+            
+            const params = new URLSearchParams(filtros).toString();
+            if (params) url += `?${params}`;
+
+            console.log('🔗 URL chamada:', url);
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            posts = await response.json();
+            renderizarPosts(posts);
+
+            const postAtualizado = JSON.parse(localStorage.getItem('postAtualizado'));
+            if (postAtualizado) {
+                const postElement = Array.from(postsContainerReal.children).find(p =>
+                    p.querySelector('figcaption')?.textContent.includes(postAtualizado.tituloAntigo)
+                );
+                if (postElement) {
+                    postElement.querySelector('figcaption').textContent = postAtualizado.tituloNovo;
+                }
+                localStorage.removeItem('postAtualizado');
+            }
+
+        } catch (error) {
+            console.error('Erro ao carregar posts:', error);
+            postsContainerErro.innerHTML = `<p class="text-center text-red-500 py-8">Erro ao carregar as postagens. Detalhes: ${error.message}</p>`;
         }
+    }
 
-        const posts = await response.json();
+    function renderizarPosts(listaPosts) {
+        postsContainerReal.innerHTML = '';
 
-        if (posts.length === 0) {
-            postsContainer.innerHTML = '<p class="text-center text-gray-500">Nenhuma postagem encontrada.</p>';
+        if (!listaPosts.length) {
+            postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
             return;
         }
 
-        // Gera o HTML para cada ocorrência
-        posts.forEach(post => {
+        listaPosts.forEach(post => {
             const postElement = document.createElement('figure');
             postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
 
-            // Corrigir data
-            let dataFormatada = '';
-            if (post.data) {
-                const dataObj = new Date(post.data);
-                dataFormatada = isNaN(dataObj.getTime()) ? '' : dataObj.toLocaleDateString();
+            // === Corrigir formatação da data ===
+            let dataFormatada = "Data não informada";
+            const dataCampo = post.data_criacao || post.data;
+            if (dataCampo) {
+                const data = new Date(dataCampo);
+                if (!isNaN(data.getTime())) {
+                    dataFormatada = data.toLocaleDateString('pt-BR', {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    });
+                }
             }
 
-            // Corrigir nome do usuário
-            let nomeUsuario = '';
-            if (typeof post.nome === 'string') {
-                nomeUsuario = post.nome;
-            } else if (post.usuario && typeof post.usuario.nome === 'string') {
-                nomeUsuario = post.usuario.nome;
-            } else {
-                nomeUsuario = 'Desconhecido';
+            const nomeUsuario = post.usuario?.nome || 'Desconhecido';
+
+            // === Capturar a primeira imagem do array JSON ===
+            let imagemSrc = '../img/Sem Foto.png';
+            if (post.imagem) {
+                try {
+                    const imagensArray = JSON.parse(post.imagem);
+                    if (Array.isArray(imagensArray) && imagensArray.length > 0) {
+                        imagemSrc = imagensArray[0]; // Pega a primeira imagem como capa
+                    }
+                } catch (e) {
+                    console.warn('Erro ao ler imagens do post', e);
+                    imagemSrc = post.imagem; // fallback
+                }
             }
 
             postElement.innerHTML = `
                 <div class="w-full h-full overflow-hidden rounded-t-xl">
-                    <img class="w-full h-full object-cover bg-fundo1" src="${post.imagem || '../img/Sem Foto.png'}" alt="Imagem da ocorrência">
+                    <img class="w-full h-full object-cover bg-fundo1" src="${imagemSrc}" alt="Imagem da ocorrência">
                 </div>
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
-                    <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
-                    <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: ${dataFormatada || 'Não informada'}</figcaption>
-                    <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
+                    <figcaption class="pl-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
+                    <figcaption class="pl-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
+                    <figcaption class="pl-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
                 </div>
             `;
 
-            // Ao clicar, abre a página de detalhes
             postElement.addEventListener('click', () => abrirDetalhesPost(post));
-
-            postsContainerReal.appendChild(postElement); 
-            
+            postsContainerReal.appendChild(postElement);
         });
+    }
 
-    } catch (error) {
-        console.error('Erro ao carregar as ocorrências:', error);
-        postsContainerErro.innerHTML = '<p class="text-center text-red-500">Erro ao carregar as postagens. Tente novamente mais tarde.</p>';
+
+    carregarPosts();
+
+    if (filtroForm) {
+        filtroForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const filtros = {
+                categoria: filtroForm.categoria.value,
+                data: filtroForm.dataFormatada.value,
+                tipo: filtroForm.tipo.value,
+                localizacao: filtroForm.localizacao.value,
+                urgencia: filtroForm.urgencia.value
+            };
+            carregarPosts(filtros);
+        });
     }
 });

@@ -4,7 +4,7 @@
     <meta charset=”UTF-8”>
     <meta name=”viewport” content=”width=device-width, initial-scale=1.0”>
     <meta http-equiv=”X-UA-Compatible” content=”ie=edge”>
-    <title>duvidas</title>
+    <title>Denuncias</title>
     <link href="./output.css" rel="stylesheet">
     <link href="./input.css" rel="stylesheet">
     <link rel="stylesheet" href="menu.css">
@@ -131,83 +131,40 @@
         </div>
   </nav> 
 
-    <main>
-        <section class="text-xl">
-            <section class="py-30 bg-fundo1 px-30 py flex items-center">
-                <div class="text-2xl">
-                    <h2 class="text-black text-5xl font-alfa mb-6">Informações Importantes</h2>
-                        <p class="w-200">Aqui estão algumas informações sobre nosso site e duvidas frequentes que podem te ajudar, se ainda se mantiver com alguma duvida após ler, clique em <a class="text-links hover:underline" href="ajuda.html">Ajuda</a> para contactar nosso suporte</p>
+    <main class="mb-30">
+        <section class="py-20 bg-fundo1 px-30 flex items-center">
+            <div class="text-2xl">
+                <h2 class="text-red-600 text-5xl font-alfa mb-6">Disque Denúncias</h2>
+                    <p class="w-150">Informe a sua denúncia para a nossa central e responderemos ela o mais rápido possível</p>
 
-                </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="bg-amber-50 px-30 py-20 flex items-center">
-                <div>
+        <section class="bg-amber-50 px-30 py-10 flex items-center">
 
-                    <summary class="w-200 mb-12">Nosso site não se envolve com nenhum tipo de transação de dinheiro ou entrega de produto. Toda negociação ou entrega deve ser combinada diretamente entre os usuários, sem envolvimento da plataforma.</summary>
+            <form class="flex flex-col gap-2 w-full" action="" method="post">
 
-                    <summary class="w-200 mb-12">Todas as doações são gratuitas e voluntárias. Não é permitido vender, trocar ou cobrar por qualquer item ou serviço dentro da plataforma.</summary>
-
-                    <summary class="w-200 mb-12">Nosso papel é somente intermediar a comunicação entre quem precisa e quem quer ajudar. Não garantimos o sucesso ou a conclusão das interações.</summary>
-
-                    <summary class="w-200 mb-12">Caso você perceba alguma postagem estranha, abusiva ou suspeita, é possível fazer uma denúncia diretamente no site, e nossa equipe fará a análise.</summary>
-
-                    <summary class="w-200 mb-12">Só é possível avaliar outro usuário após um contato real, ou seja, quando você efetivamente recebeu ou ofereceu ajuda.</summary>
-
-                    <summary class="w-200 mb-12">Se você identificar uma avaliação falsa ou ofensiva, também poderá denunciá-la para que seja verificada e removida se necessário.</summary>
-
-                    <summary class="w-200 mb-12">O uso da plataforma deve sempre seguir os princípios de respeito, empatia e responsabilidade, lembrando que o objetivo aqui é o bem coletivo.</summary>
-                </div>                
-            </section>
-
-            <hr class="mx-30">
-       
-            <section class="bg-amber-50 px-30 py-20 flex items-center">
-                <div class="w-full">
-
-                    <h2 class="text-black text-5xl mb-10">Duvidas Frequentes</h2>
-
-                    <details class="mb-4 border-textos rounded-xl border-1">
-                        <summary class="p-4">Como posso fazer uma doação?</summary>
-
-                        <hr>
-
-                        <p class="p-4">Você pode se cadastrar e acessar a seção de postagens para encontrar pedidos de ajuda ou oferecer doações diretamente.</p>
-                    </details>
-
-                    <details class="mb-4 border-textos rounded-xl border-1">
-                        <summary class="p-4">Posso pedir ajuda anonimamente?</summary>
-
-                        <hr>
-
-                        <p class="p-4">Sim, você pode escolher manter seu nome em sigilo ao criar uma postagem solicitando ajuda.</p>
-                    </details>
-                    <details class="mb-4 border-textos rounded-xl border-1">
-                        <summary class="p-4">Quais tipos de doações são aceitas?</summary>
-
-                        <hr>
-
-                        <p class="p-4">Alimentos, roupas, brinquedos, produtos de higiene e outros itens essenciais são bem-vindos.</p>
-                    </details>
-
-                    <details class="mb-4 border-textos rounded-xl border-1">
-                        <summary class="p-4">Como entrar em contato com o suporte?</summary>
-
-                        <hr>
-
-                        <p class="p-4">Você pode acessar a seção de Ajuda e enviar uma mensagem diretamente para nossa equipe.</p>
-                    </details>
+                <label for="denuncia" class="text-xl">O que deseja Denunciar?</label>
+                <select class="rounded-md border-2 border-minitexto text-minitexto p-1 text-md w-fit pr-20 mb-10 text-lg" 
+                id="denuncia" 
+                name="denuncia">
+                    <option value="comentario">Comentario</option>
+                    <option value="perfil">Perfil</option>
+                    <option value="postagem">Postagem</option>
+                </select>
 
 
-                    <details class="mb-4 border-textos rounded-xl border-1">
-                        <summary class="p-4">Posso denunciar postagens Maliciosas?</summary>
+                <label class="text-xl" for="idDenunciar">Digite o ID do que deseja denúnciar</label> 
+                <input class="border-2 border-minitexto  rounded-md w-140 indent-1 p-1 mb-10 text-lg" type="text" name="idDenunciar" id="idDenunciar" placeholder="Ex: #234243522">
 
-                        <hr>
 
-                        <p class="p-4">Sim você pode atravês do nosso <a href="denuncias.html" class="text-links font-bold">Disque Denuncias</a></p>
-                    </details>
-                </div>
-            </section>
+                <label class="text-xl" for="idDenunciar"> Descreva o motivo da sua denúncia</label>
+                <textarea id="idDenunciar" name="idDenunciar" class="border-2 border-minitexto rounded-md indent-1 p-1 mb-10 w-full h-40 resize-y text-lg"placeholder="Escreva aqui sua descrição..."></textarea>
+
+                <button id="enviar" class="px-5 py-3 bg-red-600 text-amber-50 rounded-xl w-fit">Enviar</button>
+            
+            </form>
+                
         </section>
     </main>
 
@@ -248,6 +205,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<!-- Biblioteca do EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<!-- Seu script de menu -->
 <script src="javascript/menu.js"></script>
 
+<!-- Seu script de denúncias -->
+<script src="javascript/denuncias.js"></script>
+
 </html>
+
+
