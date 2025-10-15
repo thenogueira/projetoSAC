@@ -200,4 +200,29 @@ public class OcorrenciaController {
 
         return ResponseEntity.ok(dtos);
     }
+    /**
+     * Recupera ocorrências por localização específica.
+     *
+     * @param localizacao Localização para filtrar as ocorrências
+     * @return ResponseEntity contendo lista de DTOs das ocorrências da localização especificada
+     *         e status HTTP 200, ou status 404 se nenhuma ocorrência for encontrada
+     * @see OcorrenciaResponseDTO
+     */
+    @CrossOrigin("*")
+    @GetMapping("/por-localizacao")
+    public ResponseEntity<List<OcorrenciaResponseDTO>> listarPorLocalizacao(
+            @RequestParam String localizacao) {
+
+        List<Ocorrencia> ocorrencias = ocorrenciaService.listarPorLocalizacao(localizacao);
+
+        if (ocorrencias.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<OcorrenciaResponseDTO> dtos = ocorrencias.stream()
+                .map(OcorrenciaResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
 }

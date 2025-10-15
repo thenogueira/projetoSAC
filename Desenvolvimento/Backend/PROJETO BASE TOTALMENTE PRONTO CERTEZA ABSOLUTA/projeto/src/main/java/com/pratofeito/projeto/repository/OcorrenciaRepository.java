@@ -20,4 +20,5 @@ public interface OcorrenciaRepository extends JpaRepository<Ocorrencia, Long> {
     List<Ocorrencia> findByDataCriacao(@Param("data") LocalDate data);
     List<Ocorrencia> findByTipo(TipoOcorrencia tipo);
     List<Ocorrencia> findByCategoria(String categoria);
+    List<Ocorrencia> findByLocalizacaoContainingIgnoreCase(String localizacao);
 }
