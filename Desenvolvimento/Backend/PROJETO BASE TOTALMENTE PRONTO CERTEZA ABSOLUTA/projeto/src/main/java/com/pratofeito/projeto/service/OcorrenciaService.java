@@ -103,4 +103,8 @@ public class OcorrenciaService {
         return ocorrenciaRepository.findByLocalizacaoContainingIgnoreCase(localizacao);
     }
 
+    public List<Ocorrencia> filtrarOcorrencias(TipoOcorrencia tipo, String categoria, String localizacao, LocalDate data) {
+        return ocorrenciaRepository.findWithFilters(tipo, categoria, localizacao, data);
+    }
+
 }
