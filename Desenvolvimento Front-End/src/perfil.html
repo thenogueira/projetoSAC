@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="menu.css">
 
     <script src="https://kit.fontawesome.com/8eab5b8649.js" crossorigin="anonymous"></script>
-    
-    <!-- npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch -->
-    
 </head>
 <body class="bg-amber-50 font-alexandria text-textos">
 
@@ -128,248 +125,84 @@
                     </div>
                 </div>
         </div>
-  </nav> 
-    
-    
-    <main class="">
+  </nav>
+
+    <main>
         <section class="bg-fundo1 px-30 py-10">
             <div class="flex items-end justify-end mb-6 w-full">
-
                 <div class="flex gap-5 items-center w-full">
-
+                    <!-- Foto de perfil -->
                     <div class="rounded-full overflow-hidden w-35 h-35 bg-amber-100">
-                        <img id="profileImage" class="object-cover w-full h-full" src="../img/default-profile.png" alt=" " width="50" height="50">
-
+                        <img id="profileImageEls" class=" object-cover w-full h-full" src="../img/defaultPhoto.png" alt="Foto de Perfil" width="50" height="50">
                     </div>
-                    <!-- Foto de Perfil -->
-                    
+
                     <div>
-                        <span id="profileName" class="text-xl">Usuário</span>
+                        <!-- Nome do usuário -->
+                        <span class="profileName text-xl">Usuário</span>
                         <div class="border-l-2 border-black mt-2">
-                            <p id="profileDescription" class="w-105 pl-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta recusandae placeat repellat consequatur quae alias soluta </p>
+                            <p id="profileMainDescription" class="w-105 pl-2">Lorem ipsum dolor sit amet...</p>
                         </div>
                     </div>
                 </div>
 
-                    <div class="items-end justify-end w-40">
-                        <!-- <span>☆☆☆☆☆</span> -->
-                        <!-- mudar estrelas, design, e puxar isso do banco de dados também -->
-                        <!-- SO APARECE EM PERFIL DOS OUTROS -->
-                        
-                        <button id="editProfileBtn" class="px-4 py-2 border-1 border-black rounded-lg mt-2 hover:bg-destaque-dark">
-                        Editar Perfil
-                        </button>
-                        <!-- Botão para abrir as opções de edição -->
-                         <!-- SO APARECE EM PERFIL DO USUARIO -->
-                    </div>
+                <!-- Botão de editar perfil -->
+                <div class="items-end justify-end w-50">
+                    <button id="editProfileBtn" class="">
 
-
+                    </button>
+                </div>
             </div>
 
-            
+            <!-- Container para editar perfil -->
+    <div id="editProfileContainer" class="hidden bg-fundo2 p-4 rounded-lg shadow-lg">
+    <form id="editProfileForm" class="flex flex-col gap-3">
+        <div>
+            <label for="editDescription" class="block text-sm font-medium">Descrição</label>
+            <textarea id="editDescription" class="w-full px-3 py-2 border rounded-lg" placeholder="Nova descrição"></textarea>
+        </div>
 
-            <!-- Contêiner para edição do perfil -->
-            <div id="editProfileContainer" class="hidden bg-fundo2 p-4 rounded-lg shadow-lg">
-                <form id="editProfileForm">
-                    <div class="mb-4">
-                        <label for="editName" class="block text-sm font-medium">Alterar Nome:</label>
-                        <input type="text" id="editName" class="w-full px-3 py-2 border rounded-lg" placeholder="Novo nome">
-                    </div>
-                    <div class="mb-4">
-                        <label for="editDescription" class="block text-sm font-medium">Alterar Descrição:</label>
-                        <textarea id="editDescription" class="w-full px-3 py-2 border rounded-lg" placeholder="Nova descrição"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="editPhoto" class="block text-sm font-medium">Alterar Foto:</label>
-                        <input type="file" id="editPhoto" class="w-full px-3 py-2 border rounded-lg">
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" id="saveProfileBtn" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
-                            Salvar Alterações
-                        </button>
-                    </div>
-                </form>
-            </div>
-          
-            
-            <hr class="border-1">
- 
+        <div>
+            <label for="editPhoto" class="block text-sm font-medium">Foto de Perfil</label>
+            <input type="file" id="editPhoto" accept="image/*" class="w-full px-3 py-2 border rounded-lg">
+        </div>
+
+        <div class="flex justify-end">
+            <button type="button" id="saveProfileBtn" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
+                Salvar Alterações
+            </button>
+        </div>
+    </form>
+</div>
+
+
+            <hr class="border-1 mt-6">
 
             <div class="flex justify-center items-center gap-60 mt-6 w-full">
-                <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black">Postagens</button>
-                <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black">Avaliações</button>
-                <button class="px-6 py-2 bg-fundo3 rounded-xl inline-block text-lg ">Contactar</button>
-            </div>  
-
-            <!-- usar javascript para deixar os botões com focus mesmo depois de clicar fora, sendo possivel só trocar quando ele clica em outros da mesma categoria: postagens, avaliações, e contactar. -->
-
-            
-
+                <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black" id="contactarPerfil">Postagens</button>
+                <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black" id="comentariosPerfil">Comentarios</button>
+                <button class="px-6 py-2 bg-fundo3 rounded-xl inline-block text-lg" id="contactarPerfil">Contactar</button>
+            </div>
         </section>
-        <section class="px-30 mt-5" >
-            
-            <div class="flex items-center gap-5  mb-15">
-                <p class="text-xl text-minitexto">Filtrar: </p>
-                <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Recentes</button>
-                <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Antigas</button>
-            </div> 
 
-            <!-- Aparece quando estiver selecionado postagens -->
-
-            <!-- mesma coisa de cima. -->
-
-
-            <div class="flex justify-center ">
-                <div class="grid grid-cols-3 gap-20 w-full">
-                   <figure class="w-75 h-65  flex flex-col justify-center rounded-xl m-auto ">
-                        <div class="w-full h-full overflow-hidden rounded-t-xl">
-                            <img class="w-full h-full object-cover bg-fundo1" src="../img/Sem Foto.png" alt="Doação 1">
-                        </div>
-                        <div class="rounded-b-xl drop-shadow-black shadow-lg ">
-                            <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">Titulo da postagem</figcaption>
-                            <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: 23/12/2023</figcaption>
-                            <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: Satoru Of Gojo</figcaption>
-                        </div>
-                    </figure>
-                    <figure class="w-75 h-65  flex flex-col justify-center rounded-xl m-auto ">
-                        <div class="w-full h-full overflow-hidden rounded-t-xl">
-                            <img class="w-full h-full object-cover" src="../img/Captura de tela 2025-06-20 102422.png" alt="Doação 1">
-                        </div>
-                        <div class=" rounded-b-xl drop-shadow-black shadow-lg ">
-                            <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">Titulo da postagem</figcaption>
-                            <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: 23/12/2023</figcaption>
-                            <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: Satoru Of Gojo</figcaption>
-                        </div>
-                    </figure>
-                    <figure class="w-75 h-65  flex flex-col justify-center rounded-xl m-auto">
-                        <div class="w-full h-full overflow-hidden rounded-t-xl">
-                            <img class="w-full h-full object-cover" src="../img/seta-voltar.png" alt="Doação 1">
-                        </div>
-                        <div class="rounded-b-xl drop-shadow-black shadow-lg">
-                            <figcaption class="indent-2 pt-4 pb-0.5 text-neutral-950">Titulo da postagem</figcaption>
-                            <figcaption class="indent-2 pb-0.5 text-neutral-700">Data: 23/12/2023</figcaption>
-                            <figcaption class="indent-2 pb-6 text-neutral-700">Usuário: Satoru Of Gojo</figcaption>
-                        </div>
-                    </figure>
+        <section class="px-30 mt-5">
+            <div class="flex justify-center my-10 relative">
+                <div class="grid grid-cols-3 gap-20 w-full" id="userPostsContainer">
+                    <!-- Posts do usuário serão renderizados aqui via JS -->
                 </div>
             </div>
-
-
-
-
-
-            <!-- Só fica visivel sé for selecionado comentario
-
-
-            <div class="flex items-center gap-5  mb-5">
-                
-                <p class="text-xl text-minitexto">Filtrar: </p>
-
-                
-                 <select class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl
-                focus:border-black focus:text-black" id="categoria" name="categoria">  
-                        <option value="" disabled selected hidden>Notas de avaliações</option>
-                        <option value="5">☆☆☆☆☆</option>
-                        <option value="4">☆☆☆☆</option>
-                        <option value="3">☆☆☆</option>
-                        <option value="2">☆☆</option>
-                        <option value="1">☆</option>
-                </select>
-
-                <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Recentes</button>
-                
-                <button class="border-1 border-minitexto text-minitexto px-4 py-2 rounded-xl focus:bg-fundo2 focus:border-black focus:text-black">Antigas</button>
-
-                 aparece quando estiver comentarios selecionado
-            </div>
-
-
-            <hr class="text-minitexto mb-10">
-
-
-            <section class="grid grid-cols-2 gap-x-30 gap-y-20 w-full">
-
-                <div class="flex flex-col gap-2 w-full">
-                    <div class="flex gap-4 items-center">
-                        <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                            <img id="profileImage" class="object-cover w-full h-full " src="" alt="" width="50" height="50">
-                        </div>
-                        
-                        <div class="flex flex-col">
-                            <span id="profileName" class="text-xl">Satoru Gojo</span>
-                            <span>ID Comentário: #23424</span>
-                            
-                        </div>
-                    </div>
-                    
-                    <div class="border-1 border-black rounded-2xl p-2">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sint ullam, maxime totam ea laborum explicabo dolores aliquid fugit, quibusdam, similique non unde odio. Ratione provident perferendis temporibus saepe adipisci.</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col gap-2 w-full">
-                    <div class="flex gap-4 items-center">
-                        <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                            <img id="profileImage" class="object-cover w-full h-full " src="" alt="" width="50" height="50">
-                        </div>
-                        Foto de Perfil
-                        <div class="flex flex-col">
-                            <span id="profileName" class="text-xl">Satoru Gojo</span>
-                            <span>☆☆☆☆☆</span>
-                            puxar do banco
-                        </div>
-                    </div>
-                    
-                    <div class="border-1 border-black rounded-2xl p-2">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sint ullam, maxime totam ea laborum explicabo dolores aliquid fugit, quibusdam, similique non unde odio. Ratione provident perferendis temporibus saepe adipisci.</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col gap-2 w-full">
-                    <div class="flex gap-4 items-center">
-                        <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                            <img id="profileImage" class="object-cover w-full h-full " src="" alt="" width="50" height="50">
-                        </div>
-                        Foto de Perfil 
-                        <div class="flex flex-col">
-                            <span id="profileName" class="text-xl">Satoru Gojo</span>
-                            <span>☆☆☆☆☆</span>
-                            puxar do banco 
-                        </div>
-                    </div>
-                    
-                    <div class="border-1 border-black rounded-2xl p-2">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sint ullam, maxime totam ea laborum explicabo dolores aliquid fugit, quibusdam, similique non unde odio. Ratione provident perferendis temporibus saepe adipisci.</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col gap-2 w-full">
-                    <div class="flex gap-4 items-center">
-                        <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                            <img id="profileImage" class="object-cover w-full h-full " src="" alt="" width="50" height="50">
-                        </div>
-                        Foto de Perfil 
-                        <div class="flex flex-col">
-                            <span id="profileName" class="text-xl">Satoru Gojo</span>
-                            <span>☆☆☆☆☆</span>
-                            puxar do banco 
-                        </div>
-                    </div>
-                    
-                    <div class="border-1 border-black rounded-2xl p-2">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sint ullam, maxime totam ea laborum explicabo dolores aliquid fugit, quibusdam, similique non unde odio. Ratione provident perferendis temporibus saepe adipisci.</p>
-                    </div>
-                </div>
-            </section> -->
-            
-
         </section>
+
+        <section class="px-30 mt-5 grid-cols-2 gap-x-30 gap-y-20 w-full hidden" id="containerComentarios">
+                
+        </section>
+
+        
     </main>
+
 
     <hr class="text-minitexto mt-20">
 
-    <footer class="px-30 pt-10 pb-5 ">
-
+    <footer class="px-30 pt-10 pb-5">
         <div class="flex gap-10">
             <div class="flex flex-col">
                 <h3 class="text-lg">Sobre</h3>
@@ -378,7 +211,7 @@
                     <li><a href="ajuda.html" class="text-sm hover:text-black text-minitexto duration-500">Central de Ajuda</a></li>
                 </ul>
             </div>
-            
+
             <div class="flex flex-col">
                 <h3 class="text-lg">Doações</h3>
                 <ul>
@@ -386,24 +219,11 @@
                 </ul>
             </div>
         </div>
-        
-    
+
         <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
     </footer>
 
-    <script>
-        // Preenche nome e foto do usuário logado no topo
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = JSON.parse(localStorage.getItem('usuarioLogado'));
-            if (user && user.nome) {
-                document.getElementById('profileName').textContent = user.nome;
-                document.getElementById('userTopBar').classList.remove('hidden');
-                document.getElementById('profileImage').src = user.profileImage || '../img/default-profile.png';
-            }
-        });
-        </script>
-
     <script src="javascript/menu.js"></script>
-    
+    <script src="javascript/perfil.js"></script>
 </body>
 </html>

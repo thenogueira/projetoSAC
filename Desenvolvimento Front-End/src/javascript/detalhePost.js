@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const postId = urlParams.get('id');
   const userLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
 
-
   if (!postId) {
     postDetails.innerHTML = `<p class="text-center text-red-500">
       Nenhum post selecionado. Volte para a página de postagens e escolha um.
@@ -122,22 +121,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       return resultados;
     }
 
-    const todasImagens = extractImagesFromPost(post);
+    const todasImagens = extractImagesFromPost(post) || []; // garante array
     console.log('Imagens extraídas do post:', todasImagens);
-
-    if (todasImagens.length === 0) {
-      console.warn('Nenhuma imagem detectada automaticamente.');
-    }
 
     let imagens = [];
     try {
-      imagens = JSON.parse(post.imagens);
+      imagens = post.imagens ? JSON.parse(post.imagens) : [];
     } catch {
-      imagens = post.imagens ? [post.imagem] : [];
+      imagens = post.imagem ? [post.imagem] : [];
     }
+    if (!Array.isArray(imagens)) imagens = []; // fallback
 
     let imagemPostHtml = "";
-    if (todasImagens.length > 0) {
+    if (todasImagens?.length > 0) { // uso seguro de ?.length
       const mostrarBotao = todasImagens.length > 4;
       imagemPostHtml = `
         <hr class="text-minitexto my-8">
@@ -170,12 +166,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="flex gap-5 items-center">
           <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
             <img class="object-cover w-full h-full" 
-                 src="${'../img/defaultPhoto.png'}" 
-                 alt="Imagem do post"
-                 onerror="this.src='../img/defaultPhoto.png'">
+                src="${'../img/defaultPhoto.png'}" 
+                alt="Imagem do post"
+                onerror="this.src='../img/defaultPhoto.png'">
           </div>
           <div class="flex flex-col">
-            <span class="text-2xl font-bold">${nomeUsuario}</span>
+            <span class="text-2xl font-bold cursor-pointer hover:underline" id="nomeUsuarioLink">${nomeUsuario}</span>
             <span class="text-xl"><strong>ID Postagem:</strong> ${post.id}</span>
           </div>
         </div>
@@ -191,7 +187,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             idLogado && post.usuarioId === idLogado
               ? `
               <button id="editarButton" class="px-4 py-2 border-1 rounded-lg hover:bg-gray-300">Editar</button>
-              
               `
               : ''
           }
@@ -202,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       <div>
         <ul class="text-xl mb-8">
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${formatarTipo(post.tipo)}</p></li>
+          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${(post.tipo)}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
         </ul>
@@ -216,6 +211,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       ${imagemPostHtml}
     `;
 
+    const nomeUsuarioLink = document.getElementById('nomeUsuarioLink');
+    if (nomeUsuarioLink && post.usuarioId) {
+      nomeUsuarioLink.addEventListener('click', () => {
+        window.location.href = `perfil.html?id=${post.usuarioId}`;
+      });
+    }
 
     // Botão rolar imagens
     const botaoRolar = document.getElementById('botaoRolarImagens');
@@ -229,7 +230,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Botões de contato, editar e excluir
-
     if (emailUsuario && !(idLogado && post.usuarioId === idLogado)) {
       document.getElementById('contatarButton')?.addEventListener('click', () => {
         const mailtoLink = `mailto:${emailUsuario}?subject=Contato sobre sua postagem no SAC&body=Olá ${nomeUsuario}, vi sua postagem e gostaria de conversar.`;
@@ -240,7 +240,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('editarButton')?.addEventListener('click', () => {
       window.location.href = `editPost.html?id=${post.id}`;
     });
-
 
   } catch (error) {
     postDetails.innerHTML = `<p class="text-center text-red-500">

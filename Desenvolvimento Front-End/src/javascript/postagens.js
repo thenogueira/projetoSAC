@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const postsContainerErro = document.getElementById('postsContainerErro');
     const postsContainerReal = document.getElementById('postsContainerReal');
     const filtroForm = document.getElementById('filtroForm');
+    const botaoCarregarMais = document.getElementById('carregarMais');
 
     if (!postsContainer) {
         console.error('Elemento postsContainer não encontrado no DOM.');
@@ -10,6 +11,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     let posts = [];
+    let paginaAtual = 1;
+    const limitePorPagina = 6;
+    let filtrosAtuais = {};
 
     const user = JSON.parse(localStorage.getItem('usuarioLogado'));
 
@@ -17,31 +21,49 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.location.href = `post.html?id=${post.id}`;
     }
 
-    async function carregarPosts(filtros = {}) {
+    async function carregarPosts(filtros = {}, append = false) {
         try {
-            let url = 'http://localhost:8080/ocorrencias/listar';
-            
-            const params = new URLSearchParams(filtros).toString();
-            if (params) url += `?${params}`;
+            let urlBase = 'http://localhost:8080/ocorrencias';
+            let urlFinal = `${urlBase}/listar`; // padrão
 
-            console.log('🔗 URL chamada:', url);
+            // Limpa filtros vazios
+            const filtrosLimpos = Object.fromEntries(
+                Object.entries(filtros).filter(([_, v]) => v && v.trim() !== "")
+            );
 
-            const response = await fetch(url);
+            // Adiciona paginação
+            filtrosLimpos.page = paginaAtual;
+            filtrosLimpos.limit = limitePorPagina;
+
+            // Decide o endpoint de acordo com o filtro usado
+            if (filtrosLimpos.data && Object.keys(filtrosLimpos).length === 3) { // page + limit contam
+                urlFinal = `${urlBase}/por-data?data=${filtrosLimpos.data}&page=${paginaAtual}&limit=${limitePorPagina}`;
+            } else if (filtrosLimpos.tipo && Object.keys(filtrosLimpos).length === 3) {
+                urlFinal = `${urlBase}/por-tipo?tipo=${filtrosLimpos.tipo.toUpperCase()}&page=${paginaAtual}&limit=${limitePorPagina}`;
+            } else if (filtrosLimpos.categoria && Object.keys(filtrosLimpos).length === 3) {
+                urlFinal = `${urlBase}/por-categoria?categoria=${encodeURIComponent(filtrosLimpos.categoria)}&page=${paginaAtual}&limit=${limitePorPagina}`;
+            } else if (Object.keys(filtrosLimpos).length > 0) {
+                const params = new URLSearchParams(filtrosLimpos).toString();
+                urlFinal = `${urlBase}/listar?${params}`;
+            }
+
+            console.log('🔗 Endpoint usado:', urlFinal);
+
+            const response = await fetch(urlFinal);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-            posts = await response.json();
-            renderizarPosts(posts);
-
-            const postAtualizado = JSON.parse(localStorage.getItem('postAtualizado'));
-            if (postAtualizado) {
-                const postElement = Array.from(postsContainerReal.children).find(p =>
-                    p.querySelector('figcaption')?.textContent.includes(postAtualizado.tituloAntigo)
-                );
-                if (postElement) {
-                    postElement.querySelector('figcaption').textContent = postAtualizado.tituloNovo;
-                }
-                localStorage.removeItem('postAtualizado');
+            const novosPosts = await response.json();
+            if (!append) postsContainerReal.innerHTML = '';
+            if (novosPosts.length === 0 && !append) {
+                postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
+                botaoCarregarMais.style.display = 'none';
+                return;
             }
+
+            renderizarPosts(novosPosts, append);
+
+            // esconder botão se não vier o limite completo
+            botaoCarregarMais.style.display = novosPosts.length < limitePorPagina ? 'none' : 'block';
 
         } catch (error) {
             console.error('Erro ao carregar posts:', error);
@@ -49,19 +71,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    function renderizarPosts(listaPosts) {
-        postsContainerReal.innerHTML = '';
-
-        if (!listaPosts.length) {
-            postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
-            return;
-        }
+    function renderizarPosts(listaPosts, append = false) {
+        if (!append) postsContainerReal.innerHTML = '';
 
         listaPosts.forEach(post => {
             const postElement = document.createElement('figure');
             postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
 
-            // === Corrigir formatação da data ===
             let dataFormatada = "Data não informada";
             const dataCampo = post.data_criacao || post.data;
             if (dataCampo) {
@@ -77,17 +93,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const nomeUsuario = post.usuario?.nome || 'Desconhecido';
 
-            // === Capturar a primeira imagem do array JSON ===
+            // imagem
             let imagemSrc = '../img/Sem Foto.png';
             if (post.imagem) {
                 try {
-                    const imagensArray = JSON.parse(post.imagem);
-                    if (Array.isArray(imagensArray) && imagensArray.length > 0) {
-                        imagemSrc = imagensArray[0]; // Pega a primeira imagem como capa
+                    if (Array.isArray(post.imagem)) {
+                        imagemSrc = post.imagem[0];
+                    } else {
+                        const imagensArray = JSON.parse(post.imagem);
+                        if (Array.isArray(imagensArray) && imagensArray.length > 0) {
+                            imagemSrc = imagensArray[0];
+                        }
                     }
                 } catch (e) {
                     console.warn('Erro ao ler imagens do post', e);
-                    imagemSrc = post.imagem; // fallback
+                    imagemSrc = post.imagem;
                 }
             }
 
@@ -107,20 +127,36 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-
-    carregarPosts();
-
+    // Filtros
     if (filtroForm) {
         filtroForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const filtros = {
-                categoria: filtroForm.categoria.value,
-                data: filtroForm.dataFormatada.value,
-                tipo: filtroForm.tipo.value,
-                localizacao: filtroForm.localizacao.value,
-                urgencia: filtroForm.urgencia.value
-            };
-            carregarPosts(filtros);
+            paginaAtual = 1;
+
+            let categoria = filtroForm.categoria.value;
+            let tipo = filtroForm.tipo.value;
+            let data = filtroForm.data.value;
+
+            // Ajustes de backend
+            if (categoria === "todas") categoria = "";
+            else categoria = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+
+            if (tipo === "todos") tipo = "";
+            else tipo = tipo.toUpperCase();
+
+            filtrosAtuais = { categoria, tipo, data };
+            carregarPosts(filtrosAtuais, false);
         });
     }
+
+    // Botão "Mostrar Mais"
+    if (botaoCarregarMais) {
+        botaoCarregarMais.addEventListener('click', () => {
+            paginaAtual++;
+            carregarPosts(filtrosAtuais, true);
+        });
+    }
+
+    // Carrega posts iniciais
+    carregarPosts();
 });

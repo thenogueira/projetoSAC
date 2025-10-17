@@ -1,13 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    /**
-     * Objeto que armazena referências aos elementos do modal de mensagem
-     * @type {Object}
-     * @property {HTMLElement} modal - Elemento do modal principal
-     * @property {HTMLElement} content - Elemento do conteúdo da mensagem
-     * @property {HTMLElement} title - Elemento do título do modal
-     * @property {HTMLElement} icon - Elemento do ícone do modal
-     * @property {HTMLElement} closeBtn - Botão de fechar o modal
-     */
+
     const modalElements = {
         modal: document.getElementById('modalMensagem'),
         content: document.getElementById('modalContent'),
@@ -16,101 +8,115 @@ document.addEventListener('DOMContentLoaded', function() {
         closeBtn: document.getElementById('modalCloseBtn')
     };
 
-    /**
-     * Exibe uma mensagem no modal personalizado
-     * @function mostrarMensagem
-     * @param {string} titulo - Título da mensagem
-     * @param {string} texto - Corpo da mensagem
-     * @param {string} [tipo='erro'] - Tipo da mensagem ('erro' ou outro valor para sucesso)
-     */
-
     function mostrarMensagem(titulo, texto, tipo = 'erro') {
-        // Verifica se todos os elementos do modal existem
-        if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
-            console.error('Elementos do modal não encontrados!');
-            alert(`${titulo}: ${texto}`); // Fallback básico
-            return;
-        }
+        if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) return;
 
-        // Configura o ícone e cores baseado no tipo de mensagem
-        modalElements.icon.className = tipo === 'erro' 
+        modalElements.icon.className = tipo === 'erro'
             ? 'fas fa-exclamation-circle text-red-500 text-2xl mr-3 mt-1'
             : 'fas fa-check-circle text-green-500 text-2xl mr-3 mt-1';
 
-        // Define o conteúdo do modal
         modalElements.title.textContent = titulo;
         modalElements.content.textContent = texto;
-
-        // Exibe o modal
         modalElements.modal.classList.remove('hidden');
 
-        // Fecha automaticamente após 5 segundos
-        setTimeout(() => {
-            modalElements.modal.classList.add('hidden');
-        }, 5000);
+        setTimeout(() => modalElements.modal.classList.add('hidden'), 5000);
     }
 
-    // Botão de fechar "OK"
     if (modalElements.closeBtn) {
         modalElements.closeBtn.addEventListener('click', () => {
             modalElements.modal.classList.add('hidden');
         });
     }
 
-
     const toggleDocumentoBtn = document.getElementById('toggleDocumentoBtn');
     const tipoDocumentoContainer = document.getElementById('tipoDocumentoContainer');
-
-    toggleDocumentoBtn.addEventListener('click', function () {
-        if (tipoDocumentoContainer.classList.contains('hidden')) {
-            tipoDocumentoContainer.classList.remove('hidden');
-        } else {
-            tipoDocumentoContainer.classList.add('hidden');
-        }
+    toggleDocumentoBtn.addEventListener('click', () => {
+        tipoDocumentoContainer.classList.toggle('hidden');
     });
 
+    function showFieldError(input, message) {
+        if (!input) return;
+        clearFieldError(input);
+        const el = document.createElement('p');
+        el.className = 'field-error text-red-600 text-sm mt-1';
+        el.textContent = message;
+        input.insertAdjacentElement('afterend', el);
+    }
 
+    function clearFieldError(input) {
+        if (!input) return;
+        const sib = input.nextElementSibling;
+        if (sib && sib.classList && sib.classList.contains('field-error')) sib.remove();
+    }
 
+    // **Funções de validação internas**
+   // Validação simplificada de CPF
+    function isValidCPF(CPF) {
+    CPF = CPF.replace(/\D/g, '');
+    return CPF.length === 11 && !/^(\d)\1+$/.test(CPF);
+    }
 
-    
+// Validação simplificada de CNPJ
+    function isValidCNPJ(CNPJ) {
+    CNPJ = CNPJ.replace(/\D/g, '');
+    return CNPJ.length === 14 && !/^(\d)\1+$/.test(CNPJ);
+    }
 
     const continueBtn = document.getElementById('continueBtn');
-    continueBtn.addEventListener('click', function () {
+    ['nome','numeroDocumento'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => clearFieldError(el));
+    });
+
+    continueBtn.addEventListener('click', function() {
         const nome = document.getElementById('nome').value.trim();
-        const numeroDocumento = document.getElementById('numeroDocumento').value.trim();
+        const numeroDocumentoEl = document.getElementById('numeroDocumento');
+        const numeroDocumento = numeroDocumentoEl.value.trim();
         const tipoDocumento = document.querySelector('input[name="tipoDocumento"]:checked').value;
 
+        clearFieldError(document.getElementById('nome'));
+        clearFieldError(numeroDocumentoEl);
 
-
-
-        
-        if (!nome || !numeroDocumento || 
-           (tipoDocumento === "CPF" && numeroDocumento.length !== 11) || 
-           (tipoDocumento === "CNPJ" && numeroDocumento.length !== 14)){
-            mostrarMensagem('Erro', 'Preencha todos os campos da forma correta', 'erro')
+        if (!nome) {
+            showFieldError(document.getElementById('nome'), 'Nome obrigatório.');
+            mostrarMensagem('Erro', 'Preencha o nome corretamente!', 'erro');
             return;
         }
 
-        // Armazena os dados no localStorage
-        const dadosCadastro = { 
-            nome, 
-            tipoDocumento, 
-            numeroDocumento, 
-            profileImage: '../img/default-profile.png' // Default profile image
+        if (!numeroDocumento) {
+            showFieldError(numeroDocumentoEl, `${tipoDocumento} obrigatório.`);
+            mostrarMensagem('Erro', `Preencha o ${tipoDocumento} corretamente!`, 'erro');
+            return;
+        }
+
+        let valido = false;
+        if (tipoDocumento === 'CPF') {
+            valido = isValidCPF(numeroDocumento);
+            if (!valido) {
+                showFieldError(numeroDocumentoEl, 'CPF inválido.');
+                mostrarMensagem('Erro', 'CPF inválido.', 'erro');
+                return;
+            }
+        } else if (tipoDocumento === 'CNPJ') {
+            valido = isValidCNPJ(numeroDocumento);
+            if (!valido) {
+                showFieldError(numeroDocumentoEl, 'CNPJ inválido.');
+                mostrarMensagem('Erro', 'CNPJ inválido.', 'erro');
+                return;
+            }
+        }
+
+        // Limpa apenas números
+        const numeroDocumentoLimpo = numeroDocumento.replace(/\D/g, '');
+
+        const dadosCadastro = {
+            nome,
+            tipoDocumento,
+            numeroDocumento: numeroDocumentoLimpo,
+            profileImage: '../img/default-profile.png'
         };
         localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCadastro));
 
-        // Redireciona para a segunda etapa
         window.location.href = 'cadastro-2.html';
-
-    
     });
-
-    continueBtn.addEventListener("mousedown", function (){
-        continueBtn.classList.add('text-[16px]')
-    })
-
-    continueBtn.addEventListener("mouseup", function (){
-        continueBtn.classList.remove('text-[16px]')
-    })
 });

@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Libera preflight
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/comentarios/**").permitAll()
+                        .requestMatchers("/usuarios/**").permitAll()
                         .requestMatchers("/ocorrencias/**").permitAll()// Ajuste conforme necessidade
                         .anyRequest().authenticated()
                 )
