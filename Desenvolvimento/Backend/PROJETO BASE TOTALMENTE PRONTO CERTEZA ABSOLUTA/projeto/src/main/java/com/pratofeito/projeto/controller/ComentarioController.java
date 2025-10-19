@@ -33,6 +33,21 @@ public class ComentarioController {
         return comentarioRepository.findAll();
     }
 
+    //Buscar comentários sobre um usuário específico
+    @GetMapping("/usuario/{usuarioAlvoId}")
+    public ResponseEntity<List<Comentario>> listarComentariosPorUsuarioAlvo(
+            @PathVariable int usuarioAlvoId) {
+        List<Comentario> comentarios = comentarioRepository.findByUsuarioAlvoId(usuarioAlvoId);
+        return ResponseEntity.ok(comentarios);
+    }
+    //Buscar comentários feitos por um usuário
+    @GetMapping("/autor/{usuarioId}")
+    public ResponseEntity<List<Comentario>> listarComentariosPorAutor(
+            @PathVariable int usuarioId) {
+        List<Comentario> comentarios = comentarioRepository.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(comentarios);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Comentario> atualizarComentario(
             @PathVariable int id,

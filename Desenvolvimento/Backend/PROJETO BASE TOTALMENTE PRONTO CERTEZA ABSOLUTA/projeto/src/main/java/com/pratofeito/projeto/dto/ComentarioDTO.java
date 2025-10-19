@@ -11,7 +11,7 @@ public class ComentarioDTO {
     private Long usuarioId;
 
     @NotNull
-    private Long ocorrenciaId;
+    private int usuarioAlvoId;
 
     public String getTexto() {
         return texto;
@@ -29,12 +29,11 @@ public class ComentarioDTO {
         this.usuarioId = usuarioId;
     }
 
-    public Long getOcorrenciaId() {
-        return ocorrenciaId;
+    public int getUsuarioAlvoId() {
+        return usuarioAlvoId;
     }
 
-    public void setOcorrenciaId(Long ocorrenciaId) {
-        this.ocorrenciaId = ocorrenciaId;
+    public void setUsuarioAlvoId(int usuarioAlvoId) {
+        this.usuarioAlvoId = usuarioAlvoId;
     }
-
 }
