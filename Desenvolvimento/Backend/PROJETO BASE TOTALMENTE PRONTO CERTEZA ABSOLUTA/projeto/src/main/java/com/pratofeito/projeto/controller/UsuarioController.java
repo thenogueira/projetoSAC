@@ -182,6 +182,15 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<UsuarioResponseDTO> buscarUsuarioPorId(@PathVariable Long id) {
+        try {
+            Usuario usuario = usuarioService.buscarUsuarioPorId(id);
+            UsuarioResponseDTO response = UsuarioMapper.toResponseDTO(usuario);
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com o ID: " + id);
+        }
+    }
 
 }

@@ -45,10 +45,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Buscar post
+    let post;
     try {
         const response = await fetch(`http://localhost:8080/ocorrencias/${postId}`);
         if (!response.ok) throw new Error(`Erro ao buscar post. Status: ${response.status}`);
-        const post = await response.json();
+        post = await response.json();
 
         // Verificar permissão
         if (!userLogado || userLogado.id !== post.usuarioId) {
@@ -65,35 +66,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         // ======== PREENCHER TIPO =========
         const tipoSelect = form.tipo;
         if (post.tipo) {
-            let tipoEncontrado = false;
-            Array.from(tipoSelect.options).forEach(opt => {
-                if (opt.value.toLowerCase() === post.tipo.toLowerCase().trim()) {
-                    tipoSelect.value = opt.value;
-                    tipoEncontrado = true;
-                }
-            });
-            if (!tipoEncontrado) tipoSelect.selectedIndex = 0;
+            const tipoLower = post.tipo.toLowerCase().trim();
+            const option = Array.from(tipoSelect.options).find(opt => opt.value.toLowerCase() === tipoLower);
+            tipoSelect.value = option ? option.value : tipoSelect.options[0].value;
         }
 
         // ======== PREENCHER CATEGORIA =========
         const categoriaSelect = form.categoria;
         if (post.categoria) {
-            let catEncontrada = false;
-            Array.from(categoriaSelect.options).forEach(opt => {
-                if (opt.value.toLowerCase() === post.categoria.toLowerCase().trim()) {
-                    categoriaSelect.value = opt.value;
-                    catEncontrada = true;
-                }
-            });
-            if (!catEncontrada) categoriaSelect.selectedIndex = 0;
+            const catLower = post.categoria.toLowerCase().trim();
+            const option = Array.from(categoriaSelect.options).find(opt => opt.value.toLowerCase() === catLower);
+            categoriaSelect.value = option ? option.value : categoriaSelect.options[0].value;
         }
 
         // ======== PREENCHER URGÊNCIA =========
         const urgenciaSelect = form.urgencia;
-        if (post.urgencia && Array.from(urgenciaSelect.options).some(opt => opt.value === post.urgencia)) {
-            urgenciaSelect.value = post.urgencia;
-        } else {
-            urgenciaSelect.selectedIndex = 0;
+        if (post.urgencia) {
+            const option = Array.from(urgenciaSelect.options).find(opt => opt.value === post.urgencia);
+            urgenciaSelect.value = option ? option.value : urgenciaSelect.options[0].value;
         }
 
         // ======== PREENCHER LOCALIZAÇÃO =========
@@ -123,7 +113,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         casaInput.value = lugar;
-
         if (estado || lugar) localizacaoContainer.classList.remove('hidden');
 
     } catch (error) {
@@ -137,16 +126,17 @@ document.addEventListener('DOMContentLoaded', async function () {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
+        const estado = document.getElementById('estado').value;
+        const casa = document.getElementById('casa').value;
+        const localizacao = `${estado}, ${casa}`; // 🔥 Corrigido: string, não objeto
+
         const updatedPost = {
             titulo: form.titulo.value.trim(),
             descricao: form.descricao.value.trim(),
             categoria: form.categoria.value,
             tipo: form.tipo.value,
             urgencia: form.urgencia.value,
-            localizacao: {
-                estado: document.getElementById('estado').value,
-                casa: document.getElementById('casa').value
-            }
+            localizacao // ✅ formato correto
         };
 
         mostrarMensagem('Confirmação', 'Deseja salvar as alterações?', 'erro', async () => {
@@ -156,11 +146,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedPost)
                 });
+
                 if (!putResponse.ok) throw new Error(`Erro ao atualizar post: ${putResponse.status}`);
+
                 mostrarMensagem('Sucesso', 'Post atualizado com sucesso!', 'sucesso', () => {
                     window.location.href = 'postagens.html';
                 });
             } catch (err) {
+                console.error('Erro ao atualizar post:', err);
                 mostrarMensagem('Erro', 'Erro ao atualizar post: ' + err.message, 'erro');
             }
         });
@@ -169,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Cancelar alterações
     document.querySelector('button[onclick="history.back()"]').addEventListener('click', (e) => {
         e.preventDefault();
-        mostrarMensagem('Confirmação', 'Deseja cancelar as alterações? Nenhuma mudança na postagem será salva', 'erro', () => {
+        mostrarMensagem('Confirmação', 'Deseja cancelar as alterações? Nenhuma mudança será salva.', 'erro', () => {
             history.back();
         });
     });
@@ -194,6 +187,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Toggle localização
     const toggleLocalizacaoBtn = document.getElementById('toggleLocalizacaoBtn');
     toggleLocalizacaoBtn.addEventListener('click', () => {
+        const localizacaoContainer = document.getElementById('localizacaoContainer');
         localizacaoContainer.classList.toggle('hidden');
     });
-});
+}); 
