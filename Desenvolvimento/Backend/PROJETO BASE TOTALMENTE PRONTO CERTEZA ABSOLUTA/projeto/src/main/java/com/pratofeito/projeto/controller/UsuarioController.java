@@ -68,24 +68,33 @@ public class UsuarioController {
      * @response HTTP 400 (Bad Request) se os dados de entrada forem inválidos
      */
     @PostMapping("/criar")
-    public UsuarioResponseDTO criarUsuario(@RequestBody UsuarioCreateDTO usuarioCreateDTO) {
-        // Converte DTO para entidade
-        Usuario usuario = UsuarioMapper.toEntity(usuarioCreateDTO);
+    public ResponseEntity<UsuarioResponseDTO> criarUsuario(@Valid @RequestBody UsuarioCreateDTO usuarioCreateDTO) {
+        try {
+            // Converte DTO para entidade
+            Usuario usuario = UsuarioMapper.toEntity(usuarioCreateDTO);
 
-        // Salva o usuário (o serviço deve tratar a criptografia da senha)
-        Usuario usuarioSalvo = usuarioService.salvarUsuario(usuario);
+            // Salva o usuário (o serviço deve tratar a criptografia da senha)
+            Usuario usuarioSalvo = usuarioService.salvarUsuario(usuario);
 
-        // Converte a entidade salva de volta para DTO de resposta
-        return UsuarioMapper.toResponseDTO(usuarioSalvo);
+            // Converte a entidade salva de volta para DTO de resposta
+            return ResponseEntity.ok(UsuarioMapper.toResponseDTO(usuarioSalvo));
+
+        } catch (Exception e) {
+            // Log do erro para debug
+            System.err.println("Erro ao criar usuário: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**
      * Atualiza os dados de um usuário existente.
      *
      * @param id ID do usuário a ser atualizado
-     * @param usuarioUpdateDTO DTO contendo os dados atualizados do usuário
+     * @param usuarioUpdateDTO DTO contendo os dados atualizados do usuário (todos opcionais)
      * @return ResponseEntity com os dados atualizados do usuário
      * @throws ResponseStatusException HTTP 409 (Conflict) se o e-mail já estiver em uso
+     * @throws ResponseStatusException HTTP 409 (Conflict) se o número do documento já estiver em uso
      * @throws ResponseStatusException HTTP 404 (Not Found) se o usuário não existir
      * @apiNote PUT /usuarios/atualizar/{id}
      * @response HTTP 200 (OK) com os dados atualizados do usuário
@@ -95,20 +104,32 @@ public class UsuarioController {
             @PathVariable Long id,
             @Valid @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
 
-        // Verifica se o novo e-mail já está em uso por outro usuário
-        Usuario usuarioExistente = usuarioService.buscarPorEmail(usuarioUpdateDTO.getEmail());
-        if (usuarioExistente != null && usuarioExistente.getId() != id) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "O e-mail já está em uso por outro usuário");
+        try {
+            // Verifica se o novo e-mail já está em uso por outro usuário
+            if (usuarioUpdateDTO.getEmail() != null) {
+                Optional<Usuario> usuarioComEmail = usuarioService.buscarPorEmail(usuarioUpdateDTO.getEmail());
+                if (usuarioComEmail.isPresent() && !usuarioComEmail.get().getId().equals(id)) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "O e-mail já está em uso por outro usuário");
+                }
+            }
+
+            // Verifica se o novo número do documento já está em uso por outro usuário
+            if (usuarioUpdateDTO.getNumeroDocumento() != null) {
+                Optional<Usuario> usuarioComDocumento = usuarioService.buscarPorNumeroDocumento(usuarioUpdateDTO.getNumeroDocumento());
+                if (usuarioComDocumento.isPresent() && !usuarioComDocumento.get().getId().equals(id)) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "O número do documento já está em uso por outro usuário");
+                }
+            }
+
+            // Chama o serviço para atualizar o usuário
+            Usuario usuario = usuarioService.atualizarUsuario(id, usuarioUpdateDTO);
+
+            // Retorna o usuário atualizado convertido para DTO
+            return ResponseEntity.ok(UsuarioMapper.toResponseDTO(usuario));
+
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com o ID: " + id);
         }
-
-        // Converte DTO para entidade
-        Usuario usuarioAtualizado = UsuarioMapper.toEntity(usuarioUpdateDTO);
-
-        // Chama o serviço para atualizar o usuário
-        Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
-
-        // Retorna o usuário atualizado convertido para DTO
-        return ResponseEntity.ok(UsuarioMapper.toResponseDTO(usuario));
     }
 
     /**

@@ -36,23 +36,30 @@ public class AuthService {
     }
 
     public LoginResponseDTO login(AuthenticationDTO data) {
-        try{
+        try {
+            // Valida credenciais primeiro
             Usuario usuario = validarCredenciais(data.email(), data.senha_hash());
 
+            // Autenticação do Spring Security
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha_hash());
             var auth = this.authenticationManager.authenticate(usernamePassword);
-            var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
+
+            var token = tokenService.generateToken(usuario);
 
             return new LoginResponseDTO(token, usuario);
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Credenciais inválidas: email ou senha incorretos");
         } catch (UsuarioBanidoException e) {
-            throw e; // Já tem tratamento específico
+            throw e;
         }
     }
 
     private Usuario validarCredenciais(String email, String senha) {
-        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Email não encontrado"));
+
         verificarStatusConta(usuario);
         verificarSenha(usuario, senha);
         return usuario;
@@ -64,7 +71,6 @@ public class AuthService {
         }
     }
 
-
     private void verificarStatusConta(Usuario usuario) {
         switch (usuario.getStatusConta()) {
             case BANIDA:
@@ -75,6 +81,7 @@ public class AuthService {
                 break;
         }
     }
+
     public void register(RegisterDTO data) {
         validarRegistro(data);
         Usuario novoUsuario = criarUsuario(data);
@@ -85,7 +92,8 @@ public class AuthService {
     }
 
     private void validarRegistro(RegisterDTO data) {
-        if(usuarioRepository.findByEmail(data.email()) != null){
+
+        if(usuarioRepository.findByEmail(data.email()).isPresent()){
             throw new IllegalArgumentException("Email já cadastrado");
         }
 

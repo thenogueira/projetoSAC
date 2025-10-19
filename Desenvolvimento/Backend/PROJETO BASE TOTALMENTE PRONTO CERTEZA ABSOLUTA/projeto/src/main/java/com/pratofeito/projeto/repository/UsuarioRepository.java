@@ -14,10 +14,24 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     /**
      * Busca um usuário pelo nome.
      *
-     * param nome Nome do usuário a ser buscado.
-     * return Um objeto Usuario correspondente ao nome fornecido, ou null se não encontrado.
+     * @param nome Nome do usuário a ser buscado.
+     * @return Um objeto Usuario correspondente ao nome fornecido, ou null se não encontrado.
      */
     Usuario findByNome(String nome);
-    Usuario findByEmail(String email);
-    Optional<Usuario> findByNumeroDocumento(String NumeroDocumento);
+
+    /**
+     * Busca um usuário pelo email.
+     *
+     * @param email Email do usuário a ser buscado.
+     * @return Um Optional contendo o usuário se encontrado, ou vazio se não encontrado.
+     */
+    Optional<Usuario> findByEmail(String email);
+
+    /**
+     * Busca um usuário pelo número do documento.
+     *
+     * @param numeroDocumento Número do documento a ser buscado.
+     * @return Um Optional contendo o usuário se encontrado, ou vazio se não encontrado.
+     */
+    Optional<Usuario> findByNumeroDocumento(String numeroDocumento);
 }

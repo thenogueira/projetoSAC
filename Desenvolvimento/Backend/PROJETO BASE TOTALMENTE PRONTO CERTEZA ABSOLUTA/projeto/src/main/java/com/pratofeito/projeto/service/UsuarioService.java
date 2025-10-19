@@ -1,5 +1,6 @@
 package com.pratofeito.projeto.service;
 
+import com.pratofeito.projeto.dto.usuario.UsuarioUpdateDTO;
 import com.pratofeito.projeto.model.Usuario;
 import com.pratofeito.projeto.model.UsuarioBanido;
 import com.pratofeito.projeto.model.enums.StatusConta;
@@ -15,11 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -29,46 +30,42 @@ import java.util.Optional;
  * Esta classe faz a intermediação entre o controlador (Controller) e o repositório (Repository),
  * garantindo que as regras de negócio sejam aplicadas antes de persistir ou recuperar dados.
  */
-@Service // Indica que esta classe é um serviço gerenciado pelo Spring
+@Service
 public class UsuarioService implements UserDetails {
 
-    @Autowired // Injeção de dependência automática do repositório UsuarioRepository
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
     private UsuarioBanidoRepository usuarioBanidoRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /**
      * Retorna uma lista de todos os usuários cadastrados no sistema.
-     *
-     * return Lista de objetos Usuario contendo todos os usuários cadastrados.
      */
     public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll(); // Chama o método do repositório para obter todos os usuários
+        return usuarioRepository.findAll();
     }
 
     /**
      * Salva um novo usuário no banco de dados, aplicando validações necessárias.
-     *
-     * param usuario Objeto Usuario a ser salvo.
-     * return O usuário salvo, incluindo seu ID gerado.
-     * throws IllegalArgumentException Se o documento do usuário não estiver de acordo com as regras de validação.
      */
     public Usuario salvarUsuario(Usuario usuario) {
         this.validarDocumento(usuario);
         SenhaUtils.validarForcaSenha(usuario.getSenha_hash());
+        // Criptografa a senha antes de salvar
+        usuario.setSenha_hash(passwordEncoder.encode(usuario.getSenha_hash()));
         return usuarioRepository.save(usuario);
     }
 
     /**
      * Valida o documento do usuário com base no tipo de documento (CPF ou CNPJ).
-     *
-     * param usuario Objeto Usuario cujo documento será validado.
-     * throws IllegalArgumentException Se o documento não atender aos requisitos de tamanho para CPF ou CNPJ.
      */
     private void validarDocumento(Usuario usuario) {
-        String numeroDocumento = usuario.getNumeroDocumento(); // Obtém o número do documento do usuário
-        TipoDocumento tipoDocumento = usuario.getTipoDocumento(); // Obtém o tipo de documento (CPF ou CNPJ)
+        String numeroDocumento = usuario.getNumeroDocumento();
+        TipoDocumento tipoDocumento = usuario.getTipoDocumento();
 
         // Validação para CPF
         if ((tipoDocumento == TipoDocumento.CPF) && (numeroDocumento.length() != 11)) {
@@ -82,56 +79,85 @@ public class UsuarioService implements UserDetails {
     }
 
     /**
-     * Retorna as autoridades (papéis) do usuário.
-     * Utilizado pelo Spring Security para controle de acesso.
-     *
-     * return Uma lista de autoridades (papéis) do usuário.
+     * Atualiza os dados de um usuário existente com base no DTO de atualização.
+     * Todos os campos são opcionais - apenas os campos fornecidos serão atualizados.
      */
-
-
-    public Collection<? extends GrantedAuthority> getAuthorities(Usuario usuario) {
-        return List.of(new SimpleGrantedAuthority(usuario.getTipoConta().name())); // Converte o tipo de conta em uma autoridade do Spring Security
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public String getPassword() {
-        return "";
-    }
-
-    @Override
-    public String getUsername() {
-        return "";
-    }
-
     @Transactional
-    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
+    public Usuario atualizarUsuario(Long id, UsuarioUpdateDTO usuarioUpdateDTO) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
-        // Se a senha foi alterada, validar a nova senha
-        if (usuarioAtualizado.getSenha_hash() != null &&
-                !usuarioAtualizado.getSenha_hash().equals(usuarioExistente.getSenha_hash())) {
-            SenhaUtils.validarForcaSenha(usuarioAtualizado.getSenha_hash());
-            usuarioExistente.setSenha_hash(usuarioAtualizado.getSenha_hash());
+        // Atualiza nome se fornecido
+        if (usuarioUpdateDTO.getNome() != null && !usuarioUpdateDTO.getNome().trim().isEmpty()) {
+            usuarioExistente.setNome(usuarioUpdateDTO.getNome());
         }
 
-        usuarioExistente.setNome(usuarioAtualizado.getNome());
-        usuarioExistente.setEmail(usuarioAtualizado.getEmail());
+        // Atualiza email se fornecido
+        if (usuarioUpdateDTO.getEmail() != null && !usuarioUpdateDTO.getEmail().trim().isEmpty()) {
+            usuarioExistente.setEmail(usuarioUpdateDTO.getEmail());
+        }
+
+        // Atualiza senha se fornecida (com validação e criptografia)
+        if (usuarioUpdateDTO.getSenha() != null && !usuarioUpdateDTO.getSenha().trim().isEmpty()) {
+            SenhaUtils.validarForcaSenha(usuarioUpdateDTO.getSenha());
+            usuarioExistente.setSenha_hash(passwordEncoder.encode(usuarioUpdateDTO.getSenha()));
+        }
+
+        // Atualiza número do documento se fornecido (com validação)
+        if (usuarioUpdateDTO.getNumeroDocumento() != null && !usuarioUpdateDTO.getNumeroDocumento().trim().isEmpty()) {
+            // Valida o novo documento antes de atualizar
+            validarDocumentoAtualizacao(usuarioExistente.getTipoDocumento(), usuarioUpdateDTO.getNumeroDocumento());
+            usuarioExistente.setNumeroDocumento(usuarioUpdateDTO.getNumeroDocumento());
+        }
+
+        // Atualiza foto de perfil se fornecida
+        if (usuarioUpdateDTO.getFotoPerfil() != null) {
+            usuarioExistente.setFotoPerfil(usuarioUpdateDTO.getFotoPerfil());
+        }
+
+        // Atualiza descrição se fornecida
+        if (usuarioUpdateDTO.getDescricao() != null) {
+            usuarioExistente.setDescricao(usuarioUpdateDTO.getDescricao());
+        }
 
         return usuarioRepository.save(usuarioExistente);
     }
 
-    public Usuario buscarUsuarioPorId(Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+    /**
+     * Valida o documento durante a atualização.
+     */
+    private void validarDocumentoAtualizacao(TipoDocumento tipoDocumento, String numeroDocumento) {
+        // Validação para CPF
+        if ((tipoDocumento == TipoDocumento.CPF) && (numeroDocumento.length() != 11)) {
+            throw new IllegalArgumentException("O CPF deve ter 11 caracteres.");
+        }
+
+        // Validação para CNPJ
+        if ((tipoDocumento == TipoDocumento.CNPJ) && (numeroDocumento.length() != 14)) {
+            throw new IllegalArgumentException("O CNPJ deve ter 14 caracteres.");
+        }
     }
 
-    public Usuario buscarPorEmail(String email) {
+    /**
+     * Busca usuário por número do documento (para verificação de duplicatas)
+     */
+    public Optional<Usuario> buscarPorNumeroDocumento(String numeroDocumento) {
+        return usuarioRepository.findByNumeroDocumento(numeroDocumento);
+    }
+
+    /**
+     * Busca usuário por ID
+     */
+    public Usuario buscarPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
+    }
+
+    public Usuario buscarUsuarioPorId(Long id) {
+        return buscarPorId(id); // Reutiliza o método existente
+    }
+
+    public Optional<Usuario> buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
@@ -174,33 +200,23 @@ public class UsuarioService implements UserDetails {
         return usuario.getStatusConta();
     }
 
-    @Transactional
-    public void banirConta(Long usuarioId, Long adminId, String motivo) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-
-        // Impede que administradores sejam banidos
-        if (usuario.getTipoConta() == TipoConta.ADMINISTRADOR) {
-            throw new IllegalStateException("Não é possível banir outro administrador");
-        }
-
-        Usuario admin = usuarioRepository.findById(adminId)
-                .orElseThrow(() -> new EntityNotFoundException("Administrador não encontrado"));
-
-        // Atualiza status
-        usuario.setStatusConta(StatusConta.BANIDA);
-        usuarioRepository.save(usuario);
-
-        // Registra o banimento
-        UsuarioBanido banido = new UsuarioBanido();
-        banido.setAdmin(admin);
-        banido.setUsuario(usuario);
-        banido.setMotivo(motivo);
-        banido.setDataBanimento(LocalDate.now());
-        banido.setNumeroDocumento(usuario.getNumeroDocumento());
-        banido.setEmail(usuario.getEmail());
-
-        usuarioBanidoRepository.save(banido);
+    // Métodos da interface UserDetails (mantidos conforme estava)
+    public Collection<? extends GrantedAuthority> getAuthorities(Usuario usuario) {
+        return List.of(new SimpleGrantedAuthority(usuario.getTipoConta().name()));
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
 }
