@@ -200,4 +200,60 @@ public class OcorrenciaController {
 
         return ResponseEntity.ok(dtos);
     }
+    /**
+     * Recupera ocorrências por localização específica.
+     *
+     * @param localizacao Localização para filtrar as ocorrências
+     * @return ResponseEntity contendo lista de DTOs das ocorrências da localização especificada
+     *         e status HTTP 200, ou status 404 se nenhuma ocorrência for encontrada
+     * @see OcorrenciaResponseDTO
+     */
+    @CrossOrigin("*")
+    @GetMapping("/por-localizacao")
+    public ResponseEntity<List<OcorrenciaResponseDTO>> listarPorLocalizacao(
+            @RequestParam String localizacao) {
+
+        List<Ocorrencia> ocorrencias = ocorrenciaService.listarPorLocalizacao(localizacao);
+
+        if (ocorrencias.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<OcorrenciaResponseDTO> dtos = ocorrencias.stream()
+                .map(OcorrenciaResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
+     * Recupera ocorrências com filtros combinados.
+     * Todos os parâmetros são opcionais - se não informados, não são aplicados como filtro.
+     *
+     * @param tipo Tipo da ocorrência (DOACAO ou PEDIDO)
+     * @param categoria Categoria da ocorrência
+     * @param localizacao Localização para filtrar
+     * @param data Data específica das ocorrências
+     * @return ResponseEntity com lista de ocorrências filtradas
+     */
+    @CrossOrigin("*")
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<OcorrenciaResponseDTO>> filtrarOcorrencias(
+            @RequestParam(required = false) TipoOcorrencia tipo,
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String localizacao,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+
+        List<Ocorrencia> ocorrencias = ocorrenciaService.filtrarOcorrencias(tipo, categoria, localizacao, data);
+
+        if (ocorrencias.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<OcorrenciaResponseDTO> dtos = ocorrencias.stream()
+                .map(OcorrenciaResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
 }

@@ -99,4 +99,12 @@ public class OcorrenciaService {
         return ocorrenciaRepository.findByCategoria(categoria);
     }
 
+    public List<Ocorrencia> listarPorLocalizacao(String localizacao) {
+        return ocorrenciaRepository.findByLocalizacaoContainingIgnoreCase(localizacao);
+    }
+
+    public List<Ocorrencia> filtrarOcorrencias(TipoOcorrencia tipo, String categoria, String localizacao, LocalDate data) {
+        return ocorrenciaRepository.findWithFilters(tipo, categoria, localizacao, data);
+    }
+
 }
