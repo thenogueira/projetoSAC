@@ -1,27 +1,23 @@
 package com.pratofeito.projeto.dto.usuario;
 
-import com.pratofeito.projeto.model.enums.StatusConta;
-import com.pratofeito.projeto.model.enums.TipoConta;
 import com.pratofeito.projeto.model.enums.TipoDocumento;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-
 
 public class UsuarioCreateDTO {
 
-    @NotBlank(message = "O nome é obrigatório!")
-    @Size(max = 30, message = "O nome deve ter no máximo 30 caracteres")
+    @NotBlank(message = "O nome é obrigatório")
+    @Size(min = 2, max = 30, message = "O nome deve ter entre 2 e 30 caracteres")
     private String nome;
 
-    @Email(message = "Insira um email válido!")
-    @NotBlank(message = "O email é obrigatório!")
+    @NotBlank(message = "O e-mail é obrigatório")
+    @Email(message = "O e-mail deve ser válido")
     private String email;
 
-    @NotBlank(message = "A senha é obrigatória!")
+    @NotBlank(message = "A senha é obrigatória")
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
@@ -29,14 +25,14 @@ public class UsuarioCreateDTO {
     )
     private String senha;
 
-    private TipoDocumento tipo_documento;
+    @NotNull(message = "O tipo de documento é obrigatório")
+    private TipoDocumento tipoDocumento;
 
-    private String numero_documento;
+    @NotBlank(message = "O número do documento é obrigatório")
+    @Size(max = 14, message = "O número do documento deve ter no máximo 14 caracteres")
+    private String numeroDocumento;
 
-    private TipoConta tipoConta = TipoConta.USUARIO;
-
-    private StatusConta statusConta;
-
+    // Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -61,43 +57,19 @@ public class UsuarioCreateDTO {
         this.senha = senha;
     }
 
-    public TipoDocumento getTipo_documento() {
-        return tipo_documento;
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setTipo_documento(TipoDocumento tipo_documento) {
-        this.tipo_documento = tipo_documento;
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
-    public String getNumero_documento() {
-        return numero_documento;
+    public String getNumeroDocumento() {
+        return numeroDocumento;
     }
 
-    public void setNumero_documento(String numero_documento) {
-        this.numero_documento = numero_documento;
-    }
-
-    public TipoConta getTipo_conta() {
-        return tipoConta;
-    }
-
-    public void setTipo_conta(TipoConta tipo_conta) {
-        this.tipoConta = tipo_conta;
-    }
-
-    public TipoConta getTipoConta() {
-        return tipoConta;
-    }
-
-    public void setTipoConta(TipoConta tipoConta) {
-        this.tipoConta = tipoConta;
-    }
-
-    public StatusConta getStatusConta() {
-        return statusConta;
-    }
-
-    public void setStatusConta(StatusConta statusConta) {
-        this.statusConta = statusConta;
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
     }
 }

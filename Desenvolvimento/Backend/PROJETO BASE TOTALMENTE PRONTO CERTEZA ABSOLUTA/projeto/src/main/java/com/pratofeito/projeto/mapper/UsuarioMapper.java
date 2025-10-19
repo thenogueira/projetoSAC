@@ -18,19 +18,15 @@ public class UsuarioMapper {
      * param usuarioCreateDTO DTO contendo os dados para criação de um usuário.
      * return Entidade Usuario populada com os dados do DTO.
      */
-    public static Usuario toEntity(UsuarioCreateDTO usuarioCreateDTO) {
-        // Cria uma nova instância de Usuario com os dados do DTO
-        Usuario usuario = new Usuario(
-                usuarioCreateDTO.getNome(),       // Nome do usuário
-                usuarioCreateDTO.getEmail(),       // Email do usuário
-                usuarioCreateDTO.getSenha(),       // Senha do usuário
-                usuarioCreateDTO.getTipo_conta(),  // Tipo de conta do usuário (enum)
-                usuarioCreateDTO.getTipo_documento(), // Tipo de documento do usuário (enum)
-                usuarioCreateDTO.getNumero_documento(),
-                usuarioCreateDTO.getStatusConta()// Número do documento do usuário
-        );
-
-        return usuario; // Retorna a entidade Usuario criada
+    public static Usuario toEntity(UsuarioCreateDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha_hash(dto.getSenha()); // Será criptografado no service
+        usuario.setTipoDocumento(dto.getTipoDocumento());
+        usuario.setNumeroDocumento(dto.getNumeroDocumento());
+        // tipoConta e statusConta serão definidos no service
+        return usuario;
     }
 
     /**

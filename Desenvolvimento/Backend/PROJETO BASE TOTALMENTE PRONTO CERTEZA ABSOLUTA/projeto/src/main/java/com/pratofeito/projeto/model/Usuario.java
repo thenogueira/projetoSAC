@@ -27,17 +27,16 @@ public class Usuario implements UserDetails {
     /**
      * Construtor para criar um novo usuário.
      *
-     * param nome Nome do usuário.
-     * param email Email do usuário.
-     * param senha_hash Senha criptografada do usuário.
-     * param tipo_conta Tipo de conta do usuário (ADMIN, CLIENTE, etc.).
-     * param tipo_documento Tipo de documento do usuário (CPF, CNPJ, etc.).
-     * param numero_documento Número do documento do usuário.
+     * @param nome Nome do usuário.
+     * @param email Email do usuário.
+     * @param senha_hash Senha criptografada do usuário.
+     * @param tipoConta Tipo de conta do usuário (USUARIO, ADMINISTRADOR).
+     * @param tipoDocumento Tipo de documento do usuário (CPF, CNPJ).
+     * @param numeroDocumento Número do documento do usuário.
+     * @param statusConta Status da conta do usuário (ATIVA, BANIDA).
      */
-
-    public Usuario(){};
-
-    public Usuario(String nome, String email, String senha_hash, TipoConta tipoConta, TipoDocumento tipoDocumento, String numeroDocumento, StatusConta statusConta) {
+    public Usuario(String nome, String email, String senha_hash, TipoConta tipoConta,
+                   TipoDocumento tipoDocumento, String numeroDocumento, StatusConta statusConta) {
         this.nome = nome;
         this.email = email;
         this.senha_hash = senha_hash;
@@ -47,74 +46,100 @@ public class Usuario implements UserDetails {
         this.statusConta = statusConta;
     }
 
+    public Usuario() {}
+
     /**
      * Identificador único do usuário.
      * Gerado automaticamente pelo banco de dados com auto-incremento.
      */
-    @Id // Indica que este campo é a chave primária da tabela
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Define a estratégia de geração de valor (auto-incremento)
-    @Column(name = "id") // Define o nome da coluna no banco de dados
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     /**
      * Nome do usuário.
      * Campo obrigatório com no máximo 30 caracteres.
      */
-    @NotBlank(message = "O nome é obrigatório!") // Validação: o campo não pode estar em branco
-    @Size(max = 30, message = "O nome deve ter no máximo 30 caracteres") // Validação: tamanho máximo de 30 caracteres
-    @Column(name = "nome", length = 30, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
+    @NotBlank(message = "O nome é obrigatório!")
+    @Size(max = 30, message = "O nome deve ter no máximo 30 caracteres")
+    @Column(name = "nome", length = 30, nullable = false)
     private String nome;
 
     /**
-     * Email do usuário.
-     * Campo obrigatório que deve ser um email válido.
+     * Tipo de conta do usuário (USUARIO, ADMINISTRADOR).
+     * Campo obrigatório com valor padrão USUARIO.
      */
-    @Email(message = "Insira um email válido!") // Validação: o campo deve ser um email válido
-    @NotBlank(message = "O email é obrigatório!") // Validação: o campo não pode estar em branco
-    @Column(name = "email", length = 40, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_conta", nullable = false)
+    private TipoConta tipoConta = TipoConta.USUARIO;
+
+    /**
+     * Email do usuário.
+     * Campo obrigatório com no máximo 60 caracteres e único.
+     */
+    @Email(message = "Insira um email válido!")
+    @NotBlank(message = "O email é obrigatório!")
+    @Column(name = "email", length = 60, nullable = false, unique = true)
     private String email;
 
+    /**
+     * Senha criptografada do usuário.
+     * Campo obrigatório com validação de complexidade.
+     */
     @NotBlank(message = "A senha é obrigatória!")
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
             message = "A senha deve conter pelo menos: 1 letra maiúscula, 1 letra minúscula, 1 número, 1 caractere especial (@#$%^&+=!) e não pode conter espaços"
     )
-    @Column(name = "senha_hash", nullable = false)
+    @Column(name = "senha_hash", nullable = false, length = 255)
     private String senha_hash;
 
     /**
-     * Tipo de documento do usuário (CPF, CNPJ, etc.).
-     * Campo obrigatório que utiliza o enum TipoDocumento.
+     * Tipo de documento do usuário (CPF, CNPJ).
+     * Campo obrigatório.
      */
-    @Enumerated(EnumType.STRING) // Define que o valor do enum será armazenado como String no banco de dados
-    @Column(name = "tipo_documento", nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento", nullable = false)
     private TipoDocumento tipoDocumento;
 
     /**
      * Número do documento do usuário.
-     * Campo obrigatório com no máximo 14 caracteres.
+     * Campo obrigatório com no máximo 14 caracteres e único.
      */
-    @Column(name = "numero_documento", length = 14, nullable = false) // Define o nome da coluna e suas propriedades no banco de dados
+    @NotBlank(message = "O número do documento é obrigatório!")
+    @Size(max = 14, message = "O número do documento deve ter no máximo 14 caracteres")
+    @Column(name = "numero_documento", length = 14, nullable = false, unique = true)
     private String numeroDocumento;
 
     /**
-     * Tipo de conta do usuário (ADMIN, CLIENTE, etc.).
-     * Utiliza o enum TipoConta para definir os papéis do usuário.
+     * Status da conta do usuário (ATIVA, BANIDA).
+     * Campo opcional com valor padrão ATIVA.
      */
-    @Enumerated(EnumType.STRING) // Define que o valor do enum será armazenado como String no banco de dados
-    @Column(name = "tipo_conta") // Define o nome da coluna no banco de dados
-    private TipoConta tipoConta = TipoConta.USUARIO;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status_conta")
     private StatusConta statusConta = StatusConta.ATIVA;
 
     /**
+     * URL, caminho ou nome do arquivo da foto de perfil do usuário.
+     * Campo opcional para armazenar referência à imagem.
+     */
+    @Column(name = "foto_perfil")
+    private String fotoPerfil;
+
+    /**
+     * Descrição/biografia do usuário.
+     * Campo opcional para texto longo.
+     */
+    @Column(name = "descricao", columnDefinition = "TEXT")
+    private String descricao;
+
+    /**
      * Retorna as autoridades (roles) do usuário.
      * Converte o tipo_conta para uma autoridade do Spring Security.
      *
-     * return Lista de autoridades do usuário.
+     * @return Lista de autoridades do usuário.
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -124,27 +149,27 @@ public class Usuario implements UserDetails {
     /**
      * Retorna a senha do usuário.
      *
-     * return Senha criptografada do usuário.
+     * @return Senha criptografada do usuário.
      */
     @Override
     public String getPassword() {
-        return getSenha_hash();
+        return this.senha_hash;
     }
 
     /**
      * Retorna o email do usuário como nome de usuário.
      *
-     * return Email do usuário.
+     * @return Email do usuário.
      */
     @Override
     public String getUsername() {
-        return getEmail();
+        return this.email;
     }
 
     /**
      * Verifica se a conta do usuário não expirou.
      *
-     * return true, pois a conta nunca expira.
+     * @return true, pois a conta nunca expira.
      */
     @Override
     public boolean isAccountNonExpired() {
@@ -153,18 +178,19 @@ public class Usuario implements UserDetails {
 
     /**
      * Verifica se a conta do usuário não está bloqueada.
+     * Considera o status da conta para determinar se está bloqueada.
      *
-     * return true, pois a conta nunca está bloqueada.
+     * @return false se a conta estiver banida, true caso contrário.
      */
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.statusConta != StatusConta.BANIDA;
     }
 
     /**
      * Verifica se as credenciais do usuário não expiraram.
      *
-     * return true, pois as credenciais nunca expiram.
+     * @return true, pois as credenciais nunca expiram.
      */
     @Override
     public boolean isCredentialsNonExpired() {
@@ -174,11 +200,11 @@ public class Usuario implements UserDetails {
     /**
      * Verifica se a conta do usuário está ativa.
      *
-     * @return true, pois a conta está sempre ativa.
+     * @return true se a conta estiver ativa, false caso contrário.
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.statusConta == StatusConta.ATIVA;
     }
 
     // Getters e Setters
@@ -219,16 +245,16 @@ public class Usuario implements UserDetails {
         return tipoDocumento;
     }
 
-    public void setTipoDocumento(TipoDocumento tipo_documento) {
-        this.tipoDocumento = tipo_documento;
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public String getNumeroDocumento() {
         return numeroDocumento;
     }
 
-    public void setNumeroDocumento(String numero_documento) {
-        this.numeroDocumento = numero_documento;
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
     }
 
     public TipoConta getTipoConta() {
@@ -245,5 +271,21 @@ public class Usuario implements UserDetails {
 
     public void setStatusConta(StatusConta statusConta) {
         this.statusConta = statusConta;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }
