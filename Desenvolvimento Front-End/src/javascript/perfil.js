@@ -126,18 +126,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function fetchUserComments() {
-        try {
-            const resp = await fetch('http://localhost:8080/comentarios/listar', {
-                headers: { 'Authorization': token ? `Bearer ${token}` : '', 'Content-Type': 'application/json' }
-            });
-            if (!resp.ok) throw new Error(`Erro ao buscar comentários. Status: ${resp.status}`);
-            const comments = await resp.json();
-            const userId = usuario.id || usuario.usuarioId;
-            return comments.filter(c => c.ocorrencia?.usuarioId === userId || c.ocorrenciaId === userId);
-        } catch {
-            return [];
-        }
+    try {
+        const resp = await fetch(`http://localhost:8080/comentarios/usuario/${usuario.id || usuario.usuarioId}`, {
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : '',
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!resp.ok) throw new Error(`Erro ao buscar comentários. Status: ${resp.status}`);
+        return await resp.json();
+    } catch (err) {
+        console.error(err);
+        return [];
     }
+}
+
 
     function renderUserPosts(posts) {
         userPostsContainer.innerHTML = '';
@@ -234,79 +237,85 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Botão "Adicionar Comentário" apenas em perfis de outros usuários
     if (!isOwnProfile) {
-        const addBtnContainer = document.createElement('div');
-        addBtnContainer.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'items-center', 'justify-center', 'mt-4');
+    const addBtnContainer = document.createElement('div');
+    addBtnContainer.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'items-center', 'justify-center', 'mt-4');
 
-        addBtnContainer.innerHTML = `
-            <button id="addComentario" class="border-1 px-6 py-4 rounded-xl hover:bg-gray-300">Adicionar comentário</button>
+    addBtnContainer.innerHTML = `
+        <button id="addComentario" class="border-1 px-6 py-4 rounded-xl hover:bg-gray-300">Adicionar comentário</button>
+    `;
+    containerComentarios.appendChild(addBtnContainer);
+
+    const addComentarioBtn = addBtnContainer.querySelector('#addComentario');
+
+    addComentarioBtn.addEventListener('click', () => {
+        // Criar layout para novo comentário
+        const novoComentarioLayout = document.createElement('div');
+        novoComentarioLayout.classList.add('flex', 'flex-col', 'gap-2', 'w-full');
+
+        novoComentarioLayout.innerHTML = `
+            <div class="flex gap-4 items-center">
+                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
+                    <img class="object-cover w-full h-full" src="${usuarioLogado.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioLogado.nome || 'Usuário'}" width="50" height="50">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl">${usuarioLogado.nome || 'Usuário'}</span>
+                    <span>ID Comentário: #--</span>
+                </div>
+            </div>
+            <div class="border-1 border-black rounded-2xl p-2 flex flex-col gap-2">
+                <textarea id="novoComentarioTexto" class="w-full border p-2 rounded" placeholder="Escreva seu comentário..."></textarea>
+                <button id="enviarComentarioBtn" class="border-1 px-6 py-2 rounded-xl hover:bg-gray-300 self-end">Enviar</button>
+            </div>
         `;
-        containerComentarios.appendChild(addBtnContainer);
 
-        const addComentarioBtn = document.getElementById('addComentario');
-        addComentarioBtn.addEventListener('click', () => {
-            // Remove o botão para não duplicar
-            addComentarioBtn.remove();
+        // Substitui o botão pelo formulário
+        addBtnContainer.replaceWith(novoComentarioLayout);
 
-            const novoComentarioLayout = document.createElement('div');
-            novoComentarioLayout.classList.add('flex', 'flex-col', 'gap-2', 'w-full');
+        const enviarBtn = novoComentarioLayout.querySelector('#enviarComentarioBtn');
+        enviarBtn.addEventListener('click', async () => {
+            const texto = document.getElementById('novoComentarioTexto').value.trim();
+            if (!texto) return;
 
-            novoComentarioLayout.innerHTML = `
-                <div class="flex gap-4 items-center">
-                    <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                        <img class="object-cover w-full h-full" src="${usuarioLogado.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioLogado.nome || 'Usuário'}" width="50" height="50">
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-xl">${usuarioLogado.nome || 'Usuário'}</span>
-                        <span>ID Comentário: #--</span>
-                    </div>
-                </div>
-                <div class="border-1 border-black rounded-2xl p-2 flex flex-col gap-2">
-                    <textarea id="novoComentarioTexto" class="w-full border p-2 rounded" placeholder="Escreva seu comentário..."></textarea>
-                    <button id="enviarComentarioBtn" class="border-1 px-6 py-2 rounded-xl hover:bg-gray-300 self-end">Enviar</button>
-                </div>
-            `;
+            try {
+                const resp = await fetch('http://localhost:8080/comentarios', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        texto: texto,
+                        usuarioId: usuarioLogado.id,
+                        usuarioAlvoId: usuario.id
+                    })
+                });
 
-            containerComentarios.appendChild(novoComentarioLayout);
+                if (!resp.ok) throw new Error('Erro ao enviar comentário');
+                const novoComentario = await resp.json();
 
-            const enviarBtn = document.getElementById('enviarComentarioBtn');
-            enviarBtn.addEventListener('click', async () => {
-                const texto = document.getElementById('novoComentarioTexto').value.trim();
-                if (!texto) return;
+                // Cria o elemento do comentário recém-enviado
+                const commentEl = createCommentElementLayout(
+                    usuarioLogado,
+                    novoComentario.texto,
+                    novoComentario.id
+                );
 
-                // Salvar no backend
-                try {
-                    const resp = await fetch('http://localhost:8080/comentarios/criar', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': token ? `Bearer ${token}` : '',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            usuarioId: usuarioLogado.id,
-                            perfilId: usuario.id, // perfil que recebe o comentário
-                            texto: texto
-                        })
-                    });
+                // Substitui o formulário pelo comentário
+                novoComentarioLayout.replaceWith(commentEl);
 
-                    if (!resp.ok) throw new Error('Erro ao enviar comentário');
+                // Adiciona o botão novamente abaixo
+                containerComentarios.appendChild(addBtnContainer);
 
-                    const novoComentario = await resp.json();
+                alert('Comentário enviado com sucesso!');
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao enviar comentário. Tente novamente.');
+            }
+        });
 
-                    // Atualizar layout com ID e texto final
-                    novoComentarioLayout.querySelector('span:nth-child(2)').textContent = `ID Comentário: #${novoComentario.id}`;
-                    novoComentarioLayout.querySelector('textarea').remove();
-                    novoComentarioLayout.querySelector('button').remove();
-                    const p = document.createElement('p');
-                    p.textContent = novoComentario.texto;
-                    p.classList.add('break-words');
-                    novoComentarioLayout.querySelector('.border-1').appendChild(p);
 
-                    alert('Comentário enviado com sucesso!');
-                } catch (err) {
-                    console.error(err);
-                    alert('Erro ao enviar comentário. Tente novamente.');
-                }
-            });
+
+
         });
     }
 }
@@ -387,4 +396,41 @@ function createCommentElementLayout(usuarioComent, texto, id) {
     // Carregar posts inicialmente
     const initialPosts = await fetchUserPosts();
     renderUserPosts(initialPosts);
+});
+enviarBtn.addEventListener('click', async () => {
+    const texto = document.getElementById('novoComentarioTexto').value.trim();
+    if (!texto) return;
+
+    try {
+        const resp = await fetch('http://localhost:8080/comentarios', { // ✅ endpoint correto
+            method: 'POST',
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : '',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                texto: texto,
+                usuarioId: usuarioLogado.id,        // ✅ nomes corretos
+                usuarioAlvoId: usuario.id           // ✅ nomes corretos
+            })
+        });
+
+        if (!resp.ok) throw new Error('Erro ao enviar comentário');
+        const novoComentario = await resp.json();
+
+        // Atualizar layout
+        novoComentarioLayout.querySelector('span:nth-child(2)').textContent = `ID Comentário: #${novoComentario.id}`;
+        novoComentarioLayout.querySelector('textarea').remove();
+        novoComentarioLayout.querySelector('button').remove();
+
+        const p = document.createElement('p');
+        p.textContent = novoComentario.texto;
+        p.classList.add('break-words');
+        novoComentarioLayout.querySelector('.border-1').appendChild(p);
+
+        alert('Comentário enviado com sucesso!');
+    } catch (err) {
+        console.error(err);
+        alert('Erro ao enviar comentário. Tente novamente.');
+    }
 });
