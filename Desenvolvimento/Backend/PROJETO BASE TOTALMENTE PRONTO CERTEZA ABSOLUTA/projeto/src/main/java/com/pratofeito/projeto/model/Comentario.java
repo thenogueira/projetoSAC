@@ -32,12 +32,22 @@ public class Comentario {
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "ocorrencia_id", nullable = false)
-    private Ocorrencia ocorrencia;
+    @JoinColumn(name = "usuario_alvo_id", nullable = false)
+    private Usuario usuarioAlvo;
 
     @PreUpdate
     protected void onUpdate() {
         this.dataAtualizacao = LocalDateTime.now();
+    }
+
+    public Comentario() {
+    }
+
+    public Comentario(String texto, Usuario usuario, Usuario usuarioAlvo) {
+        this.texto = texto;
+        this.usuario = usuario;
+        this.usuarioAlvo = usuarioAlvo;
+        this.dataCriacao = LocalDateTime.now();
     }
 
     public int getId() {
@@ -80,11 +90,11 @@ public class Comentario {
         this.usuario = usuario;
     }
 
-    public Ocorrencia getOcorrencia() {
-        return ocorrencia;
+    public Usuario getUsuarioAlvo() {
+        return usuarioAlvo;
     }
 
-    public void setOcorrencia(Ocorrencia ocorrencia) {
-        this.ocorrencia = ocorrencia;
+    public void setUsuarioAlvo(Usuario usuarioAlvo) {
+        this.usuarioAlvo = usuarioAlvo;
     }
 }
