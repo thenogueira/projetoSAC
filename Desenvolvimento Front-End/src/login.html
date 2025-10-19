@@ -38,7 +38,7 @@
                         <div class="relative w-full mb-5">
                           <input 
                             class="bg-amber-50 indent-1 p-1 rounded-md w-full pr-10"
-                            type="password" id="senha_hash" name="senha" placeholder="Senha" required minlength="6" autocomplete="new-password"
+                            type="password" id="senha_hash" name="senha_hash" placeholder="Senha" required minlength="6" autocomplete="new-password"
                             aria-describedby="senhaHelp">
                             <button 
                             type="button"
@@ -49,13 +49,34 @@
                           </button>
                         </div>
 
-                        <div class="relative py-4 rounded-xl mt-2 lg:mt-6">
-                            
-                            <button id="entrarBtn" type="submit" class="bg-destaque px-6 py-3 rounded-xl absolute text-white hover:bg-[#40b147] duration-100">Entrar</button>
+                        <div class="mt-4 text-right">
+                            <a href="reset-senha.html" id="forgotPasswordLink" class="text-sm text-links hover:underline">Esqueceu sua senha?</a>
                         </div>
 
+                        <div class="mt-6 lg:mt-10 px-4 py-2 bg-destaque rounded-xl inline-block text-white hover:bg-destaque-dark transition-colors">
+                            <button type="submit" class="w-full">Entrar</button>
+                        </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Recuperação de Senha -->
+    <div id="forgotPasswordModal" class="hidden fixed inset-0 z-[9999] grid place-items-center p-4">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative w-full max-w-md">
+            <div class="bg-white p-6 rounded-lg shadow-xl">
+                <h3 class="font-bold text-lg mb-2">Recuperar senha</h3>
+                <p class="text-sm text-gray-600 mb-4">Informe o e‑mail da sua conta para receber instruções.</p>
+                <form id="forgotPasswordForm">
+                    <input id="forgotEmail" type="email" placeholder="seu@email.com" required
+                        class="w-full p-2 border rounded-md mb-4">
+                    <div class="flex justify-end gap-2">
+                        <button type="button" id="forgotCancelBtn" class="px-3 py-2 rounded-md border">Cancelar</button>
+                        <button type="submit" class="px-3 py-2 bg-destaque text-white rounded-md">Enviar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
