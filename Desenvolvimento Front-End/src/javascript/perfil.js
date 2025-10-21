@@ -72,43 +72,66 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (isOwnProfile && editProfileBtn) {
         editProfileBtn.addEventListener('click', () => {
             editProfileContainer.classList.toggle('hidden');
-            if (editDescription) editDescription.value = usuario.descricao || '';
+            editDescription.value = usuario.descricao || '';
+            editPhoto.value = ''; // Limpa o input de foto ao abrir
         });
     }
 
     // Salvar alterações (somente descrição)
     const saveProfileBtn = document.getElementById('saveProfileBtn');
     if (saveProfileBtn) {
-        saveProfileBtn.addEventListener('click', async () => {
-            try {
-                const updateData = { descricao: editDescription.value };
+    saveProfileBtn.addEventListener('click', async () => {
+        try {
+            const file = document.getElementById('fileInput')?.files[0];
+            let base64Image = null;
 
-                const resp = await fetch(`http://localhost:8080/usuarios/atualizar/${usuario.id || usuario.usuarioId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': token ? `Bearer ${token}` : '',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updateData)
+            // Se houver imagem, converte pra Base64
+            if (file) {
+                base64Image = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]); // remove o prefixo data:image/jpeg;base64,
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
                 });
-
-                if (!resp.ok) throw new Error('Erro ao atualizar perfil');
-
-                const updatedUser = await resp.json();
-
-                // Atualizar UI e localStorage
-                usuario = updatedUser;
-                fillProfileUI(updatedUser);
-                localStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
-
-                editProfileContainer.classList.add('hidden');
-                alert('Descrição atualizada com sucesso!');
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao atualizar descrição. Tente novamente.');
             }
-        });
-    }
+
+            const updateData = {
+                descricao: editDescription.value,
+                fotoPerfil: base64Image // manda como string base64
+            };
+
+            console.log("Enviando para o backend:", updateData);
+
+            const resp = await fetch(`http://localhost:8080/usuarios/atualizar/${usuario.id || usuario.usuarioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+
+            if (!resp.ok) throw new Error('Erro ao atualizar perfil');
+
+            const updatedUser = await resp.json();
+
+            // Atualiza UI e localStorage
+            usuario = updatedUser;
+            fillProfileUI(updatedUser);
+            localStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+
+            editProfileContainer.classList.add('hidden');
+            alert('Perfil atualizado com sucesso!');
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao atualizar perfil. Tente novamente.');
+        }
+    });
+}
+
+
+
+    
 
     // ======= Buscar e renderizar postagens do usuário =======
     async function fetchUserPosts() {
