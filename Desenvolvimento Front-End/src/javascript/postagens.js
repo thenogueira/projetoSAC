@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     const filtroForm = document.getElementById('filtroForm');
     const botaoCarregarMais = document.getElementById('carregarMais');
 
-    if (!postsContainer) {
-        console.error('Elemento postsContainer não encontrado no DOM.');
+    // Se você não usa postsContainer, não deve impedir o script.
+    // Verifica se o container onde vamos realmente renderizar existe.
+    if (!postsContainerReal) {
+        console.error('Elemento postsContainerReal não encontrado no DOM.');
         return;
     }
 
@@ -17,6 +19,48 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const user = JSON.parse(localStorage.getItem('usuarioLogado'));
 
+    // --- sistema de primeiro nome + primeiro sobrenome (reaproveitável) ---
+    const profileName = document.getElementById('profileName');
+    const profileImage = document.getElementById('profileImage');
+
+    const conectores = new Set([
+        "de","da","do","dos","das","van","von","del","la","le","el"
+    ]);
+
+    function capitalize(word) {
+        if (!word) return "";
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }
+
+    function primeiroESobrenomeCompleto(nomeCompleto) {
+        if (!nomeCompleto || typeof nomeCompleto !== 'string') return '';
+        const partes = nomeCompleto.trim().split(/\s+/).filter(Boolean);
+        if (partes.length === 0) return '';
+        const primeiro = capitalize(partes[0]);
+        let sobrenome = '';
+        if (partes.length > 1) {
+            const segunda = partes[1];
+            const segundaLower = segunda.toLowerCase();
+            if (conectores.has(segundaLower)) {
+                if (partes.length > 2) {
+                    sobrenome = `${segundaLower} ${capitalize(partes[2])}`;
+                } else {
+                    sobrenome = segundaLower;
+                }
+            } else {
+                sobrenome = capitalize(segunda);
+            }
+        }
+        return `${primeiro} ${sobrenome}`.trim();
+    }
+
+    // Preenche profile na interface (se elementos existirem)
+    if (user && user.nome) {
+        if (profileName) profileName.textContent = primeiroESobrenomeCompleto(user.nome);
+        if (profileImage && user.foto) profileImage.src = user.foto;
+    }
+    // --- fim do sistema de nomes ---
+
     function abrirDetalhesPost(post) {
         window.location.href = `post.html?id=${post.id}`;
     }
@@ -26,17 +70,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             let urlBase = 'http://localhost:8080/ocorrencias';
             let urlFinal = `${urlBase}/listar`; // padrão
 
-            // Limpa filtros vazios
             const filtrosLimpos = Object.fromEntries(
                 Object.entries(filtros).filter(([_, v]) => v && v.trim() !== "")
             );
 
-            // Adiciona paginação
             filtrosLimpos.page = paginaAtual;
             filtrosLimpos.limit = limitePorPagina;
 
-            // Decide o endpoint de acordo com o filtro usado
-            if (filtrosLimpos.data && Object.keys(filtrosLimpos).length === 3) { // page + limit contam
+            if (filtrosLimpos.data && Object.keys(filtrosLimpos).length === 3) {
                 urlFinal = `${urlBase}/por-data?data=${filtrosLimpos.data}&page=${paginaAtual}&limit=${limitePorPagina}`;
             } else if (filtrosLimpos.tipo && Object.keys(filtrosLimpos).length === 3) {
                 urlFinal = `${urlBase}/por-tipo?tipo=${filtrosLimpos.tipo.toUpperCase()}&page=${paginaAtual}&limit=${limitePorPagina}`;
@@ -56,18 +97,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!append) postsContainerReal.innerHTML = '';
             if (novosPosts.length === 0 && !append) {
                 postsContainerReal.innerHTML = '<p class="text-center col-span-3 text-gray-500 py-8">Nenhuma postagem encontrada.</p>';
-                botaoCarregarMais.style.display = 'none';
+                if (botaoCarregarMais) botaoCarregarMais.style.display = 'none';
                 return;
             }
 
             renderizarPosts(novosPosts, append);
 
-            // esconder botão se não vier o limite completo
-            botaoCarregarMais.style.display = novosPosts.length < limitePorPagina ? 'none' : 'block';
+            if (botaoCarregarMais) botaoCarregarMais.style.display = novosPosts.length < limitePorPagina ? 'none' : 'block';
 
         } catch (error) {
             console.error('Erro ao carregar posts:', error);
-            postsContainerErro.innerHTML = `<p class="text-center text-red-500 py-8">Erro ao carregar as postagens. Detalhes: ${error.message}</p>`;
+            if (postsContainerErro) postsContainerErro.innerHTML = `<p class="text-center text-red-500 py-8">Erro ao carregar as postagens. Detalhes: ${error.message}</p>`;
         }
     }
 
@@ -78,20 +118,19 @@ document.addEventListener('DOMContentLoaded', async function () {
             const postElement = document.createElement('figure');
             postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
 
-            let dataFormatada = "Data não informada";
-            const dataCampo = post.data_criacao || post.data;
-            if (dataCampo) {
-                const data = new Date(dataCampo);
-                if (!isNaN(data.getTime())) {
-                    dataFormatada = data.toLocaleDateString('pt-BR', {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric"
-                    });
-                }
-            }
+            const dataCriacao = post.data_criacao
+            ? new Date(post.data_criacao).toLocaleDateString('pt-BR')
+            : 'Data não informada';
 
-            const nomeUsuario = post.usuario?.nome || 'Desconhecido';
+            // usa a função para cortar nome -> primeiro + sobrenome
+            const nomeUsuario = post.usuario && post.usuario.nome
+                ? primeiroESobrenomeCompleto(post.usuario.nome)
+                : 'Desconhecido';
+
+            let tipoFormatado = '';
+            if (post.tipo === 'DOACAO') tipoFormatado = 'Doação';
+            else if (post.tipo === 'PEDIDO') tipoFormatado = 'Pedido';
+            else tipoFormatado = post.tipo ? post.tipo.charAt(0).toUpperCase() + post.tipo.slice(1).toLowerCase() : '';
 
             // imagem
             let imagemSrc = '../img/Sem Foto.png';
@@ -117,8 +156,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 </div>
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
                     <figcaption class="pl-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || ''}</figcaption>
-                    <figcaption class="pl-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
-                    <figcaption class="pl-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
+                    <figcaption class="pl-2 pb-0.5 text-neutral-700 text-sm">Usuário: ${nomeUsuario}</figcaption>
+                    <figcaption class="pl-2 pb-0.5 text-neutral-700 text-sm">Tipo: ${tipoFormatado}</figcaption>
+                    <figcaption class="pl-2 pb-6  text-neutral-700 text-sm">Data: ${dataCriacao}</figcaption>
                 </div>
             `;
 
@@ -137,7 +177,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             let tipo = filtroForm.tipo.value;
             let data = filtroForm.data.value;
 
-            // Ajustes de backend
             if (categoria === "todas") categoria = "";
             else categoria = categoria.charAt(0).toUpperCase() + categoria.slice(1);
 
@@ -149,7 +188,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Botão "Mostrar Mais"
     if (botaoCarregarMais) {
         botaoCarregarMais.addEventListener('click', () => {
             paginaAtual++;
@@ -157,6 +195,5 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Carrega posts iniciais
     carregarPosts();
 });
