@@ -19,7 +19,7 @@
     <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
         <div class="flex items-center gap-15 px-6 py-2">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
-            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Dúvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
@@ -32,7 +32,7 @@
         <div class="flex items-center gap-15 py-2">
 
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
-            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Dúvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
@@ -137,7 +137,7 @@
                 <h2 class="text-[clamp(2rem,2vw,2.25rem)] mb-8">Criar Postagem</h2>
                 <div class="my-8">
                     <label for="titulo" class="block text-xl mb-1">Título:</label>
-                    <input type="text" id="titulo" class="w-full px-3 py-2 border rounded-lg" placeholder="Título da postagem" required>
+                    <input type="text" id="titulo" class="w-full px-3 py-2 border rounded-lg" placeholder="Título da postagem" maxlength="40" required>
                 </div>
 
                 <div class="my-8">
@@ -151,9 +151,10 @@
                 <div class="my-8">
                     <label for="categoria" class="block text-xl mb-1">Categoria:</label>
                     <select id="categoria" class="w-full px-3 py-2 border rounded-lg" required>
-                        <option value="Alimentos">Alimentos</option>
-                        <option value="Roupas">Roupas</option>
-                        <option value="Servicos">Serviços</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="roupas">Roupas</option>
+                        <option value="servicos">Serviços</option>
+                        <option value="eletronicos">Eletrônicos</option>
                     </select>
                 </div>
             
@@ -236,7 +237,7 @@
                 </div>
                 <div class="my-8">
                     <label for="descricao" class="block text-xl mb-1">Descrição:</label>
-                    <textarea id="descricao" class="w-full px-3 py-2 border rounded-lg" placeholder="Descrição da postagem" required></textarea>
+                    <textarea id="descricao" class="w-full px-3 py-2 border rounded-lg" placeholder="Descrição da postagem" maxlength="200" required></textarea>
                 </div>
 
 
