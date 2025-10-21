@@ -19,6 +19,29 @@ observerFactory('.publiques', 'publicados');
 observerFactory('.publiqueB', 'publicadoB');
 
 // ================================
+// VERIFICAR SE USUÁRIO ESTÁ LOGADO
+// ================================
+function usuarioEstaLogado() {
+    const token = localStorage.getItem('authToken');
+    const usuario = localStorage.getItem('usuarioLogado');
+    return !!(token && usuario);
+}
+
+// ================================
+// MOSTRAR/OCULTAR BOTÃO CADASTRO
+// ================================
+function toggleBotaoCadastro() {
+    const botaoCadastroSection = document.querySelector('aside');
+    if (botaoCadastroSection) {
+        if (usuarioEstaLogado()) {
+            botaoCadastroSection.style.display = 'none';
+        } else {
+            botaoCadastroSection.style.display = 'flex';
+        }
+    }
+}
+
+// ================================
 // FETCH POSTAGENS
 // ================================
 async function fetchPostagens() {
@@ -67,11 +90,37 @@ function renderPostagens(postagens) {
 
 function createPostCard(post, isLarge) {
     const card = document.createElement('div');
-    card.className = `flex flex-col rounded-xl overflow-hidden shadow-lg ${isLarge ? 'h-full' : 'h-80'}`;
+    card.className = `flex flex-col rounded-xl overflow-hidden shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105 ${isLarge ? 'h-full' : 'h-80'}`;
+    
+    // Tornar a postagem clicável
+    card.addEventListener('click', () => {
+        window.location.href = `postagens.html?id=${post.id || ''}`;
+    });
 
     const imgContainer = document.createElement('div');
     imgContainer.className = `${isLarge ? 'flex-1' : 'h-40'} overflow-hidden bg-gray-100`;
-    imgContainer.innerHTML = `<img class="w-full h-full object-cover" src="${post.imagem || '../img/Sem Foto.png'}" alt="${post.titulo || 'Postagem sem título'}">`;
+    
+    // Corrigir o problema das imagens
+    let imagemUrl = '../img/Sem Foto.png'; // imagem padrão
+    
+    if (post.imagem) {
+        try {
+            // Se a imagem for um array/JSON string, pega a primeira imagem
+            const imagens = JSON.parse(post.imagem);
+            if (Array.isArray(imagens) && imagens.length > 0) {
+                imagemUrl = imagens[0];
+            } else if (typeof post.imagem === 'string' && post.imagem.startsWith('data:image')) {
+                imagemUrl = post.imagem;
+            }
+        } catch (e) {
+            // Se não for JSON, usa a string diretamente
+            if (typeof post.imagem === 'string' && post.imagem.startsWith('data:image')) {
+                imagemUrl = post.imagem;
+            }
+        }
+    }
+    
+    imgContainer.innerHTML = `<img class="w-full h-full object-cover" src="${imagemUrl}" alt="${post.titulo || 'Postagem sem título'}" onerror="this.src='../img/Sem Foto.png'">`;
 
     const content = document.createElement('div');
     content.className = 'bg-white p-4';
@@ -98,7 +147,8 @@ function getTypeColorClass(tipo) {
         DOACAO: 'bg-green-100 text-green-800',
         NECESSIDADE: 'bg-red-100 text-red-800',
         VOLUNTARIADO: 'bg-blue-100 text-blue-800',
-        EVENTO: 'bg-purple-100 text-purple-800'
+        EVENTO: 'bg-purple-100 text-purple-800',
+        PEDIDO: 'bg-orange-100 text-orange-800'
     };
     return colors[tipo] || 'bg-gray-100 text-gray-800';
 }
@@ -124,5 +174,8 @@ function formatarData(dataString) {
     } catch(e) { return dataString; }
 }
 
-fetchPostagens();
-
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    fetchPostagens();
+    toggleBotaoCadastro();
+});
