@@ -142,7 +142,7 @@
             
 
             
-                <a href="config-2.html"><p class="pl-40 rounded-r-2xl pt-5 pr-4 hover:bg-gray-300  pb-5">Postagens e <br> Comunicação</p></a>
+                <!-- <a href="config-2.html"><p class="pl-40 rounded-r-2xl pt-5 pr-4 hover:bg-gray-300  pb-5">Postagens e <br> Comunicação</p></a> -->
         </section>
 
         <section class="pt-10 pr-10 w-full">
@@ -154,31 +154,46 @@
 
             <form class="flex flex-col gap-2" action="" method="post">
 
-                <label class="text-xl" for="nome_conta">Alterar nome da conta</label> 
-                <input class="border-2 border-minitexto  rounded-md w-140 indent-2 p-1 mb-10" type="text" name="nome_conta" id="nome_conta" placeholder="Nome da conta">
-
-                <label class="text-xl" for="novoTipoDocumento">Alterar nome da conta</label> 
-                
-                <div class="mb-10">
-                    <div class="flex gap-10 mt-2 ml-1 text-minitexto hover:text-black">
-                        <label class="flex items-center gap-2">
-                            <input  type="radio" name="novoTipoDocumento" value="CPF" id="novoCpfOption" checked class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
-                            CPF
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="novoTipoDocumento" value="CNPJ" id="novoCnpjOption " class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
-                            CNPJ
-                        </label>
+                <div class="flex flex-col gap-2 mb-20">
+                    <div class="flex gap-2">
+                        <label class="text-xl" for="nome_conta">Alterar nome da conta</label>
+                    </div>
+                    <div class="flex gap-4">
+                        <input class="border-2 border-minitexto  rounded-md w-140 indent-2 p-1 " type="text" name="nome_conta" id="nome_conta" placeholder="Nome da conta">
+                        <button class="px-4 py-2 rounded-xl border-1 hover:bg-gray-300" id="altNome">Alterar</button>
                     </div>
                 </div>
 
-                <!-- fazer aparecer essa opção caso queiram trocar, mandar mensagem de TEM CERTEZA? e ai confirmar e tals -->
 
-                <label class="text-xl" for="troca">Insira o CPF/CNPJ</label> 
-                <input class="border-2 border-minitexto rounded-md w-140 indent-2 p-1 mb-10" type="text" name="troca" id="troca" placeholder="Novo CPF/CNPJ">
+                <div class="flex flex-col gap-2 mb-20">
+                    <label class="text-xl" for="novoTipoDocumento">Alterar documento da conta</label> 
+                    
+                    <div class="mb-10">
+                        <div class="flex gap-10 mt-2 ml-1 text-minitexto hover:text-black">
+                            <label class="flex items-center gap-2">
+                                <input  type="radio" name="novoTipoDocumento" value="CPF" id="novoCpfOption" checked class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                                CPF
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="radio" name="novoTipoDocumento" value="CNPJ" id="novoCnpjOption " class="appearance-none bg-amber-50 checked:border-destaque  checked:border-6 border-1 border-black w-5 h-5 rounded-full">
+                                CNPJ
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- fazer aparecer essa opção caso queiram trocar, mandar mensagem de TEM CERTEZA? e ai confirmar e tals -->
+
+                    <div class="flex gap-2">
+                        <label class="text-xl" for="troca">Insira o CPF/CNPJ</label>
+                    </div>
+                    <div class="flex gap-4">
+                        <input class="border-2 border-minitexto rounded-md w-140 indent-2 p-1" type="text" name="troca" id="troca" placeholder="Novo CPF/CNPJ">
+                        <button class="px-4 py-2 rounded-xl border-1 hover:bg-gray-300" id="altDocument">Alterar</button>
+                    </div>
+                </div>
 
 
-                <label class="text-xl" for="foco_conta">Alterar foco da conta</label> 
+                <!-- <label class="text-xl" for="foco_conta">Alterar foco da conta</label> 
                 
                 <div>
                     <div class="flex gap-10 mt-2 ml-1 text-minitexto hover:text-black">
@@ -191,18 +206,28 @@
                             Recebedor
                         </label>
                     </div>
+                </div> 
+
+                <p class="mt-4 mb-15 text-minitexto w-100">Essa informação apenas altera as postagens que aparecem para você</p> -->
+
+
+                
+
+                <div class="flex flex-col gap-2 mb-50">
+
+                    <h1 class="text-2xl mb-5">Alterar Senha</h1>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xl" for="senha_atual">Digite sua senha atual:</label>
+                        <input class="border-2 rounded-md w-140 indent-2 p-1 mb-10 border-minitexto" type="text" name="senha_atual" id="senha_atual" placeholder="Senha atual">
+                    </div>
+                    <div class="flex flex-col gap-2 mb-5">
+                        <label class="text-xl" for="senha_nova">Digite sua nova senha:</label>
+                    <div class="flex gap-4">
+                        <input class="border-2 rounded-md w-140 indent-2 p-1 border-minitexto" type="text" name="senha_nova" id="senha_nova" placeholder="Senha nova">
+                        <button class="px-4 py-2 rounded-xl border-1 hover:bg-gray-300" id="altSenha">Alterar</button>
+                    </div>
                 </div>
-
-                <p class="mt-4 mb-15 text-minitexto w-100">Essa informação apenas altera as postagens que aparecem para você</p>
-
-
-                <h1 class="text-2xl mb-5">Alterar Senha</h1>
-
-                <label class="text-xl" for="senha_atual">Digite sua senha atual:</label> 
-                <input class="border-2 rounded-md w-140 indent-2 p-1 mb-10 border-minitexto" type="text" name="senha_atual" id="senha_atual" placeholder="Senha atual">
-
-                <label class="text-xl" for="senha_nova">Digite sua nova senha:</label> 
-                <input class="border-2 rounded-md w-140 indent-2 p-1 mb-50 border-minitexto" type="text" name="senha_nova" id="senha_nova" placeholder="Senha nova">
 
             </form>
 
@@ -235,6 +260,36 @@
     </footer>
 
     <script src="javascript/menu.js"></script>
+    <script src="javascript/config-1.js"></script>
+
+    <!-- Modal de mensagem (inicialmente oculto) -->
+    <div id="modalMensagem" class="hidden fixed inset-0 z-50">
+        <!-- Overlay escuro -->
+        <div class="fixed inset-0 bg-black opacity-50"></div>
+        
+        <!-- Conteúdo do modal -->
+        <div class="relative z-50 flex items-center justify-center min-h-screen p-4">
+            <div id="modalMensagemConteudo" class="bg-white rounded-lg shadow-xl w-full max-w-md">
+                <div class="p-6">
+                    <!-- Cabeçalho do modal com ícone -->
+                    <div class="flex items-start">
+                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1 "></i>
+                        <div>
+                            <h3 id="modalTitle" class="font-bold text-lg"></h3>
+                            <p id="modalContent" class="mt-1 text-gray-600"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão de fechar -->
+                    <div class="mt-6 text-right">
+                        <button id="modalCloseBtn" class="px-4 py-2 bg-destaque text-white rounded-md">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
