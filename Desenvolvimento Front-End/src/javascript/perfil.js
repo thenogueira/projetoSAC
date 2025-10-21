@@ -75,7 +75,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (isOwnProfile && editProfileBtn) {
         editProfileBtn.addEventListener('click', () => {
             editProfileContainer.classList.toggle('hidden');
-            if (editDescription) editDescription.value = usuario.descricao || '';
+            editDescription.value = usuario.descricao || '';
+            editPhoto.value = ''; // Limpa o input de foto ao abrir
         });
     }
 
@@ -112,6 +113,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     },
                     body: JSON.stringify(updateData)
                 });
+            }
 
                 if (!resp.ok) {
                     const errorText = await resp.text();
