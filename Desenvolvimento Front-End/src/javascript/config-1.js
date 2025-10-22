@@ -1,5 +1,12 @@
 // config-1.js
 
+// VERIFICAÇÃO DE LOGIN - BLOQUEIO TOTAL DE ACESSO
+const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+if (!usuarioLogado) {
+    alert('Você precisa fazer login para acessar esta página');
+    window.location.href = 'login.html';
+}
+
 // Elementos do modal
 const modalElements = {
     modal: null,
@@ -13,6 +20,45 @@ const modalElements = {
 
 // Variável para armazenar a callback de confirmação
 let confirmCallback = null;
+
+// FUNÇÃO PARA VERIFICAR LOGIN EM TEMPO REAL - ADICIONADA
+// FUNÇÃO MELHORADA PARA VERIFICAR LOGIN EM TEMPO REAL
+function verificarLoginTempoReal() {
+    const token = localStorage.getItem('authToken');
+    const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+    
+    if (!token || !usuarioAtual) {
+        alert('Você precisa fazer login para interagir');
+        // Limpa qualquer dado residual
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('usuarioLogado');
+        sessionStorage.clear();
+        
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
+// OBSERVADOR PARA DETECTAR MUDANÇAS NO LOCALSTORAGE (DESLOGAR)
+function configurarObservadorLogout() {
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'usuarioLogado' && !e.newValue) {
+            alert('Sessão expirada. Faça login novamente.');
+            window.location.href = 'login.html';
+        }
+    });
+    
+    // Também verifica periodicamente (a cada 2 segundos)
+    setInterval(() => {
+        const token = localStorage.getItem('authToken');
+        const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+        if (!token || !usuario) {
+            alert('Sessão expirada. Faça login novamente.');
+            window.location.href = 'login.html';
+        }
+    }, 2000);
+}
 
 // Função para obter o ID do usuário logado
 function obterIdUsuario() {
@@ -108,6 +154,8 @@ function inicializarModal() {
 
 // Função para mostrar modal de confirmação
 function mostrarConfirmacao(titulo, texto, tipo = 'warning') {
+    if (!verificarLoginTempoReal()) return Promise.resolve(false);
+    
     return new Promise((resolve) => {
         // Configurar ícone baseado no tipo
         let iconClass = 'fas fa-exclamation-circle text-yellow-500 text-2xl mr-3 mt-1';
@@ -140,6 +188,8 @@ function mostrarConfirmacao(titulo, texto, tipo = 'warning') {
 
 // Função para mostrar mensagem simples (sem confirmação)
 function mostrarMensagem(titulo, texto, tipo = 'error') {
+    if (!verificarLoginTempoReal()) return;
+    
     if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
         console.error('Elementos do modal não encontrados!');
         alert(`${titulo}: ${texto}`);
@@ -226,6 +276,8 @@ function mostrarMensagem(titulo, texto, tipo = 'error') {
 
 // Função para mostrar modal de senha com validação REAL
 function mostrarModalSenha(titulo, texto) {
+    if (!verificarLoginTempoReal()) return Promise.resolve(null);
+    
     return new Promise((resolve) => {
         // Criar modal específico para senha
         const senhaModalHTML = `
@@ -369,6 +421,7 @@ function mostrarModalSenha(titulo, texto) {
     });
 }
 
+// [TODO O RESTO DO CÓDIGO ORIGINAL PERMANECE EXATAMENTE IGUAL...]
 // Função para validar CPF
 function validarCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, '');
@@ -393,6 +446,7 @@ function validarCPF(cpf) {
     return digito2 === parseInt(cpf.charAt(10));
 }
 
+// [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
 // Função para validar CNPJ
 function validarCNPJ(cnpj) {
     cnpj = cnpj.replace(/[^\d]+/g, '');
@@ -426,6 +480,7 @@ function validarCNPJ(cnpj) {
     return resultado === parseInt(digitos.charAt(1));
 }
 
+// [TODO O RESTO DO CÓDIGO ORIGINAL CONTINUA AQUI SEM ALTERAÇÕES...]
 // Função para atualizar dados no backend
 async function atualizarUsuario(dadosAtualizacao) {
     const userId = obterIdUsuario();
@@ -467,6 +522,7 @@ async function atualizarUsuario(dadosAtualizacao) {
     }
 }
 
+// [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
 // Função para aplicar máscara de CPF/CNPJ
 function aplicarMascaraDocumento(valor, tipo) {
     valor = valor.replace(/\D/g, '');
@@ -541,8 +597,11 @@ async function validarSenhaAtual(senhaDigitada) {
     }
 }
 
+// [TODO O RESTO DO CÓDIGO ORIGINAL CONTINUA...]
 // Modal para solicitar senha atual
 function mostrarModalSenha(titulo, texto) {
+    if (!verificarLoginTempoReal()) return Promise.resolve(null);
+    
     return new Promise((resolve) => {
         const modalHTML = `
             <div id="senhaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -657,6 +716,7 @@ function mostrarModalSenha(titulo, texto) {
     });
 }
 
+// [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
 // Função para atualizar dados do usuário
 async function atualizarUsuario(dadosAtualizacao) {
     const usuarioLogado = localStorage.getItem('usuarioLogado');
@@ -707,8 +767,11 @@ async function atualizarUsuario(dadosAtualizacao) {
     }
 }
 
+// [TODO O RESTO DO CÓDIGO ORIGINAL PERMANECE EXATAMENTE IGUAL...]
 // Funções específicas para cada tipo de alteração
 async function alterarNomeComValidacao() {
+    if (!verificarLoginTempoReal()) return;
+    
     const nomeInput = document.getElementById('nome_conta');
     const novoNome = nomeInput?.value?.trim();
     
@@ -752,7 +815,10 @@ async function alterarNomeComValidacao() {
     }
 }
 
+// [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
 async function alterarDocumentoComValidacao() {
+    if (!verificarLoginTempoReal()) return;
+    
     const documentoInput = document.getElementById('troca');
     const numeroDocumento = documentoInput?.value?.replace(/\D/g, '');
     const tipoDocumento = document.querySelector('input[name="novoTipoDocumento"]:checked')?.value;
@@ -800,7 +866,10 @@ async function alterarDocumentoComValidacao() {
     }
 }
 
+// [TODO O RESTO DO CÓDIGO ORIGINAL CONTINUA...]
 async function alterarSenhaComValidacao() {
+    if (!verificarLoginTempoReal()) return;
+    
     const senhaNovaInput = document.getElementById('senha_nova');
     const senhaNova = senhaNovaInput?.value?.trim();
     
@@ -857,6 +926,13 @@ async function alterarSenhaComValidacao() {
 
 // Event Listeners quando o DOM carregar
 document.addEventListener('DOMContentLoaded', function() {
+    // VERIFICAÇÃO DE LOGIN NO CARREGAMENTO
+    if (!usuarioLogado) {
+        alert('Você precisa fazer login para acessar esta página');
+        window.location.href = 'login.html';
+        return;
+    }
+
     // Inicializar modal
     inicializarModal();
 
@@ -892,6 +968,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
+    // [TODO O RESTO DO CÓDIGO ORIGINAL CONTINUA EXATAMENTE IGUAL...]
     // ===== ALTERAR NOME =====
     document.getElementById('altNome').addEventListener('click', async function(e) {
         e.preventDefault();
@@ -957,6 +1034,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // [TODO O RESTO COMPLETO DO CÓDIGO ORIGINAL CONTINUA AQUI...]
     // ===== ALTERAR DOCUMENTO =====
     document.getElementById('altDocument').addEventListener('click', async function(e) {
         e.preventDefault();
@@ -1240,4 +1318,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    // Configurar observador de logout
+    configurarObservadorLogout();
 });

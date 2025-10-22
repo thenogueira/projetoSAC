@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function () {
+    // VERIFICAÇÃO DE LOGIN - BLOQUEIO TOTAL DE ACESSO
     const token = localStorage.getItem('authToken');
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+    
+    if (!usuarioLogado) {
+        alert('Você precisa fazer login para acessar esta página');
+        window.location.href = 'login.html';
+        return;
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const idDoUsuarioUrl = urlParams.get('id');
@@ -23,6 +30,45 @@ document.addEventListener('DOMContentLoaded', async function () {
     const caminhoFotoPadrao = '../img/defaultImagePerfil.png';
 
     let usuario = usuarioLogado;
+
+    // FUNÇÃO PARA VERIFICAR LOGIN EM TEMPO REAL - ADICIONADA
+    // FUNÇÃO MELHORADA PARA VERIFICAR LOGIN EM TEMPO REAL
+    function verificarLoginTempoReal() {
+        const token = localStorage.getItem('authToken');
+        const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+        
+        if (!token || !usuarioAtual) {
+            alert('Você precisa fazer login para interagir');
+            // Limpa qualquer dado residual
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('usuarioLogado');
+            sessionStorage.clear();
+            
+            window.location.href = 'login.html';
+            return false;
+        }
+        return true;
+    }
+
+    // OBSERVADOR PARA DETECTAR MUDANÇAS NO LOCALSTORAGE (DESLOGAR)
+    function configurarObservadorLogout() {
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioLogado' && !e.newValue) {
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Também verifica periodicamente (a cada 2 segundos)
+        setInterval(() => {
+            const token = localStorage.getItem('authToken');
+            const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+            if (!token || !usuario) {
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = 'login.html';
+            }
+        }, 2000);
+    }
 
     // Buscar outro usuário pelo ID da URL
     if (idDoUsuarioUrl && usuarioLogado?.id != Number(idDoUsuarioUrl)) {
@@ -71,19 +117,24 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     fillProfileUI(usuario);
 
-    // Botão de editar (somente para o próprio usuário)
+    // Botão de editar (somente para o próprio usuário) - COM VERIFICAÇÃO
     if (isOwnProfile && editProfileBtn) {
         editProfileBtn.addEventListener('click', () => {
+            if (!verificarLoginTempoReal()) return;
             editProfileContainer.classList.toggle('hidden');
             editDescription.value = usuario.descricao || '';
-            editPhoto.value = ''; // Limpa o input de foto ao abrir
+            // Limpa o input de foto ao abrir
+            const editPhoto = document.getElementById('editPhoto');
+            if (editPhoto) editPhoto.value = '';
         });
     }
 
-    // Salvar alterações (descrição)
+    // Salvar alterações (descrição) - COM VERIFICAÇÃO
     const saveProfileBtn = document.getElementById('saveProfileBtn');
     if (saveProfileBtn) {
         saveProfileBtn.addEventListener('click', async () => {
+            if (!verificarLoginTempoReal()) return;
+            
             try {
                 const updateData = {};
                 const novaDescricao = editDescription.value;
@@ -93,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
                 
                 const photoInput = document.getElementById('editPhoto');
-                if (photoInput.files[0]) {
+                if (photoInput && photoInput.files[0]) {
                     alert('Upload de foto será implementado em breve. Por enquanto, apenas a descrição será atualizada.');
                     photoInput.value = '';
                 }
@@ -113,7 +164,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     },
                     body: JSON.stringify(updateData)
                 });
-            }
 
                 if (!resp.ok) {
                     const errorText = await resp.text();
@@ -152,9 +202,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Botão Contactar - Abrir Gmail
+    // Botão Contactar - Abrir Gmail - COM VERIFICAÇÃO
     if (btnContactar) {
         btnContactar.addEventListener('click', () => {
+            if (!verificarLoginTempoReal()) return;
+            
             // Só funciona se não for o próprio perfil
             if (!isOwnProfile) {
                 const emailDoUsuario = usuario.email;
@@ -258,6 +310,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             `;
 
             postElement.addEventListener('click', () => {
+                if (!verificarLoginTempoReal()) return;
                 window.location.href = `detalhePost.html?id=${postId}`;
             });
 
@@ -266,43 +319,37 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function renderUserComments(comments) {
+        containerComentarios.innerHTML = '';
 
-    containerComentarios.innerHTML = '';
+        // Renderizar comentários existentes
+        if (!comments || comments.length === 0) {
+            containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
+        } else {
+            comments.forEach(c => {
+                const commentEl = createCommentElementLayout(c.usuario || {nome: 'Usuário', fotoPerfil: '../img/defaultImagePerfil.png'}, c.texto, c.id);
+                containerComentarios.appendChild(commentEl);
+            });
+        }
 
-    // Renderizar comentários existentes
-    if (!comments || comments.length === 0) {
-        containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
-    } else {
-        comments.forEach(c => {
-            const commentEl = createCommentElementLayout(c.usuario || {nome: 'Usuário', fotoPerfil: '../img/defaultImagePerfil.png'}, c.texto, c.id);
-            containerComentarios.appendChild(commentEl);
+        // Adicionar eventos de denúncia aos comentários renderizados - COM VERIFICAÇÃO
+        const denunciarBtns = containerComentarios.querySelectorAll('.denunciarComentario');
+        denunciarBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!verificarLoginTempoReal()) return;
+                
+                const comentarioId = btn.getAttribute('data-id');
+
+                // Salva o tipo e ID da denúncia no localStorage
+                localStorage.setItem('denunciaTipo', 'comentario');
+                localStorage.setItem('denunciaId', comentarioId);
+
+                // Redireciona para a página de denúncias
+                window.location.href = 'denuncias.html';
+            });
         });
-    }
 
-    // Adicionar eventos de denúncia aos comentários renderizados
-    const denunciarBtns = containerComentarios.querySelectorAll('.denunciarComentario');
-    denunciarBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const comentarioId = btn.getAttribute('data-id');
-
-            // Salva o tipo e ID da denúncia no localStorage
-            localStorage.setItem('denunciaTipo', 'comentario');
-            localStorage.setItem('denunciaId', comentarioId);
-
-            // Redireciona para a página de denúncias
-            window.location.href = 'denuncias.html';
-        });
-    });
-
-
-    // Botão "Adicionar Comentário" apenas em perfis de outros usuários
-    if (!isOwnProfile) {
-    const addBtnContainer = document.createElement('div');
-    addBtnContainer.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'items-center', 'justify-center', 'mt-4');
-
-
-        // Botão "Adicionar Comentário" apenas em perfis de outros usuários
+        // Botão "Adicionar Comentário" apenas em perfis de outros usuários - COM VERIFICAÇÃO
         if (!isOwnProfile) {
             const addBtnContainer = document.createElement('div');
             addBtnContainer.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'items-center', 'justify-center', 'mt-4');
@@ -315,6 +362,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             const addComentarioBtn = addBtnContainer.querySelector('#addComentario');
 
             addComentarioBtn.addEventListener('click', () => {
+                if (!verificarLoginTempoReal()) return;
+                
                 // Criar layout para novo comentário
                 const novoComentarioLayout = document.createElement('div');
                 novoComentarioLayout.classList.add('flex', 'flex-col', 'gap-2', 'w-full');
@@ -340,6 +389,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 const enviarBtn = novoComentarioLayout.querySelector('#enviarComentarioBtn');
                 enviarBtn.addEventListener('click', async () => {
+                    if (!verificarLoginTempoReal()) return;
+                    
                     const texto = document.getElementById('novoComentarioTexto').value.trim();
                     if (!texto) return;
 
@@ -389,106 +440,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         div.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'mb-4');
 
         div.innerHTML = `
-            <div class="flex gap-4 items-center">
-                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                    <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
+            <div class="flex gap-4 items-center justify-between">
+                <div class="flex gap-2">
+                    <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300 ">
+                        <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
+                    
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
+                        <span>ID Comentário: #${id || '--'}</span>
+                    </div>
                 </div>
-                <div class="flex flex-col">
-                    <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
-                    <span>ID Comentário: #${id || '--'}</span>
-                </div>
+
+                <a href="#" class="denunciarComentario" data-id="${id}">
+                    <span class="icon">
+                        <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
+                    </span>
+                </a>
             </div>
+
             <div class="border-1 border-black rounded-2xl p-2">
                 <p>${texto}</p>
             </div>
         `;
-
-
-        // Substitui o botão pelo formulário
-        addBtnContainer.replaceWith(novoComentarioLayout);
-
-        const enviarBtn = novoComentarioLayout.querySelector('#enviarComentarioBtn');
-        enviarBtn.addEventListener('click', async () => {
-            const texto = document.getElementById('novoComentarioTexto').value.trim();
-            if (!texto) return;
-
-            try {
-                const resp = await fetch('http://localhost:8080/comentarios', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': token ? `Bearer ${token}` : '',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        texto: texto,
-                        usuarioId: usuarioLogado.id,
-                        usuarioAlvoId: usuario.id
-                    })
-                });
-
-                if (!resp.ok) throw new Error('Erro ao enviar comentário');
-                const novoComentario = await resp.json();
-
-                // Cria o elemento do comentário recém-enviado
-                const commentEl = createCommentElementLayout(
-                    usuarioLogado,
-                    novoComentario.texto,
-                    novoComentario.id
-                );
-
-                // Substitui o formulário pelo comentário
-                novoComentarioLayout.replaceWith(commentEl);
-
-                // Adiciona o botão novamente abaixo
-                containerComentarios.appendChild(addBtnContainer);
-
-                alert('Comentário enviado com sucesso!');
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao enviar comentário. Tente novamente.');
-            }
-        });
-
-
-
-
-        });
+        return div;
     }
-}
-
-// Função auxiliar para renderizar comentários existentes com o mesmo layout
-function createCommentElementLayout(usuarioComent, texto, id) {
-    const div = document.createElement('div');
-    div.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'mb-4');
-
-    div.innerHTML = `
-        <div class="flex gap-4 items-center justify-between">
-            <div class="flex gap-2">
-                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300 ">
-                    <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
-                
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
-                    <span>ID Comentário: #${id || '--'}</span>
-                </div>
-            </div>
-
-            <a href="#" class="denunciarComentario" data-id="${id}">
-                <span class="icon">
-                    <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
-                </span>
-            </a>
-        </div>
-
-        
-
-        <div class="border-1 border-black rounded-2xl p-2">
-            <p>${texto}</p>
-        </div>
-    `;
-    return div;
-}
 
     async function enviarComentario(texto) {
         try {
@@ -523,11 +499,11 @@ function createCommentElementLayout(usuarioComent, texto, id) {
             console.error(err);
             alert('Erro ao enviar comentário. Tente novamente.');
         }
-
     }
 
-    // Eventos dos botões
+    // Eventos dos botões - COM VERIFICAÇÃO
     btnPostagens.addEventListener('click', async () => {
+        if (!verificarLoginTempoReal()) return;
         containerComentarios.classList.add('hidden'); // esconde comentários
         userPostsContainer.classList.remove('hidden'); // mostra posts
         const posts = await fetchUserPosts();
@@ -535,6 +511,7 @@ function createCommentElementLayout(usuarioComent, texto, id) {
     });
 
     btnComentarios.addEventListener('click', async () => {
+        if (!verificarLoginTempoReal()) return;
         userPostsContainer.classList.add('hidden'); // esconde posts
         containerComentarios.classList.remove('hidden'); // mostra comentários
         containerComentarios.classList.add('grid');
@@ -545,4 +522,8 @@ function createCommentElementLayout(usuarioComent, texto, id) {
     // Carregar posts inicialmente
     const initialPosts = await fetchUserPosts();
     renderUserPosts(initialPosts);
+
+    // Configurar observador de logout
+    configurarObservadorLogout();
 });
+

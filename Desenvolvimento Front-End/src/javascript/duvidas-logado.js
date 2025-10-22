@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is logged in
-    const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+    // VERIFICAÇÃO DE LOGIN - MODIFICADA
+    const user = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
     if (!user) {
+        alert('Você precisa estar logado para interagir');
         window.location.href = 'login.html';
         return;
     }
