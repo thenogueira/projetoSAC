@@ -147,39 +147,45 @@
 
                 <!-- Botão de editar perfil -->
                 <div class="items-end justify-end w-50">
-                    <button id="editProfileBtn" class="">
-
-                    </button>
+                    <button id="editProfileBtn" class=""></button>
                 </div>
             </div>
 
             <!-- Container para editar perfil -->
-    <div id="editProfileContainer" class="hidden bg-fundo2 p-4 rounded-lg shadow-lg">
-    <form id="editProfileForm" class="flex flex-col gap-3">
-        <div>
-            <label for="editDescription" class="block text-sm font-medium">Descrição</label>
-            <textarea id="editDescription" class="w-full px-3 py-2 border rounded-lg" placeholder="Nova descrição"></textarea>
-        </div>
+            <!-- Container para editar perfil -->
+            <div id="editProfileContainer" class="hidden bg-fundo2 p-4 rounded-lg shadow-lg mt-4">
+                <form id="editProfileForm" class="flex flex-col gap-3">
+                    <div>
+                        <label for="editDescription" class="block text-sm font-medium">Descrição</label>
+                        <textarea id="editDescription" class="w-full px-3 py-2 border rounded-lg" placeholder="Coloque informações Importantes para contato aqui" rows="4"></textarea>
+                    </div>
 
-        <div>
-            <label for="editPhoto" class="block text-sm font-medium">Foto de Perfil</label>
-            <input type="file" id="fileInput" accept="image/*" class="w-full px-3 py-2 border rounded-lg">
-        </div>
+                    <!-- Temporariamente desativado -->
+                    <div class="hidden">
+                        <label for="editPhoto" class="block text-sm font-medium mb-2">Foto de Perfil</label>
+                        <div class="flex items-center gap-4">
+                            <div class="rounded-full overflow-hidden w-16 h-16 bg-gray-200">
+                                <img id="currentProfileImage" class="object-cover w-full h-full" src="../img/defaultImagePerfil.png" alt="Foto atual">
+                            </div>
+                            <input type="file" id="editPhoto" accept="image/*" class="flex-1 px-3 py-2 border rounded-lg">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Deixe em branco para manter a foto atual</p>
+                    </div>
 
-
-        <div class="flex justify-end">
-            <button type="button" id="saveProfileBtn" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
-                Salvar Alterações
-            </button>
-        </div>
-    </form>
-</div>
-
-
+                    <div class="flex justify-end gap-3">
+                        <button type="button" id="cancelEditBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                            Cancelar
+                        </button>
+                        <button type="button" id="saveProfileBtn" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
+                            Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
             <hr class="border-1 mt-6">
 
             <div class="flex justify-center items-center gap-60 mt-6 w-full">
-                <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black" id="contactarPerfil">Postagens</button>
+                <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black" id="postagensPerfil">Postagens</button>
                 <button class="px-6 py-2 bg-fundo2 rounded-xl inline-block text-lg focus:bg-destaque focus:text-white focus:border-1 focus:border-black" id="comentariosPerfil">Comentarios</button>
                 <button class="px-6 py-2 bg-fundo3 rounded-xl inline-block text-lg" id="contactarPerfil">Contactar</button>
             </div>
