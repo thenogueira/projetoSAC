@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let usuario = usuarioLogado;
 
-    // FUNÇÃO PARA VERIFICAR LOGIN EM TEMPO REAL - ADICIONADA
     // FUNÇÃO MELHORADA PARA VERIFICAR LOGIN EM TEMPO REAL
     function verificarLoginTempoReal() {
         const token = localStorage.getItem('authToken');
@@ -319,7 +318,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // =========================
-    // FUNÇÕES PARA EDITAR E DELETAR COMENTÁRIOS
+    // FUNÇÕES PARA EDITAR E DELETAR COMENTÁRIOS - CORRIGIDAS
     // =========================
 
     // Função para deletar comentário
@@ -352,10 +351,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Função para editar comentário
-    async function editarComentario(comentarioId, textoAtual) {
+    // Função para editar comentário - CORRIGIDA
+    async function editarComentario(comentarioId, elementoTexto) {
         if (!verificarLoginTempoReal()) return false;
 
+        // Obter o texto atual do elemento DOM
+        const textoAtual = elementoTexto.textContent || elementoTexto.innerText;
+        
         const novoTexto = prompt('Editar comentário:', textoAtual);
         
         if (novoTexto === null) return false; // Usuário cancelou
@@ -380,6 +382,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 throw new Error(`Erro ${resp.status} ao editar comentário`);
             }
 
+            // Atualizar a UI imediatamente - CORREÇÃO PRINCIPAL
+            elementoTexto.textContent = novoTexto.trim();
+            
             alert('Comentário editado com sucesso!');
             return true;
         } catch (err) {
@@ -529,7 +534,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <div class="flex gap-2 items-center">
                     ${isMyComment ? `
                         <!-- Botões de editar e deletar (apenas para comentários do usuário logado) -->
-                        <button class="editarComentario text-blue-500 hover:text-blue-700" data-id="${id}" data-texto="${texto}">
+                        <button class="editarComentario text-blue-500 hover:text-blue-700" data-id="${id}">
                             <i class="fa-solid fa-pen-to-square text-lg"></i>
                         </button>
                         <button class="deletarComentario text-red-500 hover:text-red-700" data-id="${id}">
@@ -555,20 +560,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (isMyComment) {
             const editarBtn = div.querySelector('.editarComentario');
             const deletarBtn = div.querySelector('.deletarComentario');
+            const textoElement = div.querySelector('.comentario-texto');
 
             editarBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const comentarioId = editarBtn.getAttribute('data-id');
-                const textoAtual = editarBtn.getAttribute('data-texto');
                 
-                const sucesso = await editarComentario(comentarioId, textoAtual);
+                const sucesso = await editarComentario(comentarioId, textoElement);
                 if (sucesso) {
-                    // Atualizar a UI localmente
-                    const textoElement = div.querySelector('.comentario-texto');
-                    textoElement.textContent = prompt('Editar comentário:', textoAtual) || textoAtual;
-                    
-                    // Atualizar o data-texto do botão
-                    editarBtn.setAttribute('data-texto', textoElement.textContent);
+                    // A atualização já foi feita dentro da função editarComentario
+                    console.log('Comentário atualizado com sucesso');
                 }
             });
 
