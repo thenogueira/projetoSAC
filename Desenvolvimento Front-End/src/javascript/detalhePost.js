@@ -158,72 +158,72 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ===== Renderização principal =====
-    postDetails.innerHTML = `
-      <div class="flex justify-between mb-6 w-full items-center">
-        <div class="flex flex-col">
-          <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
-          <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
-        </div>
-        
+postDetails.innerHTML = `
+  <div class="flex justify-between mb-6 w-full items-center">
+    <div class="flex flex-col">
+      <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
+      <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
+    </div>
 
-        <a href="#" id="denunciarPost">
-          <span class="icon">
-            <i class="fa-solid fa-circle-exclamation text-red-500 text-3xl"></i>
-          </span>
-        </a>
+    <a href="#" id="denunciarPost">
+      <span class="icon">
+        <i class="fa-solid fa-circle-exclamation text-red-500 text-3xl"></i>
+      </span>
+    </a>
+  </div>
 
-
-
+  <div class="flex items-center justify-between mb-6 w-full mt-8">
+    <div class="flex gap-5 items-center">
+      <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
+        <img class="object-cover w-full h-full" 
+            src="${'../img/defaultPhoto.png'}" 
+            alt="Imagem do post"
+            onerror="this.src='../img/defaultPhoto.png'">
       </div>
-
-      <div class="flex items-center justify-between mb-6 w-full mt-8">
-        <div class="flex gap-5 items-center">
-          <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-            <img class="object-cover w-full h-full" 
-                src="${'../img/defaultPhoto.png'}" 
-                alt="Imagem do post"
-                onerror="this.src='../img/defaultPhoto.png'">
-          </div>
-          <div class="flex flex-col">
-            <span class="text-2xl font-bold cursor-pointer hover:underline" id="nomeUsuarioLink">${nomeUsuario}</span>
-            <span class="text-xl"><strong>ID Postagem:</strong> ${post.id}</span>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          ${
-            idLogado && post.usuarioId === idLogado
-              ? ""
-              : emailUsuario
-                ? `<button id="contatarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Contactar</button>`
-                : `<button disabled class="bg-gray-300 py-2 px-4 rounded-xl opacity-50 cursor-not-allowed">Contactar</button>`
-          }
-          ${
-            idLogado && post.usuarioId === idLogado
-              ? `
-              <button id="editarButton" class="px-4 py-2 border-1 rounded-lg hover:bg-gray-300">Editar</button>
-              `
-              : ''
-          }
-        </div>
+      <div class="flex flex-col">
+        <span class="text-2xl font-bold cursor-pointer hover:underline" id="nomeUsuarioLink">${nomeUsuario}</span>
+        <span class="text-xl"><strong>ID Postagem:</strong> ${post.id}</span>
       </div>
+    </div>
+    <div class="flex gap-3" id="botoesContainer"></div>
+  </div>
 
-      <hr class="text-minitexto mt-6 mb-10">
+  <hr class="text-minitexto mt-6 mb-10">
 
-      <div>
-        <ul class="text-xl mb-8">
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${(post.tipo)}</p></li>
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
-        </ul>
+  <div>
+    <ul class="text-xl mb-8">
+      <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${post.tipo}</p></li>
+      <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
+      <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
+    </ul>
 
-        <label class="text-xl font-bold">Descrição</label>
-        <p class="border border-black w-full rounded-xl py-2 px-4 mt-2">
-          ${post.descricao || 'Sem descrição disponível.'}
-        </p>
-      </div>
+    <label class="text-xl font-bold">Descrição</label>
+    <p class="border border-black w-full rounded-xl py-2 px-4 mt-2">
+      ${post.descricao || 'Sem descrição disponível.'}
+    </p>
+  </div>
 
-      ${imagemPostHtml}
-    `;
+  ${imagemPostHtml}
+`;
+
+// ====== Criação dinâmica do botão Contactar ======
+const botoesContainer = document.getElementById('botoesContainer');
+
+if (botoesContainer && !(idLogado && post.usuarioId === idLogado)) {
+  const contatarButton = document.createElement('button');
+  contatarButton.id = 'contatarButton';
+  contatarButton.className = 'bg-fundo1 border border-black hover:bg-destaque hover:text-white py-2 px-4 rounded-xl'
+  contatarButton.textContent = 'Contactar';
+
+  // ✅ Quando clicar, vai direto pro perfil do dono da postagem
+  contatarButton.addEventListener('click', () => {
+    window.location.href = `perfil.html?id=${post.usuarioId}`;
+  });
+
+  botoesContainer.appendChild(contatarButton);
+}
+
+
 
     // Botão de denúncia
 const denunciarButton = document.getElementById("denunciarPost");
@@ -254,14 +254,6 @@ if (denunciarButton) {
         if (container) {
           container.scrollBy({ left: 300, behavior: 'smooth' });
         }
-      });
-    }
-
-    // Botões de contato, editar e excluir
-    if (emailUsuario && !(idLogado && post.usuarioId === idLogado)) {
-      document.getElementById('contatarButton')?.addEventListener('click', () => {
-        const mailtoLink = `mailto:${emailUsuario}?subject=Contato sobre sua postagem no SAC&body=Olá ${nomeUsuario}, vi sua postagem e gostaria de conversar.`;
-        window.location.href = mailtoLink;
       });
     }
 

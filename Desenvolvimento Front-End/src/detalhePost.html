@@ -136,15 +136,6 @@
             <div id="postDetails" class="space-y-6">
                 <!-- Conteúdo dinâmico da postagem será inserido aqui -->
             </div>
-
-            <div class="mt-8 flex justify-between">
-                <button onclick="history.back()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                    Voltar
-                </button>
-                <button id="contatarButton" class="px-4 py-2 bg-destaque text-white rounded-lg hover:bg-destaque-dark">
-                    Contatar Usuário
-                </button>
-            </div>
         </div>
     </main>
 
@@ -177,6 +168,19 @@
     <!-- Scripts -->
     <script src="javascript/detalhePost.js"></script>
     <script src="javascript/menu.js"></script>
+
+    <!-- Modal de mensagem -->
+<div id="modalMensagem" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 w-96 relative">
+    <button id="modalCloseBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+    <div class="flex items-center mb-4">
+      <i id="modalIcon" class="fas fa-envelope text-2xl mr-3"></i>
+      <h2 id="modalTitle" class="text-xl font-bold"></h2>
+    </div>
+    <div id="modalContent" class="text-base"></div>
+  </div>
+</div>
+
 
 
 </body>

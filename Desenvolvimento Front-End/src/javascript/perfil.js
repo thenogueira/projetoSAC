@@ -1,3 +1,26 @@
+// ====== Função de Modal Customizado ======
+function mostrarModal(titulo, mensagem, tipo = 'info') {
+    const modal = document.getElementById('modalMensagem');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    // Define ícone e cor conforme tipo
+    let iconClass = 'fa-info-circle text-blue-500';
+    if (tipo === 'sucesso') iconClass = 'fa-check-circle text-green-500';
+    else if (tipo === 'erro') iconClass = 'fa-times-circle text-red-500';
+    else if (tipo === 'aviso') iconClass = 'fa-exclamation-circle text-yellow-500';
+
+    modalIcon.className = `fas ${iconClass} text-2xl mr-3 mt-1`;
+    modalTitle.textContent = titulo;
+    modalContent.textContent = mensagem;
+
+    modal.classList.remove('hidden');
+
+    modalCloseBtn.onclick = () => modal.classList.add('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
     const token = localStorage.getItem('authToken');
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
@@ -121,10 +144,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
 
             editProfileContainer.classList.add('hidden');
-            alert('Perfil atualizado com sucesso!');
+            mostrarModal('Sucesso!', 'Perfil atualizado com sucesso!', 'sucesso');
+
         } catch (err) {
             console.error(err);
-            alert('Erro ao atualizar perfil. Tente novamente.');
+            mostrarModal('Erro', 'Erro ao atualizar perfil. Tente novamente.', 'erro');
         }
     });
 }
@@ -346,10 +370,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Adiciona o botão novamente abaixo
                 containerComentarios.appendChild(addBtnContainer);
 
-                alert('Comentário enviado com sucesso!');
+                mostrarModal('Sucesso!', 'Comentário enviado com sucesso!', 'sucesso');
+
             } catch (err) {
                 console.error(err);
-                alert('Erro ao enviar comentário. Tente novamente.');
+                mostrarModal('Erro', 'Erro ao enviar comentário. Tente novamente.', 'erro');
+
             }
         });
 
@@ -362,15 +388,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 // Função auxiliar para renderizar comentários existentes com o mesmo layout
 function createCommentElementLayout(usuarioComent, texto, id) {
+    const isOwner = usuarioLogado && (usuarioComent.id === usuarioLogado.id || usuarioComent.usuarioId === usuarioLogado.id);
+
     const div = document.createElement('div');
     div.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'mb-4');
 
     div.innerHTML = `
         <div class="flex gap-4 items-center justify-between">
             <div class="flex gap-2">
-                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300 ">
+                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
                     <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
-                
                 </div>
                 <div class="flex flex-col">
                     <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
@@ -378,21 +405,53 @@ function createCommentElementLayout(usuarioComent, texto, id) {
                 </div>
             </div>
 
-            <a href="#" class="denunciarComentario" data-id="${id}">
-                <span class="icon">
-                    <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
-                </span>
-            </a>
-        </div>
+            <div class="flex gap-3 items-center">
+                <a href="#" class="denunciarComentario" data-id="${id}">
+                    <i class="fa-solid fa-circle-exclamation text-yellow-500 text-2xl"></i>
+                </a>
 
-        
+                ${isOwner ? `
+                <button class="excluirComentario" data-id="${id}" title="Excluir comentário">
+                    <i class="fa-solid fa-trash text-gray-600 text-2xl hover:text-red-600"></i>
+                </button>` : ''}
+            </div>
+        </div>
 
         <div class="border-1 border-black rounded-2xl p-2">
             <p>${texto}</p>
         </div>
     `;
+
+    // Listener do DELETE
+    if (isOwner) {
+        const excluirBtn = div.querySelector('.excluirComentario');
+        excluirBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const comentarioId = excluirBtn.getAttribute('data-id');
+
+            try {
+                const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!resp.ok) throw new Error('Erro ao excluir comentário');
+
+                div.remove();
+                mostrarModal('Sucesso!', 'Comentário excluído com sucesso!', 'sucesso');
+            } catch (err) {
+                console.error(err);
+                mostrarModal('Erro', 'Não foi possível excluir o comentário. Tente novamente.', 'erro');
+            }
+        });
+    }
+
     return div;
 }
+
 
     async function enviarComentario(texto) {
         try {
