@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function () {
+    // VERIFICAÇÃO DE LOGIN - BLOQUEIO TOTAL DE ACESSO
     const token = localStorage.getItem('authToken');
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+    
+    if (!usuarioLogado) {
+        alert('Você precisa fazer login para acessar esta página');
+        window.location.href = 'login.html';
+        return;
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const idDoUsuarioUrl = urlParams.get('id');
@@ -23,6 +30,45 @@ document.addEventListener('DOMContentLoaded', async function () {
     const caminhoFotoPadrao = '../img/defaultImagePerfil.png';
 
     let usuario = usuarioLogado;
+
+    // FUNÇÃO PARA VERIFICAR LOGIN EM TEMPO REAL - ADICIONADA
+    // FUNÇÃO MELHORADA PARA VERIFICAR LOGIN EM TEMPO REAL
+    function verificarLoginTempoReal() {
+        const token = localStorage.getItem('authToken');
+        const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+        
+        if (!token || !usuarioAtual) {
+            alert('Você precisa fazer login para interagir');
+            // Limpa qualquer dado residual
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('usuarioLogado');
+            sessionStorage.clear();
+            
+            window.location.href = 'login.html';
+            return false;
+        }
+        return true;
+    }
+
+    // OBSERVADOR PARA DETECTAR MUDANÇAS NO LOCALSTORAGE (DESLOGAR)
+    function configurarObservadorLogout() {
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioLogado' && !e.newValue) {
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Também verifica periodicamente (a cada 2 segundos)
+        setInterval(() => {
+            const token = localStorage.getItem('authToken');
+            const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+            if (!token || !usuario) {
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = 'login.html';
+            }
+        }, 2000);
+    }
 
     // Buscar outro usuário pelo ID da URL
     if (idDoUsuarioUrl && usuarioLogado?.id != Number(idDoUsuarioUrl)) {
@@ -71,9 +117,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     fillProfileUI(usuario);
 
-    // Botão de editar (somente para o próprio usuário)
+    // Botão de editar (somente para o próprio usuário) - COM VERIFICAÇÃO
     if (isOwnProfile && editProfileBtn) {
         editProfileBtn.addEventListener('click', () => {
+            if (!verificarLoginTempoReal()) return;
             editProfileContainer.classList.toggle('hidden');
             editDescription.value = usuario.descricao || '';
             // Limpa o input de foto ao abrir
@@ -82,10 +129,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Salvar alterações (descrição)
+    // Salvar alterações (descrição) - COM VERIFICAÇÃO
     const saveProfileBtn = document.getElementById('saveProfileBtn');
     if (saveProfileBtn) {
         saveProfileBtn.addEventListener('click', async () => {
+            if (!verificarLoginTempoReal()) return;
+            
             try {
                 const updateData = {};
                 const novaDescricao = editDescription.value;
@@ -153,9 +202,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    // Botão Contactar - Abrir Gmail
+    // Botão Contactar - Abrir Gmail - COM VERIFICAÇÃO
     if (btnContactar) {
         btnContactar.addEventListener('click', () => {
+            if (!verificarLoginTempoReal()) return;
+            
             // Só funciona se não for o próprio perfil
             if (!isOwnProfile) {
                 const emailDoUsuario = usuario.email;
@@ -259,6 +310,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             `;
 
             postElement.addEventListener('click', () => {
+                if (!verificarLoginTempoReal()) return;
                 window.location.href = `detalhePost.html?id=${postId}`;
             });
 
@@ -279,11 +331,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
         }
 
-        // Adicionar eventos de denúncia aos comentários renderizados
+        // Adicionar eventos de denúncia aos comentários renderizados - COM VERIFICAÇÃO
         const denunciarBtns = containerComentarios.querySelectorAll('.denunciarComentario');
         denunciarBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
+                if (!verificarLoginTempoReal()) return;
+                
                 const comentarioId = btn.getAttribute('data-id');
 
                 // Salva o tipo e ID da denúncia no localStorage
@@ -295,7 +349,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
         });
 
-        // Botão "Adicionar Comentário" apenas em perfis de outros usuários
+        // Botão "Adicionar Comentário" apenas em perfis de outros usuários - COM VERIFICAÇÃO
         if (!isOwnProfile) {
             const addBtnContainer = document.createElement('div');
             addBtnContainer.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'items-center', 'justify-center', 'mt-4');
@@ -308,6 +362,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             const addComentarioBtn = addBtnContainer.querySelector('#addComentario');
 
             addComentarioBtn.addEventListener('click', () => {
+                if (!verificarLoginTempoReal()) return;
+                
                 // Criar layout para novo comentário
                 const novoComentarioLayout = document.createElement('div');
                 novoComentarioLayout.classList.add('flex', 'flex-col', 'gap-2', 'w-full');
@@ -333,6 +389,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 const enviarBtn = novoComentarioLayout.querySelector('#enviarComentarioBtn');
                 enviarBtn.addEventListener('click', async () => {
+                    if (!verificarLoginTempoReal()) return;
+                    
                     const texto = document.getElementById('novoComentarioTexto').value.trim();
                     if (!texto) return;
 
@@ -443,8 +501,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Eventos dos botões
+    // Eventos dos botões - COM VERIFICAÇÃO
     btnPostagens.addEventListener('click', async () => {
+        if (!verificarLoginTempoReal()) return;
         containerComentarios.classList.add('hidden'); // esconde comentários
         userPostsContainer.classList.remove('hidden'); // mostra posts
         const posts = await fetchUserPosts();
@@ -452,6 +511,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     btnComentarios.addEventListener('click', async () => {
+        if (!verificarLoginTempoReal()) return;
         userPostsContainer.classList.add('hidden'); // esconde posts
         containerComentarios.classList.remove('hidden'); // mostra comentários
         containerComentarios.classList.add('grid');
@@ -462,4 +522,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Carregar posts inicialmente
     const initialPosts = await fetchUserPosts();
     renderUserPosts(initialPosts);
+
+    // Configurar observador de logout
+    configurarObservadorLogout();
 });
+

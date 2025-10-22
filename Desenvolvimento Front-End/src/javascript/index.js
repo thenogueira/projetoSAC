@@ -28,6 +28,18 @@ function usuarioEstaLogado() {
 }
 
 // ================================
+// FUNÇÃO DE VERIFICAÇÃO DE LOGIN PARA INTERAÇÕES - ADICIONADA
+// ================================
+function verificarLoginParaInteracao() {
+    if (!usuarioEstaLogado()) {
+        alert('Você precisa estar logado para interagir');
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
+// ================================
 // MOSTRAR/OCULTAR BOTÃO CADASTRO
 // ================================
 function toggleBotaoCadastro() {
@@ -57,7 +69,7 @@ async function fetchPostagens() {
 }
 
 // ================================
-// RENDER POSTAGENS
+// RENDER POSTAGENS - COM VERIFICAÇÃO DE LOGIN
 // ================================
 function renderPostagens(postagens) {
     const container = document.getElementById('postsContainer');
@@ -92,8 +104,9 @@ function createPostCard(post, isLarge) {
     const card = document.createElement('div');
     card.className = `flex flex-col rounded-xl overflow-hidden shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105 ${isLarge ? 'h-full' : 'h-80'}`;
     
-    // Tornar a postagem clicável
+    // Tornar a postagem clicável - COM VERIFICAÇÃO DE LOGIN
     card.addEventListener('click', () => {
+        if (!verificarLoginParaInteracao()) return;
         window.location.href = `postagens.html?id=${post.id || ''}`;
     });
 
