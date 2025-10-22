@@ -19,6 +19,29 @@ observerFactory('.publiques', 'publicados');
 observerFactory('.publiqueB', 'publicadoB');
 
 // ================================
+// VERIFICAR SE USUÁRIO ESTÁ LOGADO
+// ================================
+function usuarioEstaLogado() {
+    const token = localStorage.getItem('authToken');
+    const usuario = localStorage.getItem('usuarioLogado');
+    return !!(token && usuario);
+}
+
+// ================================
+// MOSTRAR/OCULTAR BOTÃO CADASTRO
+// ================================
+function toggleBotaoCadastro() {
+    const botaoCadastroSection = document.querySelector('aside');
+    if (botaoCadastroSection) {
+        if (usuarioEstaLogado()) {
+            botaoCadastroSection.style.display = 'none';
+        } else {
+            botaoCadastroSection.style.display = 'flex';
+        }
+    }
+}
+
+// ================================
 // FETCH POSTAGENS
 // ================================
 async function fetchPostagens() {
@@ -73,6 +96,7 @@ function renderPostagens(postagens) {
 }
 
 function createPostCard(post, isLarge) {
+
     const card = document.createElement('figure');
     card.classList.add(
         'flex', 'flex-col', 'justify-center',
@@ -142,6 +166,7 @@ function createPostCard(post, isLarge) {
             <figcaption class="pl-2 pb-3 text-neutral-700 text-sm">
                 Data: ${dataCriacao}
             </figcaption>
+
         </div>
     `;
 
@@ -157,7 +182,8 @@ function getTypeColorClass(tipo) {
         DOACAO: 'bg-green-100 text-green-800',
         NECESSIDADE: 'bg-red-100 text-red-800',
         VOLUNTARIADO: 'bg-blue-100 text-blue-800',
-        EVENTO: 'bg-purple-100 text-purple-800'
+        EVENTO: 'bg-purple-100 text-purple-800',
+        PEDIDO: 'bg-orange-100 text-orange-800'
     };
     return colors[tipo] || 'bg-gray-100 text-gray-800';
 }
@@ -183,5 +209,8 @@ function formatarData(dataString) {
     } catch(e) { return dataString; }
 }
 
-fetchPostagens();
-
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    fetchPostagens();
+    toggleBotaoCadastro();
+});

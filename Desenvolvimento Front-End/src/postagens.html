@@ -19,7 +19,7 @@
     <nav class="bg-amber-50 text-black flex justify-center items-center" id="menu-antigo">
         <div class="flex items-center gap-15 px-6 py-2">
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
-            <a href="duvidas.html" class=" hover:text-gray-800">Dúvidas</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
@@ -31,7 +31,7 @@
         <div class="flex items-center gap-15 py-2">
 
             <a href="postagens.html" class=" hover:text-gray-800">Postagens</a>
-            <a href="duvidas.html" class=" hover:text-gray-800">Dúvidas</a>
+            <a href="duvidas.html" class=" hover:text-gray-800">Duvidas</a>
             <span class="separator">|</span>
             <a href="index.html" class="text-destaque font-alfa text-4xl">SAC</a>
             <span class="separator">|</span>
@@ -143,14 +143,15 @@
             <hr class="text-minitexto mx-[-2rem]">
 
             <!-- ajeitar caixas de escolhas, deixar elas redondas -->
+            <!-- Apenas a parte do formulário de filtros - substitua esta seção -->
             <form class="text-minitexto flex flex-row gap-5 items-center justify-center px-30 py-2" id="filtroForm">
                 <label for="categoria">Categoria:</label>
                 <select class="rounded-md border-1 border-minitexto indent-0.5 " id="categoria" name="categoria">
-                    <option value="todas" onclick="filterProduct('todas')">Todas</option>
-                    <option value="alimentos">Alimentos</option>
-                    <option value="roupas">Roupas</option> 
-                    <option value="servicos">Serviços</option> 
-                    <option value="eletronicos">Eletrônicos</option>
+                    <option value="Todas" onclick="filterProduct('todas')">Todas</option>
+                    <option value="Alimentos">Alimentos</option>
+                    <option value="Roupas">Roupas</option> 
+                    <option value="Servicos">Serviços</option> 
+                    <option value="Eletronicos">Eletrônicos</option>
                 </select>
 
                 <label for="data">Data:</label>
@@ -159,39 +160,13 @@
                 <label for="tipo">Tipo:</label>
                 <select class="rounded-md border-1 border-minitexto indent-0.5" id="tipo" name="tipo">
                     <option value="todos">Todos</option>
-                    <option value="doacao">Doação</option>
-                    <option value="pedido">Pedido</option>
+                    <option value="DOACAO">Doação</option>
+                    <option value="PEDIDO">Pedido</option>
                 </select>
 
                 <label for="localizacao">Localização:</label>
                 <select class="rounded-md border-1 border-minitexto indent-0.5" id="localizacao" name="localizacao">
-                    <option value="RJ">AC</option>
-                    <option value="SP">AL</option>
-                    <option value="MG">AP</option>
-                    <option value="MG">AM</option>
-                    <option value="MG">BA</option>
-                    <option value="MG">CE</option>
-                    <option value="MG">DF</option>
-                    <option value="MG">ES</option>
-                    <option value="MG">GO</option>
-                    <option value="MG">MA</option>
-                    <option value="MG">MT</option>
-                    <option value="MG">MS</option>
-                    <option value="MG">MG</option>
-                    <option value="MG">PA</option>
-                    <option value="MG">PB</option>
-                    <option value="MG">PR</option>
-                    <option value="MG">PE</option>
-                    <option value="MG">PI</option>
-                    <option value="MG">RJ</option>
-                    <option value="MG">RN</option>
-                    <option value="MG">RS</option>
-                    <option value="MG">RO</option>
-                    <option value="MG">RR</option>
-                    <option value="MG">SC</option>
-                    <option value="MG">SP</option>
-                    <option value="MG">SE</option>
-                    <option value="MG">TO</option>
+                    <!-- Estados serão populados automaticamente pelo JavaScript -->
                 </select>
 
                 <label for="urgencia">Urgência:</label>
@@ -202,7 +177,10 @@
                     <option value="baixa">Baixa</option>
                 </select>
 
-                <button class="px-4 py-1.5 bg-fundo2 text-black rounded-lg ml-2 hover:bg-destaque hover:text-amber-50 duration-250" type="submit" >Filtrar</button>
+                <button class="px-4 py-1.5 bg-fundo2 text-black rounded-lg ml-2 hover:bg-destaque hover:text-amber-50 duration-250" type="submit">Filtrar</button>
+                
+                <!-- Botão Limpar Filtros -->
+                <button class="px-4 py-1.5 bg-gray-200 text-black rounded-lg hover:bg-gray-300 duration-250" type="button" id="limparFiltros">Limpar Filtros</button>
             </form>
 
 
