@@ -1,5 +1,13 @@
-// postagens.js - VERSÃO CORRIGIDA (DATA E USUÁRIO)
+// postagens.js - VERSÃO CORRIGIDA (DATA E USUÁRIO) + VERIFICAÇÃO DE LOGIN
 document.addEventListener('DOMContentLoaded', function () {
+    // VERIFICAÇÃO DE LOGIN - ADICIONADO
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+    if (!usuarioLogado) {
+        alert('Você precisa fazer login para interagir com as postagens');
+        window.location.href = 'login.html';
+        return;
+    }
+
     const postsContainerReal = document.getElementById('postsContainerReal');
     const postsContainerErro = document.getElementById('postsContainerErro');
     const filtroForm = document.getElementById('filtroForm');
@@ -28,8 +36,21 @@ document.addEventListener('DOMContentLoaded', function () {
         botaoCarregarMais.style.display = 'none';
     }
 
-    // abre detalhes salvando estado atual
+    // FUNÇÃO DE VERIFICAÇÃO DE LOGIN PARA INTERAÇÕES - ADICIONADO
+    function verificarLoginParaInteracao() {
+        const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+        if (!usuario) {
+            alert('Você precisa fazer login para interagir');
+            window.location.href = 'login.html';
+            return false;
+        }
+        return true;
+    }
+
+    // abre detalhes salvando estado atual - COM VERIFICAÇÃO DE LOGIN
     function abrirDetalhesPost(post) {
+        if (!verificarLoginParaInteracao()) return;
+        
         localStorage.setItem(STORAGE_KEY, JSON.stringify(filtrosAtuais));
         localStorage.setItem(STORAGE_PAGE, String(paginaAtual));
         window.location.href = `post.html?id=${post.id}`;
@@ -40,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined && v !== null && String(v).trim() !== ''));
     }
 
+    // [RESTANTE DO CÓDIGO PERMANECE EXATAMENTE IGUAL...]
     // Função para montar endpoint - SÓ USA ENDPOINTS ESPECÍFICOS PARA FILTROS ÚNICOS
     function montarEndpointParaFiltros(filtros, page, limit) {
         const urlBase = 'http://localhost:8080/ocorrencias';
@@ -69,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return null;
     }
 
+    // [TODO O RESTANTE DO CÓDIGO PERMANECE EXATAMENTE IGUAL...]
     // Função para obter data da postagem - CORREÇÃO APLICADA
     function obterDataPostagem(post) {
         // CORREÇÃO: Ordem de prioridade melhorada
@@ -88,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return null;
     }
 
+    // [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
     // Função para formatar data
     function formatarData(dataCampo) {
         if (!dataCampo) return "Data não informada";
@@ -104,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return "Data não informada";
     }
 
+    // [TODO O CÓDIGO ORIGINAL CONTINUA AQUI...]
     // Função para obter nome do usuário - CORREÇÃO DEFINITIVA
     function obterNomeUsuario(post) {
         // Cenário 1: Quando não usa filtro - usuario é um objeto com nome
@@ -154,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return 'Desconhecido';
     }
 
+    // [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
     // Função de filtros no frontend - PARA MÚLTIPLOS FILTROS
     function aplicarFiltrosNoFrontend(postagens, filtros) {
         console.log('🎯 Aplicando filtros múltiplos no frontend:', filtros);
@@ -243,6 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // [TODO O RESTANTE DO CÓDIGO ORIGINAL PERMANECE EXATAMENTE IGUAL...]
     // Pega postagens da página atual
     function getPostagensDaPagina(postagens, pagina, limite) {
         const inicio = (pagina - 1) * limite;
@@ -630,6 +657,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // BLOQUEAR BOTÃO DE CRIAR POSTAGEM SE NÃO ESTIVER LOGADO - ADICIONADO
+    function configurarBotaoCriarPostagem() {
+        const linkCriar = document.getElementById('linkCriar');
+        if (linkCriar) {
+            linkCriar.addEventListener('click', function(e) {
+                if (!verificarLoginParaInteracao()) {
+                    e.preventDefault();
+                }
+            });
+        }
+    }
+
     // Inicialização
     function inicializar() {
         popularEstadosBrasileiros();
@@ -643,6 +682,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         
         carregarFiltrosSalvosSeExistirem();
+        configurarBotaoCriarPostagem(); // ADICIONADO
 
         if (!filtrosAtuais || Object.keys(limparFiltros(filtrosAtuais)).length === 0) {
             filtrosAtuais = {};
