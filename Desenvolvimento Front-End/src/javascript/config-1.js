@@ -39,24 +39,29 @@ function obterIdUsuario() {
 function inicializarModal() {
     // Criar elementos do modal - CORRIGIDO: Adicionei FLEX
     const modalHTML = `
-        <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-lg p-6 w-80 max-w-sm mx-4">
-                <div class="flex items-start">
-                    <span id="modalIcon" class="fas fa-exclamation-circle text-yellow-500 text-2xl mr-3 mt-1"></span>
-                    <div class="flex-1">
-                        <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3>
-                        <p id="modalContent" class="text-gray-600 mb-4 whitespace-pre-line"></p>
-                    </div>
-                </div>
-                <div class="flex justify-end gap-3">
-                    <button id="modalCancel" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-250">
-                        Cancelar
-                    </button>
-                    <button id="modalConfirm" class="px-4 py-2 bg-destaque text-white rounded-md hover:bg-opacity-90 transition duration-250">
-                        Confirmar
-                    </button>
-                </div>
+    
+    <div id="confirmModal" class="fixed inset-0 items-center justify-center z-50 hidden">
+        <!-- Fundo escuro semi-transparente -->
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+
+        <!-- Conteúdo do modal -->
+        <div class="relative bg-white rounded-lg p-6 w-80 max-w-sm mx-4">
+            <div class="flex items-start">
+            <span id="modalIcon" class="fas fa-exclamation-circle text-yellow-500 text-2xl mr-3 mt-1"></span>
+            <div class="flex-1">
+                <h3 id="modalTitle" class="text-lg font-bold mb-2"></h3>
+                <p id="modalContent" class="text-gray-600 mb-4 whitespace-pre-line"></p>
             </div>
+            </div>
+            <div class="flex justify-end gap-3">
+            <button id="modalCancel" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-250">
+                Cancelar
+            </button>
+            <button id="modalConfirm" class="px-4 py-2 bg-destaque text-white rounded-md hover:bg-opacity-90 transition duration-250">
+                Confirmar
+            </button>
+            </div>
+        </div>
         </div>
     `;
     
@@ -219,7 +224,7 @@ function mostrarMensagem(titulo, texto, tipo = 'error') {
     }, 5000);
 }
 
-// Função para mostrar modal de senha com validação em tempo real
+// Função para mostrar modal de senha com validação REAL
 function mostrarModalSenha(titulo, texto) {
     return new Promise((resolve) => {
         // Criar modal específico para senha
@@ -278,28 +283,62 @@ function mostrarModalSenha(titulo, texto) {
             confirmBtn.textContent = 'Verificando...';
             confirmBtn.disabled = true;
             
-            // Simular verificação (agora apenas confiamos no backend)
-            const senhaValida = true; // Sempre assume que está correta, o backend vai validar
-            
-            // Restaurar botão
-            confirmBtn.textContent = textoOriginal;
-            confirmBtn.disabled = false;
-            
-            if (senhaValida) {
-                senhaModal.remove();
-                resolve(senha);
-            } else {
-                tentativas++;
-                senhaError.textContent = `Senha incorreta. Tentativas restantes: ${MAX_TENTATIVAS - tentativas}`;
-                senhaError.classList.remove('hidden');
-                senhaInput.value = '';
-                senhaInput.focus();
+            try {
+                // VALIDAÇÃO REAL DA SENHA ATUAL
+                console.log('🔐 Validando senha atual no modal...');
                 
-                if (tentativas >= MAX_TENTATIVAS) {
-                    mostrarMensagem('Tentativas Esgotadas', 'Você excedeu o número máximo de tentativas. Tente novamente mais tarde.', 'error');
-                    senhaModal.remove();
-                    resolve(null);
+                // Obter email do usuário logado
+                const usuarioLogado = localStorage.getItem('usuarioLogado') || sessionStorage.getItem('usuarioLogado');
+                if (!usuarioLogado) {
+                    throw new Error('Usuário não encontrado');
                 }
+                
+                const usuario = JSON.parse(usuarioLogado);
+                const email = usuario.email;
+                
+                if (!email) {
+                    throw new Error('Email do usuário não encontrado');
+                }
+                
+                // Tentar fazer login com a senha atual para validar
+                const response = await fetch('http://localhost:8080/usuarios/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        senha: senha
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('✅ Senha validada com sucesso no modal');
+                    senhaModal.remove();
+                    resolve(senha);
+                } else {
+                    tentativas++;
+                    const tentativasRestantes = MAX_TENTATIVAS - tentativas;
+                    senhaError.textContent = `Senha incorreta. Tentativas restantes: ${tentativasRestantes}`;
+                    senhaError.classList.remove('hidden');
+                    senhaInput.value = '';
+                    senhaInput.focus();
+                    
+                    if (tentativas >= MAX_TENTATIVAS) {
+                        mostrarMensagem('Tentativas Esgotadas', 'Você excedeu o número máximo de tentativas. Tente novamente mais tarde.', 'error');
+                        senhaModal.remove();
+                        resolve(null);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('🚨 Erro na validação da senha:', error);
+                senhaError.textContent = 'Erro ao validar senha. Tente novamente.';
+                senhaError.classList.remove('hidden');
+            } finally {
+                // Restaurar botão
+                confirmBtn.textContent = textoOriginal;
+                confirmBtn.disabled = false;
             }
         });
         
@@ -328,77 +367,6 @@ function mostrarModalSenha(titulo, texto) {
             }
         });
     });
-}
-
-// Função para validar a senha atual no backend
-async function validarSenhaAtual(senhaAtual) {
-    const userId = obterIdUsuario();
-    
-    if (!userId) {
-        return { success: false, error: 'Usuário não autenticado' };
-    }
-    
-    try {
-        console.log('🔐 Validando senha atual...');
-        
-        // Tentar diferentes formatos de validação
-        const tentativas = [
-            { senhaAtual: senhaAtual },
-            { currentPassword: senhaAtual },
-            { password: senhaAtual },
-            { senha: senhaAtual },
-            {} // Tentativa vazia para verificar autenticação
-        ];
-        
-        for (let i = 0; i < tentativas.length; i++) {
-            const tentativa = tentativas[i];
-            console.log(`🔍 Tentativa ${i + 1}/5:`, Object.keys(tentativa));
-            
-            const response = await fetch(`http://localhost:8080/usuarios/atualizar/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(tentativa)
-            });
-            
-            const responseText = await response.text();
-            
-            if (response.ok) {
-                console.log('✅ Validação bem-sucedida - Senha atual correta');
-                return { success: true };
-            } else {
-                // Se o erro NÃO for relacionado a senha, pode ser que a validação esteja funcionando
-                const erroRelacionadoSenha = 
-                    responseText.includes('senha') || 
-                    responseText.includes('Senha') || 
-                    responseText.includes('password') || 
-                    responseText.includes('Password') || 
-                    responseText.includes('autenticação') ||
-                    responseText.includes('credenciais') ||
-                    responseText.includes('incorreta');
-                
-                if (!erroRelacionadoSenha) {
-                    console.log('✅ Validação indireta - Senha atual provavelmente correta');
-                    return { success: true };
-                }
-                
-                // Se for a última tentativa e o erro é de senha
-                if (i === tentativas.length - 1 && erroRelacionadoSenha) {
-                    console.log('❌ Todas as tentativas falharam - Senha atual incorreta');
-                    return { success: false, error: 'Senha atual incorreta' };
-                }
-                
-                console.log(`⏭️ Tentativa ${i + 1} falhou (erro de senha), tentando próximo formato...`);
-            }
-        }
-        
-        return { success: false, error: 'Não foi possível validar a senha atual' };
-        
-    } catch (error) {
-        console.error('🚨 Erro de rede durante validação:', error);
-        return { success: false, error: 'Erro de conexão. Verifique sua internet e tente novamente.' };
-    }
 }
 
 // Função para validar CPF
@@ -521,10 +489,397 @@ function aplicarMascaraDocumento(valor, tipo) {
     return valor;
 }
 
+// ===== SISTEMA DE VALIDAÇÃO DE SENHA PARA ALTERAÇÕES =====
+
+// Função para validar senha atual
+async function validarSenhaAtual(senhaDigitada) {
+    try {
+        // Obter usuário logado
+        const usuarioLogado = localStorage.getItem('usuarioLogado');
+        if (!usuarioLogado) {
+            return { success: false, error: 'Usuário não autenticado' };
+        }
+
+        const usuario = JSON.parse(usuarioLogado);
+        const email = usuario.email;
+
+        if (!email) {
+            return { success: false, error: 'Email do usuário não encontrado' };
+        }
+
+        console.log('🔐 Validando senha atual para:', email);
+
+        // Fazer login com a senha digitada para validar
+        const response = await fetch('http://localhost:8080/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                senha_hash: senhaDigitada
+            })
+        });
+
+        if (response.ok) {
+            console.log('✅ Senha atual validada com sucesso');
+            return { success: true };
+        } else {
+            console.log('❌ Senha atual incorreta');
+            return { 
+                success: false, 
+                error: 'Senha atual incorreta' 
+            };
+        }
+
+    } catch (error) {
+        console.error('🚨 Erro na validação:', error);
+        return { 
+            success: false, 
+            error: 'Erro ao validar senha. Tente novamente.' 
+        };
+    }
+}
+
+// Modal para solicitar senha atual
+function mostrarModalSenha(titulo, texto) {
+    return new Promise((resolve) => {
+        const modalHTML = `
+            <div id="senhaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg p-6 w-80 max-w-sm mx-4">
+                    <div class="flex items-start mb-4">
+                        <span class="fas fa-lock text-blue-500 text-2xl mr-3 mt-1"></span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold mb-2">${titulo}</h3>
+                            <p class="text-gray-600 mb-2">${texto}</p>
+                            <p id="senhaError" class="text-red-500 text-sm hidden mt-2"></p>
+                        </div>
+                    </div>
+                    <input type="password" id="senhaAtualInput" 
+                           class="w-full border border-gray-300 rounded-md p-2 mb-4" 
+                           placeholder="Digite sua senha atual">
+                    <div class="flex justify-end gap-3">
+                        <button id="senhaModalCancel" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-250">
+                            Cancelar
+                        </button>
+                        <button id="senhaModalConfirm" class="px-4 py-2 bg-destaque text-white rounded-md hover:bg-opacity-90 transition duration-250">
+                            Verificar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        const senhaModal = document.getElementById('senhaModal');
+        const senhaInput = document.getElementById('senhaAtualInput');
+        const senhaError = document.getElementById('senhaError');
+        const confirmBtn = document.getElementById('senhaModalConfirm');
+        const cancelBtn = document.getElementById('senhaModalCancel');
+        
+        let tentativas = 0;
+        const MAX_TENTATIVAS = 3;
+        
+        setTimeout(() => senhaInput.focus(), 100);
+        
+        // Event listener para verificar senha
+        confirmBtn.addEventListener('click', async function() {
+            const senha = senhaInput.value.trim();
+            
+            if (!senha) {
+                senhaError.textContent = 'Por favor, digite sua senha atual.';
+                senhaError.classList.remove('hidden');
+                return;
+            }
+            
+            // Mostrar loading
+            const textoOriginal = confirmBtn.textContent;
+            confirmBtn.textContent = 'Verificando...';
+            confirmBtn.disabled = true;
+            
+            try {
+                const validacao = await validarSenhaAtual(senha);
+                
+                if (validacao.success) {
+                    senhaModal.remove();
+                    resolve(senha); // Retorna a senha validada
+                } else {
+                    tentativas++;
+                    const tentativasRestantes = MAX_TENTATIVAS - tentativas;
+                    senhaError.textContent = `Senha incorreta. Tentativas restantes: ${tentativasRestantes}`;
+                    senhaError.classList.remove('hidden');
+                    senhaInput.value = '';
+                    senhaInput.focus();
+                    
+                    if (tentativas >= MAX_TENTATIVAS) {
+                        mostrarMensagem('Tentativas Esgotadas', 'Você excedeu o número máximo de tentativas. Tente novamente mais tarde.', 'erro');
+                        senhaModal.remove();
+                        resolve(null);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Erro no modal:', error);
+                senhaError.textContent = 'Erro ao validar senha. Tente novamente.';
+                senhaError.classList.remove('hidden');
+            } finally {
+                confirmBtn.textContent = textoOriginal;
+                confirmBtn.disabled = false;
+            }
+        });
+        
+        // Cancelar
+        cancelBtn.addEventListener('click', function() {
+            senhaModal.remove();
+            resolve(null);
+        });
+        
+        // Enter para confirmar
+        senhaInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                confirmBtn.click();
+            }
+        });
+        
+        // Limpar erro ao digitar
+        senhaInput.addEventListener('input', function() {
+            senhaError.classList.add('hidden');
+        });
+        
+        // Fechar ao clicar fora
+        senhaModal.addEventListener('click', function(e) {
+            if (e.target === senhaModal) {
+                senhaModal.remove();
+                resolve(null);
+            }
+        });
+    });
+}
+
+// Função para atualizar dados do usuário
+async function atualizarUsuario(dadosAtualizacao) {
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    if (!usuarioLogado) {
+        mostrarMensagem('Erro de Autenticação', 'Usuário não identificado. Faça login novamente.', 'erro');
+        return { success: false, error: 'Usuário não autenticado' };
+    }
+
+    const usuario = JSON.parse(usuarioLogado);
+    const userId = usuario.id;
+
+    console.log('📤 ENVIANDO PARA API:');
+    console.log('URL:', `http://localhost:8080/usuarios/atualizar/${userId}`);
+    console.log('Dados:', { ...dadosAtualizacao, senha_hash: '***' });
+
+    try {
+        const response = await fetch(`http://localhost:8080/usuarios/atualizar/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosAtualizacao)
+        });
+
+        console.log('📥 RESPOSTA DA API:');
+        console.log('Status:', response.status);
+        console.log('OK:', response.ok);
+
+        if (response.ok) {
+            const resultado = await response.json();
+            console.log('✅ SUCESSO:', resultado);
+            
+            // Atualizar dados no localStorage se necessário
+            if (dadosAtualizacao.nome) {
+                usuario.nome = dadosAtualizacao.nome;
+                localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+            }
+            
+            return { success: true, data: resultado };
+        } else {
+            const erro = await response.text();
+            console.log('❌ ERRO DA API:', erro);
+            return { success: false, error: erro };
+        }
+    } catch (error) {
+        console.log('🚨 ERRO DE REDE:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Funções específicas para cada tipo de alteração
+async function alterarNomeComValidacao() {
+    const nomeInput = document.getElementById('nome_conta');
+    const novoNome = nomeInput?.value?.trim();
+    
+    if (!novoNome) {
+        mostrarMensagem('Atenção', 'Por favor, insira um nome para alterar.', 'erro');
+        return;
+    }
+    
+    // 1. Pedir senha atual para confirmar identidade
+    const senhaAtual = await mostrarModalSenha(
+        'Confirmar Identidade',
+        'Para alterar seu nome, digite sua senha atual:'
+    );
+    
+    if (!senhaAtual) {
+        mostrarMensagem('Alteração Cancelada', 'A alteração foi cancelada.', 'erro');
+        return;
+    }
+    
+    // Mostrar loading
+    const botao = document.getElementById('altNome');
+    const textoOriginal = botao.textContent;
+    botao.textContent = 'Alterando...';
+    botao.disabled = true;
+    
+    try {
+        // 2. Se a senha estiver correta, proceder com a alteração
+        const resultado = await atualizarUsuario({ nome: novoNome });
+        
+        if (resultado.success) {
+            mostrarMensagem('Sucesso', 'Nome alterado com sucesso!', 'sucesso');
+            nomeInput.value = '';
+        } else {
+            mostrarMensagem('Erro', `Não foi possível alterar o nome: ${resultado.error}`, 'erro');
+        }
+    } catch (error) {
+        mostrarMensagem('Erro', 'Erro ao processar alteração.', 'erro');
+    } finally {
+        botao.textContent = textoOriginal;
+        botao.disabled = false;
+    }
+}
+
+async function alterarDocumentoComValidacao() {
+    const documentoInput = document.getElementById('troca');
+    const numeroDocumento = documentoInput?.value?.replace(/\D/g, '');
+    const tipoDocumento = document.querySelector('input[name="novoTipoDocumento"]:checked')?.value;
+    
+    if (!numeroDocumento) {
+        mostrarMensagem('Atenção', 'Por favor, insira um documento para alterar.', 'erro');
+        return;
+    }
+    
+    // 1. Pedir senha atual para confirmar identidade
+    const senhaAtual = await mostrarModalSenha(
+        'Confirmar Identidade',
+        'Para alterar seu documento, digite sua senha atual:'
+    );
+    
+    if (!senhaAtual) {
+        mostrarMensagem('Alteração Cancelada', 'A alteração foi cancelada.', 'erro');
+        return;
+    }
+    
+    // Mostrar loading
+    const botao = document.getElementById('altDocument');
+    const textoOriginal = botao.textContent;
+    botao.textContent = 'Alterando...';
+    botao.disabled = true;
+    
+    try {
+        // 2. Se a senha estiver correta, proceder com a alteração
+        const resultado = await atualizarUsuario({ 
+            numeroDocumento: numeroDocumento,
+            tipoDocumento: tipoDocumento
+        });
+        
+        if (resultado.success) {
+            mostrarMensagem('Sucesso', 'Documento alterado com sucesso!', 'sucesso');
+            documentoInput.value = '';
+        } else {
+            mostrarMensagem('Erro', `Não foi possível alterar o documento: ${resultado.error}`, 'erro');
+        }
+    } catch (error) {
+        mostrarMensagem('Erro', 'Erro ao processar alteração.', 'erro');
+    } finally {
+        botao.textContent = textoOriginal;
+        botao.disabled = false;
+    }
+}
+
+async function alterarSenhaComValidacao() {
+    const senhaNovaInput = document.getElementById('senha_nova');
+    const senhaNova = senhaNovaInput?.value?.trim();
+    
+    if (!senhaNova) {
+        mostrarMensagem('Atenção', 'Por favor, insira uma nova senha.', 'erro');
+        return;
+    }
+    
+    if (senhaNova.length < 6) {
+        mostrarMensagem('Senha Insuficiente', 'A nova senha deve ter pelo menos 6 caracteres.', 'erro');
+        return;
+    }
+    
+    // 1. Pedir senha atual para confirmar identidade
+    const senhaAtual = await mostrarModalSenha(
+        'Confirmar Alteração de Senha',
+        'Para alterar sua senha, digite sua senha atual:'
+    );
+    
+    if (!senhaAtual) {
+        mostrarMensagem('Alteração Cancelada', 'A alteração foi cancelada.', 'erro');
+        return;
+    }
+    
+    // Verificar se nova senha é diferente da atual
+    if (senhaAtual === senhaNova) {
+        mostrarMensagem('Senha Inválida', 'A nova senha não pode ser igual à atual.', 'erro');
+        return;
+    }
+    
+    // Mostrar loading
+    const botao = document.getElementById('altSenha');
+    const textoOriginal = botao.textContent;
+    botao.textContent = 'Alterando...';
+    botao.disabled = true;
+    
+    try {
+        // 2. Se a senha estiver correta, proceder com a alteração
+        const resultado = await atualizarUsuario({ senha_hash: senhaNova });
+        
+        if (resultado.success) {
+            mostrarMensagem('Sucesso', 'Senha alterada com sucesso!', 'sucesso');
+            senhaNovaInput.value = '';
+        } else {
+            mostrarMensagem('Erro', `Não foi possível alterar a senha: ${resultado.error}`, 'erro');
+        }
+    } catch (error) {
+        mostrarMensagem('Erro', 'Erro ao processar alteração.', 'erro');
+    } finally {
+        botao.textContent = textoOriginal;
+        botao.disabled = false;
+    }
+}
+
 // Event Listeners quando o DOM carregar
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar modal
     inicializarModal();
+
+        // ===== CONFIGURAÇÃO DOS BOTÕES DE ALTERAÇÃO =====
+    
+    // Botão Alterar Nome
+    const altNomeBtn = document.getElementById('altNome');
+    if (altNomeBtn) {
+        altNomeBtn.addEventListener('click', alterarNomeComValidacao);
+    }
+
+    // Botão Alterar Documento
+    const altDocumentBtn = document.getElementById('altDocument');
+    if (altDocumentBtn) {
+        altDocumentBtn.addEventListener('click', alterarDocumentoComValidacao);
+    }
+
+    // Botão Alterar Senha
+    const altSenhaBtn = document.getElementById('altSenha');
+    if (altSenhaBtn) {
+        altSenhaBtn.addEventListener('click', alterarSenhaComValidacao);
+    }
+
     
     // Verificar se usuário está logado
     const userId = obterIdUsuario();
@@ -549,17 +904,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Verificar se nome já foi alterado
-        const nomeAlterado = localStorage.getItem('nomeAlterado');
-        if (nomeAlterado === 'true') {
-            mostrarMensagem('Limite Atingido', 'Você já alterou seu nome anteriormente. Não é possível alterar novamente.', 'error');
-            return;
-        }
-        
         // 1. Primeiro mostrar confirmação da alteração
         const confirmado = await mostrarConfirmacao(
             'Confirmar Alteração de Nome', 
-            `Deseja realmente alterar seu nome para "${novoNome}"?\n\nATENÇÃO: Esta alteração só pode ser feita UMA ÚNICA VEZ.`,
+            `Deseja realmente alterar seu nome para "${novoNome}"?`,
             'warning'
         );
         
@@ -599,13 +947,6 @@ document.addEventListener('DOMContentLoaded', function() {
             elementosNome.forEach(el => el.textContent = novoNome);
             // Limpar campo
             nomeInput.value = '';
-            // Desabilitar o botão após alteração bem-sucedida
-            botao.disabled = true;
-            botao.textContent = 'Alterado';
-            botao.classList.remove('hover:bg-gray-300');
-            botao.classList.add('bg-gray-400', 'cursor-not-allowed');
-            // Marcar que nome foi alterado
-            localStorage.setItem('nomeAlterado', 'true');
         } else {
             // Se der erro relacionado a senha
             if (resultado.error && (resultado.error.includes('senha') || resultado.error.includes('Senha') || resultado.error.includes('autenticação'))) {
@@ -642,17 +983,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Verificar se documento já foi alterado
-        const documentoAlterado = localStorage.getItem('documentoAlterado');
-        if (documentoAlterado === 'true') {
-            mostrarMensagem('Limite Atingido', 'Você já alterou seu documento anteriormente. Não é possível alterar novamente.', 'error');
-            return;
-        }
-        
         // 1. Primeiro mostrar confirmação da alteração
         const confirmado = await mostrarConfirmacao(
             'Confirmar Alteração de Documento', 
-            `ATENÇÃO: Você só pode alterar seu documento UMA ÚNICA VEZ.\n\nDeseja realmente alterar para:\n${tipoDocumento}: ${aplicarMascaraDocumento(numeroDocumento, tipoDocumento)}?`,
+            `Deseja realmente alterar para:\n${tipoDocumento}: ${aplicarMascaraDocumento(numeroDocumento, tipoDocumento)}?`,
             'warning'
         );
         
@@ -691,13 +1025,6 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarMensagem('Sucesso', 'Documento alterado com sucesso!', 'success');
             // Limpar campo
             documentoInput.value = '';
-            // Desabilitar o botão após alteração bem-sucedida
-            botao.disabled = true;
-            botao.textContent = 'Alterado';
-            botao.classList.remove('hover:bg-gray-300');
-            botao.classList.add('bg-gray-400', 'cursor-not-allowed');
-            // Marcar que documento foi alterado
-            localStorage.setItem('documentoAlterado', 'true');
         } else {
             // Se der erro relacionado a senha
             if (resultado.error && (resultado.error.includes('senha') || resultado.error.includes('Senha') || resultado.error.includes('autenticação'))) {
@@ -712,13 +1039,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('altSenha').addEventListener('click', async function(e) {
         e.preventDefault();
         
-        const senhaAtualInput = document.getElementById('senha_atual');
         const senhaNovaInput = document.getElementById('senha_nova');
-        const senhaAtual = senhaAtualInput.value.trim();
         const senhaNova = senhaNovaInput.value.trim();
         
-        if (!senhaAtual || !senhaNova) {
-            mostrarMensagem('Atenção', 'Por favor, preencha tanto a senha atual quanto a nova senha para realizar a alteração.', 'warning');
+        if (!senhaNova) {
+            mostrarMensagem('Atenção', 'Por favor, insira uma nova senha para realizar a alteração.', 'warning');
             return;
         }
         
@@ -727,11 +1052,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Confirmação para alterar senha
+        // 1. Primeiro mostrar confirmação da alteração
         const confirmado = await mostrarConfirmacao(
             'Confirmar Alteração de Senha', 
-            'Você está prestes a alterar sua senha de acesso.\n\nEsta ação não pode ser desfeita.',
-            'info'
+            `Deseja realmente alterar sua senha?`,
+            'warning'
         );
         
         if (!confirmado) {
@@ -739,47 +1064,56 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // 2. Depois pedir senha atual para confirmar identidade
+        const senhaAtual = await mostrarModalSenha(
+            'Confirmar Identidade',
+            'Para confirmar a alteração da senha, digite sua senha atual:'
+        );
+        
+        if (!senhaAtual) {
+            mostrarMensagem('Alteração Cancelada', 'A alteração da senha foi cancelada.', 'info');
+            return;
+        }
+        
+        // Verificar se a nova senha é igual à atual
+        if (senhaAtual === senhaNova) {
+            mostrarMensagem('Senha Inválida', 'A nova senha não pode ser igual à senha atual. Por favor, escolha uma senha diferente.', 'warning');
+            return;
+        }
+        
         // Mostrar loading no botão
         const botao = this;
         const textoOriginal = botao.textContent;
-        botao.textContent = 'Verificando...';
+        botao.textContent = 'Alterando...';
         botao.disabled = true;
         
         try {
             console.log('🔐 Iniciando processo de alteração de senha...');
             
-            // PRIMEIRO: Validar a senha atual
-            const validacao = await validarSenhaAtual(senhaAtual);
+            // Tentar diferentes formatos que incluam a senha atual para validação
+            const tentativasAlteracao = [
+                { 
+                    senha: senhaNova,
+                    senhaAtual: senhaAtual
+                },
+                { 
+                    password: senhaNova,
+                    currentPassword: senhaAtual
+                },
+                { 
+                    novaSenha: senhaNova,
+                    senhaAtual: senhaAtual
+                },
+                { 
+                    senha: senhaNova
+                },
+                { 
+                    password: senhaNova
+                }
+            ];
             
-            if (!validacao.success) {
-                console.log('❌ Falha na validação da senha atual');
-                mostrarMensagem(
-                    'Senha Incorreta', 
-                    'A senha atual informada não está correta.\n\nPor favor, verifique e tente novamente.', 
-                    'error'
-                );
-                
-                // Limpar campo da senha atual para nova tentativa
-                senhaAtualInput.value = '';
-                senhaAtualInput.focus();
-                return;
-            }
-            
-            console.log('✅ Senha atual validada com sucesso');
-            botao.textContent = 'Alterando Senha...';
-            
-            // SEGUNDO: Se a senha atual estiver correta, proceder com a alteração
             let resultado;
             let sucesso = false;
-            
-            // Tentar diferentes formatos para a nova senha
-            const tentativasAlteracao = [
-                { senha: senhaNova },
-                { password: senhaNova },
-                { senha: senhaNova, senhaAtual: senhaAtual },
-                { password: senhaNova, currentPassword: senhaAtual },
-                { novaSenha: senhaNova, senhaAtual: senhaAtual }
-            ];
             
             for (let i = 0; i < tentativasAlteracao.length; i++) {
                 console.log(`🔄 Tentativa ${i + 1} de alteração:`, Object.keys(tentativasAlteracao[i]));
@@ -790,14 +1124,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     sucesso = true;
                     console.log(`✅ Alteração bem-sucedida na tentativa ${i + 1}`);
                     break;
+                } else {
+                    console.log(`❌ Tentativa ${i + 1} falhou:`, resultado.error);
+                    
+                    // Se o erro for de senha atual, parar imediatamente
+                    if (resultado.error && (
+                        resultado.error.includes('senha atual') ||
+                        resultado.error.includes('senhaAtual') ||
+                        resultado.error.includes('current password') ||
+                        resultado.error.includes('senha incorreta') ||
+                        resultado.error.includes('password incorrect') ||
+                        resultado.error.includes('incorreta')
+                    )) {
+                        console.log('🚫 Erro de senha atual detectado, interrompendo tentativas');
+                        break;
+                    }
                 }
                 
                 if (i < tentativasAlteracao.length - 1) {
-                    console.log(`⏭️ Tentativa ${i + 1} falhou, tentando próximo formato...`);
+                    console.log(`⏭️ Tentando próximo formato...`);
                 }
             }
             
-            console.log('📊 Resultado final do processo:', { sucesso, erro: resultado.error });
+            console.log('📊 Resultado final do processo:', { sucesso, erro: resultado?.error });
             
             if (sucesso) {
                 mostrarMensagem(
@@ -806,30 +1155,43 @@ document.addEventListener('DOMContentLoaded', function() {
                     'success'
                 );
                 
-                // Limpar campos após sucesso
-                senhaAtualInput.value = '';
+                // Limpar campo após sucesso
                 senhaNovaInput.value = '';
                 
-                // Mostrar mensagem de recomendação após 2 segundos
-                setTimeout(() => {
-                    mostrarMensagem(
-                        'Recomendação de Segurança', 
-                        'Para garantir a segurança da sua conta, recomendamos que:\n\n• Faça logout e login novamente\n• Não compartilhe sua senha\n• Use uma senha forte e única', 
-                        'info'
-                    );
-                }, 2000);
-                
             } else {
-                console.error('❌ Todas as tentativas de alteração falharam:', resultado.error);
+                console.error('❌ Todas as tentativas de alteração falharam:', resultado?.error);
                 
-                // Mensagens de erro mais específicas e amigáveis
-                if (resultado.error.includes('fraca') || resultado.error.includes('weak') || resultado.error.includes('mínimo') || resultado.error.includes('requisitos')) {
+                // Verificar se o erro é específico de senha atual
+                if (resultado?.error && (
+                    resultado.error.includes('senha atual') ||
+                    resultado.error.includes('senhaAtual') ||
+                    resultado.error.includes('current password') ||
+                    resultado.error.includes('senha incorreta') ||
+                    resultado.error.includes('password incorrect') ||
+                    resultado.error.includes('incorreta')
+                )) {
+                    mostrarMensagem(
+                        'Senha Atual Incorreta', 
+                        'Não foi possível alterar a senha porque a senha atual informada está incorreta.\n\nPor favor, verifique e tente novamente.', 
+                        'error'
+                    );
+                } else if (resultado?.error && (
+                    resultado.error.includes('fraca') || 
+                    resultado.error.includes('weak') || 
+                    resultado.error.includes('mínimo') || 
+                    resultado.error.includes('requisitos')
+                )) {
                     mostrarMensagem(
                         'Senha Não Atende aos Requisitos', 
                         'A nova senha não atende aos requisitos de segurança.\n\nRecomendamos:\n• Mínimo de 6 caracteres\n• Letras maiúsculas e minúsculas\n• Números e caracteres especiais', 
                         'warning'
                     );
-                } else if (resultado.error.includes('senha') || resultado.error.includes('Senha') || resultado.error.includes('password') || resultado.error.includes('Password')) {
+                } else if (resultado?.error && (
+                    resultado.error.includes('senha') || 
+                    resultado.error.includes('Senha') || 
+                    resultado.error.includes('password') || 
+                    resultado.error.includes('Password')
+                )) {
                     mostrarMensagem(
                         'Erro na Alteração', 
                         'Não foi possível processar a alteração de senha.\n\nPor favor, verifique os dados e tente novamente.', 
@@ -838,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     mostrarMensagem(
                         'Erro no Processamento', 
-                        `Não foi possível completar a alteração:\n${resultado.error || 'Erro desconhecido'}`,
+                        `Não foi possível completar a alteração:\n${resultado?.error || 'Erro desconhecido'}`,
                         'error'
                     );
                 }
@@ -878,33 +1240,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    // ===== VERIFICAR SE CAMPOS JÁ FORAM ALTERADOS =====
-    function verificarCamposAlterados() {
-        // Verificar nome
-        const nomeAlterado = localStorage.getItem('nomeAlterado');
-        if (nomeAlterado === 'true') {
-            const botaoNome = document.getElementById('altNome');
-            if (botaoNome) {
-                botaoNome.disabled = true;
-                botaoNome.textContent = 'Alterado';
-                botaoNome.classList.remove('hover:bg-gray-300');
-                botaoNome.classList.add('bg-gray-400', 'cursor-not-allowed');
-            }
-        }
-        
-        // Verificar documento
-        const documentoAlterado = localStorage.getItem('documentoAlterado');
-        if (documentoAlterado === 'true') {
-            const botaoDocument = document.getElementById('altDocument');
-            if (botaoDocument) {
-                botaoDocument.disabled = true;
-                botaoDocument.textContent = 'Alterado';
-                botaoDocument.classList.remove('hover:bg-gray-300');
-                botaoDocument.classList.add('bg-gray-400', 'cursor-not-allowed');
-            }
-        }
-    }
-    
-    verificarCamposAlterados();
 });

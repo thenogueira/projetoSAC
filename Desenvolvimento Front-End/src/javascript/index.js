@@ -33,6 +33,13 @@ async function fetchPostagens() {
     }
 }
 
+function primeiroESobrenomeCompleto(nome) {
+    if (!nome) return 'Desconhecido';
+    const partes = nome.trim().split(' ');
+    if (partes.length === 1) return partes[0];
+    return `${partes[0]} ${partes[partes.length - 1]}`;
+}
+
 // ================================
 // RENDER POSTAGENS
 // ================================
@@ -66,31 +73,83 @@ function renderPostagens(postagens) {
 }
 
 function createPostCard(post, isLarge) {
-    const card = document.createElement('div');
-    card.className = `flex flex-col rounded-xl overflow-hidden shadow-lg ${isLarge ? 'h-full' : 'h-80'}`;
+    const card = document.createElement('figure');
+    card.classList.add(
+        'flex', 'flex-col', 'justify-center',
+        'rounded-xl', 'cursor-pointer', 'overflow-hidden',
+        'shadow-md', 'bg-white'
+    );
 
-    const imgContainer = document.createElement('div');
-    imgContainer.className = `${isLarge ? 'flex-1' : 'h-40'} overflow-hidden bg-gray-100`;
-    imgContainer.innerHTML = `<img class="w-full h-full object-cover" src="${post.imagem || '../img/Sem Foto.png'}" alt="${post.titulo || 'Postagem sem título'}">`;
+    // CORREÇÃO AQUI 👇
+    if (isLarge) {
+        card.classList.add('w-full', 'h-full');
+    } else {
+        card.classList.add('w-full', 'h-full');
+    }
 
-    const content = document.createElement('div');
-    content.className = 'bg-white p-4';
-    content.innerHTML = `
-        <h3 class="font-bold ${isLarge ? 'text-xl' : 'text-lg'} truncate">${post.titulo || 'Sem título'}</h3>
-        <div class="flex items-center justify-between my-2">
-            <span class="text-xs px-2 py-1 rounded-full ${getTypeColorClass(post.tipo)}">
-                ${post.tipo || 'Geral'}
-            </span>
-            <span class="text-xs text-gray-500 truncate">${post.localizacao || ''}</span>
+    // 📅 Data formatada
+    const dataCriacao = post.data_criacao
+        ? new Date(post.data_criacao).toLocaleDateString('pt-BR')
+        : 'Data não informada';
+
+    const nomeUsuario = post.usuario && post.usuario.nome
+        ? primeiroESobrenomeCompleto(post.usuario.nome)
+        : (post.usuarioNome || 'Desconhecido');
+
+    let tipoFormatado = '';
+    if (post.tipo === 'DOACAO') tipoFormatado = 'Doação';
+    else if (post.tipo === 'PEDIDO') tipoFormatado = 'Pedido';
+    else tipoFormatado = post.tipo
+        ? post.tipo.charAt(0).toUpperCase() + post.tipo.slice(1).toLowerCase()
+        : '';
+
+    let imagemSrc = '../img/Sem Foto.png';
+    if (post.imagem) {
+        try {
+            if (Array.isArray(post.imagem) && post.imagem.length > 0) {
+                imagemSrc = post.imagem[0];
+            } else if (typeof post.imagem === 'string' && post.imagem.trim() !== '') {
+                const possivelArray = JSON.parse(post.imagem);
+                if (Array.isArray(possivelArray) && possivelArray.length > 0) {
+                    imagemSrc = possivelArray[0];
+                } else {
+                    imagemSrc = post.imagem;
+                }
+            }
+        } catch (e) {
+            console.warn('⚠️ Erro ao processar imagem do post:', e);
+            imagemSrc = post.imagem;
+        }
+    }
+
+    card.innerHTML = `
+        <div class="w-full ${isLarge ? 'h-[80%]' : 'h-[70%]'} overflow-hidden rounded-t-xl">
+            <img class="w-full h-full object-cover bg-fundo1 transition-transform duration-500 hover:scale-105" 
+                 src="${imagemSrc}" 
+                 alt="${post.titulo || 'Imagem da postagem'}"
+                 onerror="this.src='../img/Sem Foto.png'">
         </div>
-        <p class="text-sm text-gray-600 mt-2"><strong>Data:</strong> ${formatarData(post.data_criacao)}</p>
-        <p class="text-sm text-gray-600"><strong>Por:</strong> ${post.usuario?.nome || post.usuarioNome || 'Anônimo'}</p>
+        <div class="rounded-b-xl bg-white drop-shadow-black shadow-md">
+            <figcaption class="pl-2 pt-3 pb-0.5 text-neutral-950 font-semibold truncate">
+                ${post.titulo || 'Sem título'}
+            </figcaption>
+            <figcaption class="pl-2 pb-0.5 text-neutral-700 text-sm">
+                Usuário: ${nomeUsuario}
+            </figcaption>
+            <figcaption class="pl-2 pb-0.5 text-neutral-700 text-sm">
+                Tipo: ${tipoFormatado}
+            </figcaption>
+            <figcaption class="pl-2 pb-3 text-neutral-700 text-sm">
+                Data: ${dataCriacao}
+            </figcaption>
+        </div>
     `;
 
-    card.appendChild(imgContainer);
-    card.appendChild(content);
+    card.addEventListener('click', () => abrirDetalhesPost(post));
+
     return card;
 }
+
 
 function getTypeColorClass(tipo) {
     if (!tipo) return 'bg-gray-100 text-gray-800';

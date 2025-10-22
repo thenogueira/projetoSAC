@@ -159,8 +159,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ===== Renderização principal =====
     postDetails.innerHTML = `
-      <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
-      <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
+      <div class="flex justify-between mb-6 w-full items-center">
+        <div class="flex flex-col">
+          <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
+          <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
+        </div>
+        
+
+        <a href="#" id="denunciarPost">
+          <span class="icon">
+            <i class="fa-solid fa-circle-exclamation text-red-500 text-3xl"></i>
+          </span>
+        </a>
+
+
+
+      </div>
 
       <div class="flex items-center justify-between mb-6 w-full mt-8">
         <div class="flex gap-5 items-center">
@@ -210,6 +224,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       ${imagemPostHtml}
     `;
+
+    // Botão de denúncia
+const denunciarButton = document.getElementById("denunciarPost");
+if (denunciarButton) {
+  denunciarButton.addEventListener("click", () => {
+    // Salva o ID e o tipo no localStorage
+    localStorage.setItem("denunciaTipo", "postagem");
+    localStorage.setItem("denunciaId", post.id);
+
+    // Redireciona para a página de denúncias
+    window.location.href = "denuncias.html";
+  });
+}
+
 
     const nomeUsuarioLink = document.getElementById('nomeUsuarioLink');
     if (nomeUsuarioLink && post.usuarioId) {
