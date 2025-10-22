@@ -267,41 +267,33 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function renderUserComments(comments) {
+        containerComentarios.innerHTML = '';
 
-    containerComentarios.innerHTML = '';
+        // Renderizar comentários existentes
+        if (!comments || comments.length === 0) {
+            containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
+        } else {
+            comments.forEach(c => {
+                const commentEl = createCommentElementLayout(c.usuario || {nome: 'Usuário', fotoPerfil: '../img/defaultImagePerfil.png'}, c.texto, c.id);
+                containerComentarios.appendChild(commentEl);
+            });
+        }
 
-    // Renderizar comentários existentes
-    if (!comments || comments.length === 0) {
-        containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
-    } else {
-        comments.forEach(c => {
-            const commentEl = createCommentElementLayout(c.usuario || {nome: 'Usuário', fotoPerfil: '../img/defaultImagePerfil.png'}, c.texto, c.id);
-            containerComentarios.appendChild(commentEl);
+        // Adicionar eventos de denúncia aos comentários renderizados
+        const denunciarBtns = containerComentarios.querySelectorAll('.denunciarComentario');
+        denunciarBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const comentarioId = btn.getAttribute('data-id');
+
+                // Salva o tipo e ID da denúncia no localStorage
+                localStorage.setItem('denunciaTipo', 'comentario');
+                localStorage.setItem('denunciaId', comentarioId);
+
+                // Redireciona para a página de denúncias
+                window.location.href = 'denuncias.html';
+            });
         });
-    }
-
-    // Adicionar eventos de denúncia aos comentários renderizados
-    const denunciarBtns = containerComentarios.querySelectorAll('.denunciarComentario');
-    denunciarBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const comentarioId = btn.getAttribute('data-id');
-
-            // Salva o tipo e ID da denúncia no localStorage
-            localStorage.setItem('denunciaTipo', 'comentario');
-            localStorage.setItem('denunciaId', comentarioId);
-
-            // Redireciona para a página de denúncias
-            window.location.href = 'denuncias.html';
-        });
-    });
-
-
-    // Botão "Adicionar Comentário" apenas em perfis de outros usuários
-    if (!isOwnProfile) {
-    const addBtnContainer = document.createElement('div');
-    addBtnContainer.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'items-center', 'justify-center', 'mt-4');
-
 
         // Botão "Adicionar Comentário" apenas em perfis de outros usuários
         if (!isOwnProfile) {
@@ -390,106 +382,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         div.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'mb-4');
 
         div.innerHTML = `
-            <div class="flex gap-4 items-center">
-                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-                    <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
+            <div class="flex gap-4 items-center justify-between">
+                <div class="flex gap-2">
+                    <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300 ">
+                        <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
+                    
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
+                        <span>ID Comentário: #${id || '--'}</span>
+                    </div>
                 </div>
-                <div class="flex flex-col">
-                    <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
-                    <span>ID Comentário: #${id || '--'}</span>
-                </div>
+
+                <a href="#" class="denunciarComentario" data-id="${id}">
+                    <span class="icon">
+                        <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
+                    </span>
+                </a>
             </div>
+
             <div class="border-1 border-black rounded-2xl p-2">
                 <p>${texto}</p>
             </div>
         `;
-
-
-        // Substitui o botão pelo formulário
-        addBtnContainer.replaceWith(novoComentarioLayout);
-
-        const enviarBtn = novoComentarioLayout.querySelector('#enviarComentarioBtn');
-        enviarBtn.addEventListener('click', async () => {
-            const texto = document.getElementById('novoComentarioTexto').value.trim();
-            if (!texto) return;
-
-            try {
-                const resp = await fetch('http://localhost:8080/comentarios', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': token ? `Bearer ${token}` : '',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        texto: texto,
-                        usuarioId: usuarioLogado.id,
-                        usuarioAlvoId: usuario.id
-                    })
-                });
-
-                if (!resp.ok) throw new Error('Erro ao enviar comentário');
-                const novoComentario = await resp.json();
-
-                // Cria o elemento do comentário recém-enviado
-                const commentEl = createCommentElementLayout(
-                    usuarioLogado,
-                    novoComentario.texto,
-                    novoComentario.id
-                );
-
-                // Substitui o formulário pelo comentário
-                novoComentarioLayout.replaceWith(commentEl);
-
-                // Adiciona o botão novamente abaixo
-                containerComentarios.appendChild(addBtnContainer);
-
-                alert('Comentário enviado com sucesso!');
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao enviar comentário. Tente novamente.');
-            }
-        });
-
-
-
-
-        });
+        return div;
     }
-}
-
-// Função auxiliar para renderizar comentários existentes com o mesmo layout
-function createCommentElementLayout(usuarioComent, texto, id) {
-    const div = document.createElement('div');
-    div.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'mb-4');
-
-    div.innerHTML = `
-        <div class="flex gap-4 items-center justify-between">
-            <div class="flex gap-2">
-                <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300 ">
-                    <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
-                
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
-                    <span>ID Comentário: #${id || '--'}</span>
-                </div>
-            </div>
-
-            <a href="#" class="denunciarComentario" data-id="${id}">
-                <span class="icon">
-                    <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
-                </span>
-            </a>
-        </div>
-
-        
-
-        <div class="border-1 border-black rounded-2xl p-2">
-            <p>${texto}</p>
-        </div>
-    `;
-    return div;
-}
 
     async function enviarComentario(texto) {
         try {
@@ -524,7 +441,6 @@ function createCommentElementLayout(usuarioComent, texto, id) {
             console.error(err);
             alert('Erro ao enviar comentário. Tente novamente.');
         }
-
     }
 
     // Eventos dos botões
