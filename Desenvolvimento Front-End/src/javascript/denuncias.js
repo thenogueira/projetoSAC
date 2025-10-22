@@ -9,6 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const nomeUsuario = usuarioLogado?.nome || "Usuário não identificado";
   const idUsuario = usuarioLogado?.id || usuarioLogado?.idUsuario || "N/A";
 
+  // Preenche automaticamente os campos se veio de uma denúncia (post ou comentário)
+  const denunciaSalva = localStorage.getItem("denunciaTipo");
+  const idSalvo = localStorage.getItem("denunciaId");
+
+  if (denunciaSalva && idSalvo) {
+      document.getElementById("denuncia").value = denunciaSalva;
+      document.getElementById("idDenunciar").value = idSalvo;
+
+      // Limpa o localStorage depois de preencher
+      localStorage.removeItem("denunciaTipo");
+      localStorage.removeItem("denunciaId");
+  }
+
+
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
