@@ -318,6 +318,77 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
+    // =========================
+    // FUNÇÕES PARA EDITAR E DELETAR COMENTÁRIOS
+    // =========================
+
+    // Função para deletar comentário
+    async function deletarComentario(comentarioId) {
+        if (!verificarLoginTempoReal()) return false;
+        
+        if (!confirm('Tem certeza que deseja excluir este comentário?')) {
+            return false;
+        }
+
+        try {
+            const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Erro ${resp.status} ao deletar comentário`);
+            }
+
+            alert('Comentário excluído com sucesso!');
+            return true;
+        } catch (err) {
+            console.error('Erro ao deletar comentário:', err);
+            alert('Erro ao excluir comentário: ' + err.message);
+            return false;
+        }
+    }
+
+    // Função para editar comentário
+    async function editarComentario(comentarioId, textoAtual) {
+        if (!verificarLoginTempoReal()) return false;
+
+        const novoTexto = prompt('Editar comentário:', textoAtual);
+        
+        if (novoTexto === null) return false; // Usuário cancelou
+        if (novoTexto.trim() === '') {
+            alert('O comentário não pode estar vazio!');
+            return false;
+        }
+
+        try {
+            const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    texto: novoTexto.trim()
+                })
+            });
+
+            if (!resp.ok) {
+                throw new Error(`Erro ${resp.status} ao editar comentário`);
+            }
+
+            alert('Comentário editado com sucesso!');
+            return true;
+        } catch (err) {
+            console.error('Erro ao editar comentário:', err);
+            alert('Erro ao editar comentário: ' + err.message);
+            return false;
+        }
+    }
+
     function renderUserComments(comments) {
         containerComentarios.innerHTML = '';
 
@@ -439,12 +510,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         const div = document.createElement('div');
         div.classList.add('flex', 'flex-col', 'gap-2', 'w-full', 'mb-4');
 
+        // Verificar se o comentário pertence ao usuário logado
+        const isMyComment = usuarioComent.id === usuarioLogado.id || 
+                           usuarioComent.usuarioId === usuarioLogado.id;
+
         div.innerHTML = `
             <div class="flex gap-4 items-center justify-between">
                 <div class="flex gap-2">
                     <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300 ">
                         <img class="object-cover w-full h-full" src="${usuarioComent.fotoPerfil || '../img/defaultImagePerfil.png'}" alt="${usuarioComent.nome || 'Usuário'}" width="50" height="50">
-                    
                     </div>
                     <div class="flex flex-col">
                         <span class="text-xl">${usuarioComent.nome || 'Usuário'}</span>
@@ -452,17 +526,69 @@ document.addEventListener('DOMContentLoaded', async function () {
                     </div>
                 </div>
 
-                <a href="#" class="denunciarComentario" data-id="${id}">
-                    <span class="icon">
-                        <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
-                    </span>
-                </a>
+                <div class="flex gap-2 items-center">
+                    ${isMyComment ? `
+                        <!-- Botões de editar e deletar (apenas para comentários do usuário logado) -->
+                        <button class="editarComentario text-blue-500 hover:text-blue-700" data-id="${id}" data-texto="${texto}">
+                            <i class="fa-solid fa-pen-to-square text-lg"></i>
+                        </button>
+                        <button class="deletarComentario text-red-500 hover:text-red-700" data-id="${id}">
+                            <i class="fa-solid fa-trash text-lg"></i>
+                        </button>
+                    ` : ''}
+                    
+                    <!-- Botão de denúncia (sempre visível) -->
+                    <a href="#" class="denunciarComentario" data-id="${id}">
+                        <span class="icon">
+                            <i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i>
+                        </span>
+                    </a>
+                </div>
             </div>
 
             <div class="border-1 border-black rounded-2xl p-2">
-                <p>${texto}</p>
+                <p class="comentario-texto">${texto}</p>
             </div>
         `;
+
+        // Adicionar eventos para os botões de editar e deletar (se existirem)
+        if (isMyComment) {
+            const editarBtn = div.querySelector('.editarComentario');
+            const deletarBtn = div.querySelector('.deletarComentario');
+
+            editarBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const comentarioId = editarBtn.getAttribute('data-id');
+                const textoAtual = editarBtn.getAttribute('data-texto');
+                
+                const sucesso = await editarComentario(comentarioId, textoAtual);
+                if (sucesso) {
+                    // Atualizar a UI localmente
+                    const textoElement = div.querySelector('.comentario-texto');
+                    textoElement.textContent = prompt('Editar comentário:', textoAtual) || textoAtual;
+                    
+                    // Atualizar o data-texto do botão
+                    editarBtn.setAttribute('data-texto', textoElement.textContent);
+                }
+            });
+
+            deletarBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const comentarioId = deletarBtn.getAttribute('data-id');
+                
+                const sucesso = await deletarComentario(comentarioId);
+                if (sucesso) {
+                    // Remover o comentário da UI
+                    div.remove();
+                    
+                    // Se não houver mais comentários, mostrar mensagem
+                    if (containerComentarios.children.length === 0) {
+                        containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
+                    }
+                }
+            });
+        }
+
         return div;
     }
 
@@ -526,4 +652,3 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Configurar observador de logout
     configurarObservadorLogout();
 });
-

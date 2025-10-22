@@ -36,6 +36,135 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // =========================
+  // AUTOCOMPLETE DE CEP
+  // =========================
+  function initCEPAutocomplete() {
+    const cepInput = document.getElementById('cep');
+    
+    if (!cepInput) return;
+
+    // Formatar CEP enquanto digita
+    cepInput.addEventListener('input', function() {
+      this.value = formatarCEP(this.value);
+    });
+
+    // Buscar CEP quando perder foco
+    cepInput.addEventListener('blur', buscarCEP);
+
+    // Buscar CEP com Enter
+    cepInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        buscarCEP();
+      }
+    });
+  }
+
+  function formatarCEP(cep) {
+    cep = cep.replace(/\D/g, '');
+    if (cep.length > 5) {
+      cep = cep.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+    if (cep.length > 9) {
+      cep = cep.substring(0, 9);
+    }
+    return cep;
+  }
+
+  async function buscarCEP() {
+    const cepInput = document.getElementById('cep');
+    const cep = cepInput.value.replace(/\D/g, '');
+
+    // Validação básica
+    if (cep.length !== 8) {
+      mostrarMensagemCEP('CEP deve ter 8 dígitos', 'erro');
+      return;
+    }
+
+    try {
+      mostrarLoadingCEP(true);
+      
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      
+      if (!response.ok) {
+        throw new Error('Erro na requisição');
+      }
+      
+      const data = await response.json();
+      
+      if (data.erro) {
+        throw new Error('CEP não encontrado');
+      }
+      
+      preencherCamposCEP(data);
+      mostrarMensagemCEP('Endereço preenchido automaticamente!', 'sucesso');
+      
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      mostrarMensagemCEP('CEP não encontrado. Preencha manualmente.', 'erro');
+    } finally {
+      mostrarLoadingCEP(false);
+    }
+  }
+
+  function preencherCamposCEP(data) {
+    const campos = {
+      'estado': data.uf,
+      'bairro': data.bairro,
+      'casa': data.logradouro
+    };
+    
+    for (const [id, valor] of Object.entries(campos)) {
+      const campo = document.getElementById(id);
+      if (campo && valor) {
+        campo.value = valor;
+        campo.classList.add('auto-filled');
+        
+        // Remove a classe após 3 segundos
+        setTimeout(() => {
+          campo.classList.remove('auto-filled');
+        }, 3000);
+      }
+    }
+  }
+
+  function mostrarLoadingCEP(mostrar) {
+    const cepInput = document.getElementById('cep');
+    
+    if (mostrar) {
+      cepInput.classList.add('loading');
+    } else {
+      cepInput.classList.remove('loading');
+    }
+  }
+
+  function mostrarMensagemCEP(mensagem, tipo) {
+    // Remove mensagem anterior
+    const mensagemAnterior = document.querySelector('.cep-mensagem');
+    if (mensagemAnterior) {
+      mensagemAnterior.remove();
+    }
+    
+    // Cria nova mensagem
+    const divMensagem = document.createElement('div');
+    divMensagem.className = `cep-mensagem text-sm mt-1 p-2 rounded ${
+      tipo === 'erro' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+    }`;
+    divMensagem.textContent = mensagem;
+    
+    // Adiciona após o campo CEP
+    const cepContainer = document.getElementById('cep').parentNode;
+    cepContainer.appendChild(divMensagem);
+    
+    // Remove a mensagem após 5 segundos
+    setTimeout(() => {
+      if (divMensagem.parentNode) {
+        divMensagem.remove();
+      }
+    }, 5000);
+  }
+
+  // =========================
   // Pré-visualização das imagens (imagem3)
   // =========================
   const imagemInput = document.getElementById('imagem3');
@@ -152,28 +281,40 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(event) {
       event.preventDefault();
 
+      console.log('=== DEBUG INICIO ===');
+      
       const usuarioDataRaw = localStorage.getItem('usuarioLogado');
+      console.log('usuarioDataRaw:', usuarioDataRaw);
+      
       let usuarioData;
       try {
         usuarioData = JSON.parse(usuarioDataRaw);
+        console.log('usuarioData:', usuarioData);
       } catch (error) {
+        console.error('Erro ao parsear usuarioData:', error);
         mostrarMensagem('Erro', `Erro ao analisar os dados do usuário: ${error.message}`, 'erro');
         window.location.href = 'login.html';
         return;
       }
 
+      const token = localStorage.getItem('authToken');
+      console.log('Token:', token);
+      
       if (!usuarioData || !usuarioData.id) {
+        console.error('Usuário não identificado');
         mostrarMensagem('Erro', 'Usuário não identificado. Faça login ou cadastre-se.', 'erro');
         window.location.href = 'login.html';
         return;
       }
 
-      const token = localStorage.getItem('authToken');
       if (!token) {
+        console.error('Token não encontrado');
         mostrarMensagem('Erro', 'Usuário não autenticado. Faça login novamente.', 'erro');
         window.location.href = 'login.html';
         return;
       }
+
+      console.log('=== DEBUG FIM ===');
 
       const titulo = document.getElementById('titulo')?.value.trim() || '';
       const categoria = document.getElementById('categoria')?.value.trim() || '';
@@ -202,7 +343,11 @@ document.addEventListener('DOMContentLoaded', function() {
       async function saveAndSendPost(imagensBase64 = []) {
         // Salva TODAS as imagens como JSON string no campo "imagem"
         const post = {
-          usuario: { id: usuarioData.id },
+          usuario: { 
+            id: usuarioData.id,
+            nome: usuarioData.nome || 'Usuário',
+            email: usuarioData.email || ''
+          },
           titulo,
           descricao,
           tipo,
@@ -214,6 +359,9 @@ document.addEventListener('DOMContentLoaded', function() {
           data_atualizacao: new Date().toISOString(),
         };
 
+        console.log('Enviando post:', post);
+        console.log('Token enviado:', token);
+
         try {
           const response = await fetch('http://localhost:8080/ocorrencias/criar', {
             method: 'POST',
@@ -224,18 +372,45 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(post),
           });
 
+          console.log('Status da resposta:', response.status);
+          console.log('Resposta OK?', response.ok);
+
           if (response.ok) {
+            const responseData = await response.json();
+            console.log('Resposta do servidor:', responseData);
             mostrarMensagem('Sucesso', 'Postagem criada com sucesso!', 'sucesso');
             form.reset();
             arquivosSelecionados = [];
             previewContainer.innerHTML = '';
-            window.location.href = 'postagens.html';
+            setTimeout(() => {
+              window.location.href = 'postagens.html';
+            }, 1500);
           } else {
-            let error = { message: 'Erro desconhecido do servidor' };
-            try { error = await response.json(); } catch {}
-            mostrarMensagem('Erro', `Erro ao criar postagem: ${error.message}`, 'erro');
+            let errorText = await response.text();
+            console.error('Erro do servidor:', errorText);
+            
+            // Tenta parsear como JSON, se não conseguir, usa o texto
+            let error;
+            try {
+              error = JSON.parse(errorText);
+            } catch {
+              error = { message: errorText };
+            }
+            
+            mostrarMensagem('Erro', `Erro ao criar postagem: ${error.message || 'Erro desconhecido'}`, 'erro');
+            
+            // Se for erro de autenticação, redireciona para login
+            if (response.status === 403 || response.status === 401) {
+              console.error('Erro de autenticação - limpando dados e redirecionando para login');
+              localStorage.removeItem('authToken');
+              localStorage.removeItem('usuarioLogado');
+              setTimeout(() => {
+                window.location.href = 'login.html';
+              }, 2000);
+            }
           }
         } catch (error) {
+          console.error('Erro de rede:', error);
           mostrarMensagem('Erro', 'Erro ao criar postagem. Tente novamente mais tarde.', 'erro');
         }
       }
@@ -262,28 +437,79 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // =========================
+  // Botão Voltar
+  // =========================
+  // =========================
+// BOTÃO VOLTAR - VERSÃO CORRIGIDA
+// =========================
+function inicializarBotaoVoltar() {
+    const voltarBtn = document.getElementById('voltarBtn');
+    console.log('🔄 Inicializando botão voltar...', voltarBtn);
+    
+    if (voltarBtn) {
+        // Remover event listeners antigos para evitar duplicação
+        const novoVoltarBtn = voltarBtn.cloneNode(true);
+        voltarBtn.parentNode.replaceChild(novoVoltarBtn, voltarBtn);
+        
+        // Referência ao novo botão
+        const botaoVoltar = document.getElementById('voltarBtn');
+        
+        // Event listener principal
+        botaoVoltar.addEventListener('click', function(e) {
+            console.log('🎯 Clique no botão voltar capturado!');
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = 'postagens.html';
+        });
+        
+        // Animação (opcional)
+        botaoVoltar.addEventListener("mousedown", () => {
+            botaoVoltar.style.transform = 'scale(0.95)';
+        });
+        
+        botaoVoltar.addEventListener("mouseup", () => {
+            botaoVoltar.style.transform = 'scale(1)';
+        });
+        
+        botaoVoltar.addEventListener("mouseleave", () => {
+            botaoVoltar.style.transform = 'scale(1)';
+        });
+        
+        console.log('✅ Botão voltar inicializado com sucesso!');
+    } else {
+        console.log('❌ Botão voltar não encontrado na inicialização');
+    }
+}
+
+// Inicializar quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarBotaoVoltar();
 });
 
-async function buscarCEP() {
-      const cep = document.getElementById("cep").value.replace(/\D/g, "");
+// Também inicializar após um pequeno delay (para garantir)
+setTimeout(inicializarBotaoVoltar, 100);
 
-      const url = `https://viacep.com.br/ws/${cep}/json/`;
+  // =========================
+  // INICIALIZAR AUTOCOMPLETE DE CEP
+  // =========================
+  initCEPAutocomplete();
 
-      try {
-        const response = await fetch(url);
-        const dados = await response.json();
+  // =========================
+// DEBUG - Verificar se botão existe
+// =========================
+console.log('=== DEBUG BOTÃO VOLTAR ===');
+console.log('Botão voltar encontrado:', voltarBtn);
+console.log('Classes do botão voltar:', voltarBtn?.className);
+console.log('Estilo display:', voltarBtn?.style.display);
+console.log('Estilo visibility:', voltarBtn?.style.visibility);
+console.log('Estilo opacity:', voltarBtn?.style.opacity);
 
-        if ("erro" in dados) {
-          alert("CEP não encontrado!");
-          return;
-        }
-
-        // Preenche os campos
-        document.getElementById("casa").value = dados.logradouro;
-        document.getElementById("bairro").value = dados.bairro;
-        document.getElementById("estado").value = dados.uf;
-
-      } catch (error) {
-       
-      }
-    }
+if (voltarBtn) {
+    // Forçar visibilidade
+    voltarBtn.style.display = 'block';
+    voltarBtn.style.visibility = 'visible';
+    voltarBtn.style.opacity = '1';
+    voltarBtn.style.position = 'static';
+}
+});

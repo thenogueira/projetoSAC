@@ -4,6 +4,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   const postId = urlParams.get('id');
   const userLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
 
+  // Funções auxiliares para formatação
+  function formatarTipo(tipo) {
+      if (!tipo) return 'Não informado';
+      
+      // Converte para o formato de exibição (primeira letra maiúscula)
+      const tipoLower = tipo.toLowerCase();
+      if (tipoLower === 'doacao' || tipo === 'DOACAO') {
+          return 'Doação';
+      } else if (tipoLower === 'pedido' || tipo === 'PEDIDO') {
+          return 'Pedido';
+      }
+      return tipo.charAt(0).toUpperCase() + tipo.slice(1).toLowerCase();
+  }
+
   if (!postId) {
     postDetails.innerHTML = `<p class="text-center text-red-500">
       Nenhum post selecionado. Volte para a página de postagens e escolha um.
@@ -192,17 +206,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="flex gap-3">
           ${
             idLogado && post.usuarioId === idLogado
-              ? ""
+              ? `
+                <button id="editarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Editar</button>
+              `
               : emailUsuario
                 ? `<button id="contatarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Contactar</button>`
                 : `<button disabled class="bg-gray-300 py-2 px-4 rounded-xl opacity-50 cursor-not-allowed">Contactar</button>`
-          }
-          ${
-            idLogado && post.usuarioId === idLogado
-              ? `
-              <button id="editarButton" class="px-4 py-2 border-1 rounded-lg hover:bg-gray-300">Editar</button>
-              `
-              : ''
           }
         </div>
       </div>
@@ -211,8 +220,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       <div>
         <ul class="text-xl mb-8">
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${(post.tipo)}</p></li>
-          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
+          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${formatarTipo(post.tipo)}</p></li>
+          <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria ? post.categoria.charAt(0).toUpperCase() + post.categoria.slice(1).toLowerCase() : 'Não informada'}</p></li>
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
         </ul>
 
@@ -223,21 +232,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
 
       ${imagemPostHtml}
+
+      <div class="mt-8 flex justify-start">
+        <button onclick="history.back()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+          Voltar
+        </button>
+      </div>
     `;
 
     // Botão de denúncia
-const denunciarButton = document.getElementById("denunciarPost");
-if (denunciarButton) {
-  denunciarButton.addEventListener("click", () => {
-    // Salva o ID e o tipo no localStorage
-    localStorage.setItem("denunciaTipo", "postagem");
-    localStorage.setItem("denunciaId", post.id);
+    const denunciarButton = document.getElementById("denunciarPost");
+    if (denunciarButton) {
+      denunciarButton.addEventListener("click", () => {
+        // Salva o ID e o tipo no localStorage
+        localStorage.setItem("denunciaTipo", "postagem");
+        localStorage.setItem("denunciaId", post.id);
 
-    // Redireciona para a página de denúncias
-    window.location.href = "denuncias.html";
-  });
-}
-
+        // Redireciona para a página de denúncias
+        window.location.href = "denuncias.html";
+      });
+    }
 
     const nomeUsuarioLink = document.getElementById('nomeUsuarioLink');
     if (nomeUsuarioLink && post.usuarioId) {
@@ -274,5 +288,6 @@ if (denunciarButton) {
       Ocorreu um erro ao carregar a postagem.<br>
       <small>${error.message}</small>
     </p>`;
+    console.error('Erro detalhado:', error);
   }
 });
