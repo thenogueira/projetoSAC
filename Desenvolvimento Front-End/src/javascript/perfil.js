@@ -76,7 +76,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         editProfileBtn.addEventListener('click', () => {
             editProfileContainer.classList.toggle('hidden');
             editDescription.value = usuario.descricao || '';
-            editPhoto.value = ''; // Limpa o input de foto ao abrir
+            // Limpa o input de foto ao abrir
+            const editPhoto = document.getElementById('editPhoto');
+            if (editPhoto) editPhoto.value = '';
         });
     }
 
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
                 
                 const photoInput = document.getElementById('editPhoto');
-                if (photoInput.files[0]) {
+                if (photoInput && photoInput.files[0]) {
                     alert('Upload de foto será implementado em breve. Por enquanto, apenas a descrição será atualizada.');
                     photoInput.value = '';
                 }
@@ -113,7 +115,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     },
                     body: JSON.stringify(updateData)
                 });
-            }
 
                 if (!resp.ok) {
                     const errorText = await resp.text();
