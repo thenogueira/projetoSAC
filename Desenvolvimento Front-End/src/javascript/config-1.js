@@ -1,10 +1,33 @@
-// config-1.js
+// ====== Função de Modal Customizado ======
+function mostrarModal(titulo, mensagem, tipo = 'info') {
+    const modal = document.getElementById('modalMensagem');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    // Define ícone e cor conforme tipo
+    let iconClass = 'fa-info-circle text-blue-500';
+    if (tipo === 'sucesso') iconClass = 'fa-check-circle text-green-500';
+    else if (tipo === 'erro') iconClass = 'fa-times-circle text-red-500';
+    else if (tipo === 'aviso') iconClass = 'fa-exclamation-circle text-yellow-500';
+
+    modalIcon.className = `fas ${iconClass} text-2xl mr-3 mt-1`;
+    modalTitle.textContent = titulo;
+    modalContent.textContent = mensagem;
+
+    modal.classList.remove('hidden');
+
+    modalCloseBtn.onclick = () => modal.classList.add('hidden');
+}
+
 
 // VERIFICAÇÃO DE LOGIN - BLOQUEIO TOTAL DE ACESSO
 const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
 if (!usuarioLogado) {
-    alert('Você precisa fazer login para acessar esta página');
-    window.location.href = 'login.html';
+    mostrarModal('Erro', 'Você precisa fazer login para acessar esta página', 'erro');
+
+    
 }
 
 // Elementos do modal
@@ -28,7 +51,8 @@ function verificarLoginTempoReal() {
     const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
     
     if (!token || !usuarioAtual) {
-        alert('Você precisa fazer login para interagir');
+        mostrarModal('Erro', 'Você precisa fazer login para interagir', 'erro');
+    
         // Limpa qualquer dado residual
         localStorage.removeItem('authToken');
         localStorage.removeItem('usuarioLogado');
@@ -44,7 +68,8 @@ function verificarLoginTempoReal() {
 function configurarObservadorLogout() {
     window.addEventListener('storage', function(e) {
         if (e.key === 'usuarioLogado' && !e.newValue) {
-            alert('Sessão expirada. Faça login novamente.');
+            mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
+            
             window.location.href = 'login.html';
         }
     });
@@ -54,7 +79,9 @@ function configurarObservadorLogout() {
         const token = localStorage.getItem('authToken');
         const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
         if (!token || !usuario) {
-            alert('Sessão expirada. Faça login novamente.');
+            mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
+
+            
             window.location.href = 'login.html';
         }
     }, 2000);
@@ -192,7 +219,9 @@ function mostrarMensagem(titulo, texto, tipo = 'error') {
     
     if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
         console.error('Elementos do modal não encontrados!');
-        alert(`${titulo}: ${texto}`);
+        mostrarModal(`${titulo}: ${texto}`);
+
+        
         return;
     }
 
@@ -928,7 +957,7 @@ async function alterarSenhaComValidacao() {
 document.addEventListener('DOMContentLoaded', function() {
     // VERIFICAÇÃO DE LOGIN NO CARREGAMENTO
     if (!usuarioLogado) {
-        alert('Você precisa fazer login para acessar esta página');
+        mostrarModal('Erro', 'Você precisa fazer login para acessar esta página', 'erro');
         window.location.href = 'login.html';
         return;
     }
