@@ -1,28 +1,4 @@
-// ====== Função de Modal Customizado ======
-function mostrarModal(titulo, mensagem, tipo = 'info') {
-    const modal = document.getElementById('modalMensagem');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalContent = document.getElementById('modalContent');
-    const modalIcon = document.getElementById('modalIcon');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
-
-    // Define ícone e cor conforme tipo
-    let iconClass = 'fa-info-circle text-blue-500';
-    if (tipo === 'sucesso') iconClass = 'fa-check-circle text-green-500';
-    else if (tipo === 'erro') iconClass = 'fa-times-circle text-red-500';
-    else if (tipo === 'aviso') iconClass = 'fa-exclamation-circle text-yellow-500';
-
-    modalIcon.className = `fas ${iconClass} text-2xl mr-3 mt-1`;
-    modalTitle.textContent = titulo;
-    modalContent.textContent = mensagem;
-
-    modal.classList.remove('hidden');
-
-    modalCloseBtn.onclick = () => modal.classList.add('hidden');
-}
-
-
-// postagens.js - VERSÃO CORRIGIDA (DATA E USUÁRIO) + VERIFICAÇÃO DE LOGIN
+// postagens.js - VERSÃO CORRIGIDA (LOCALIZAÇÃO COMPLETA)
 document.addEventListener('DOMContentLoaded', function () {
     // VERIFICAÇÃO DE LOGIN - ADICIONADO
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
@@ -60,6 +36,51 @@ document.addEventListener('DOMContentLoaded', function () {
         botaoCarregarMais.style.display = 'none';
     }
 
+    // =========================
+    // FUNÇÃO PARA FORMATAR LOCALIZAÇÃO COMPLETA - VERSÃO CORRIGIDA
+    // =========================
+    function formatarLocalizacao(localizacao) {
+        if (!localizacao) return 'Não informada';
+        
+        console.log('📌 Localização original:', localizacao);
+        
+        // Se for uma string com vírgulas (formato do backend: "Estado, Cidade, Bairro, Logradouro, Número, CEP")
+        if (typeof localizacao === 'string') {
+            // Remove espaços extras
+            let localizacaoLimpa = localizacao.trim();
+            
+            // Se estiver vazia ou for "null", retorna não informada
+            if (!localizacaoLimpa || localizacaoLimpa === 'null') {
+                return 'Não informada';
+            }
+            
+            // Se já estiver bem formatada, retorna como está
+            console.log('📍 Localização formatada:', localizacaoLimpa);
+            return localizacaoLimpa;
+        }
+        
+        // Se for um objeto, formata os campos individualmente
+        if (typeof localizacao === 'object') {
+            const partes = [];
+            
+            // Ordem de exibição: Logradouro, Número, Bairro, Cidade, Estado, CEP
+            if (localizacao.logradouro) partes.push(localizacao.logradouro);
+            if (localizacao.numero) partes.push(localizacao.numero);
+            if (localizacao.bairro) partes.push(localizacao.bairro);
+            if (localizacao.cidade) partes.push(localizacao.cidade);
+            if (localizacao.estado) partes.push(localizacao.estado);
+            if (localizacao.cep) partes.push(`CEP: ${localizacao.cep}`);
+            
+            if (partes.length > 0) {
+                const resultado = partes.join(', ');
+                console.log('📍 Localização formatada (objeto):', resultado);
+                return resultado;
+            }
+        }
+        
+        return 'Não informada';
+    }
+
     // FUNÇÃO DE VERIFICAÇÃO DE LOGIN PARA INTERAÇÕES - ADICIONADO
     function verificarLoginParaInteracao() {
         const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
@@ -85,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined && v !== null && String(v).trim() !== ''));
     }
 
-    // [RESTANTE DO CÓDIGO PERMANECE EXATAMENTE IGUAL...]
     // Função para montar endpoint - SÓ USA ENDPOINTS ESPECÍFICOS PARA FILTROS ÚNICOS
     function montarEndpointParaFiltros(filtros, page, limit) {
         const urlBase = 'http://localhost:8080/ocorrencias';
@@ -115,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return null;
     }
 
-    // [TODO O RESTANTE DO CÓDIGO PERMANECE EXATAMENTE IGUAL...]
     // Função para obter data da postagem - CORREÇÃO APLICADA
     function obterDataPostagem(post) {
         // CORREÇÃO: Ordem de prioridade melhorada
@@ -135,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return null;
     }
 
-    // [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
     // Função para formatar data
     function formatarData(dataCampo) {
         if (!dataCampo) return "Data não informada";
@@ -152,7 +170,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return "Data não informada";
     }
 
-    // [TODO O CÓDIGO ORIGINAL CONTINUA AQUI...]
     // Função para obter nome do usuário - CORREÇÃO DEFINITIVA
     function obterNomeUsuario(post) {
         // Cenário 1: Quando não usa filtro - usuario é um objeto com nome
@@ -203,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return 'Desconhecido';
     }
 
-    // [CONTINUAÇÃO DO CÓDIGO ORIGINAL...]
     // Função de filtros no frontend - PARA MÚLTIPLOS FILTROS
     function aplicarFiltrosNoFrontend(postagens, filtros) {
         console.log('🎯 Aplicando filtros múltiplos no frontend:', filtros);
@@ -293,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // [TODO O RESTANTE DO CÓDIGO ORIGINAL PERMANECE EXATAMENTE IGUAL...]
     // Pega postagens da página atual
     function getPostagensDaPagina(postagens, pagina, limite) {
         const inicio = (pagina - 1) * limite;
@@ -537,6 +552,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const dataReal = obterDataPostagem(post);
             const dataFormatada = formatarData(dataReal);
             const nomeUsuario = obterNomeUsuario(post);
+            const localizacaoFormatada = formatarLocalizacao(post.localizacao);
+
+            // DEBUG: Mostra os dados completos do post no console
+            console.log(`📄 Post ${index + 1}:`, {
+                titulo: post.titulo,
+                localizacaoOriginal: post.localizacao,
+                localizacaoFormatada: localizacaoFormatada,
+                tipo: typeof post.localizacao
+            });
 
             const postElement = document.createElement('figure');
             postElement.classList.add('w-75', 'h-65', 'flex', 'flex-col', 'justify-center', 'rounded-xl', 'm-auto', 'cursor-pointer');
@@ -566,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="rounded-b-xl drop-shadow-black shadow-lg">
                     <figcaption class="pl-2 pt-4 pb-0.5 text-neutral-950">${post.titulo || 'Sem título'}</figcaption>
                     <figcaption class="pl-2 pb-0.5 text-neutral-700">Data: ${dataFormatada}</figcaption>
-                    <figcaption class="pl-2 pb-0.5 text-neutral-700">Localização: ${post.localizacao || 'Não informada'}</figcaption>
+                    <figcaption class="pl-2 pb-0.5 text-neutral-700">Localização: ${localizacaoFormatada}</figcaption>
                     <figcaption class="pl-2 pb-6 text-neutral-700">Usuário: ${nomeUsuario}</figcaption>
                 </div>
             `;

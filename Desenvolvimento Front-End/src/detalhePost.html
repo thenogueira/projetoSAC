@@ -140,7 +140,6 @@
         </div>
     </main>
 
-
     <footer class="px-30 pt-10 pb-5 ">
 
         <div class="flex gap-10">
@@ -164,54 +163,9 @@
         <p class="text-sm mt-8">©Sistema de Apoio Comunitário (SAC)</p>
     </footer>
 
-    
-
     <!-- Scripts -->
     <script src="javascript/detalhePost.js"></script>
     <script src="javascript/menu.js"></script>
-
-    <!-- Modal de mensagem -->
-<div id="modalMensagem" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
-  <div class="bg-white rounded-xl p-6 w-96 relative">
-    <button id="modalCloseBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
-    <div class="flex items-center mb-4">
-      <i id="modalIcon" class="fas fa-envelope text-2xl mr-3"></i>
-      <h2 id="modalTitle" class="text-xl font-bold"></h2>
-    </div>
-    <div id="modalContent" class="text-base"></div>
-  </div>
-</div>
-
-<!-- Modal de mensagem (inicialmente oculto) -->
-    <div id="modalMensagem" class="hidden fixed inset-0 z-50">
-        <!-- Overlay escuro -->
-        <div class="fixed inset-0 bg-black opacity-50"></div>
-        
-        <!-- Conteúdo do modal -->
-        <div class="relative z-50 flex items-center justify-center min-h-screen p-4">
-            <div id="modalMensagemConteudo" class="bg-white rounded-lg shadow-xl w-full max-w-md">
-                <div class="p-6">
-                    <!-- Cabeçalho do modal com ícone -->
-                    <div class="flex items-start">
-                        <i id="modalIcon" class="fas fa-exclamation-circle text-2xl mr-3 mt-1 "></i>
-                        <div>
-                            <h3 id="modalTitle" class="font-bold text-lg"></h3>
-                            <p id="modalContent" class="mt-1 text-gray-600"></p>
-                        </div>
-                    </div>
-                    
-                    <!-- Botão de fechar -->
-                    <div class="mt-6 text-right">
-                        <button id="modalCloseBtn" class="px-4 py-2 bg-destaque text-white rounded-md">
-                            OK
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 
 </body>
 </html>

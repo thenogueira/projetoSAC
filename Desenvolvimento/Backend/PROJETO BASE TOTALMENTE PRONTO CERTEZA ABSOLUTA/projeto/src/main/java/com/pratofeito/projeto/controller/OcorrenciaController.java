@@ -46,7 +46,7 @@ public class OcorrenciaController {
         return ocorrenciaService.listarOcorrencias();
     }
 
-    /**
+    /**z
      * Recupera ocorrências criadas em uma data específica.
      *
      * @param data Data no formato YYYY-MM-DD (ex: 2024-01-15)

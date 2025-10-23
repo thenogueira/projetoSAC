@@ -9,7 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function mostrarMensagem(titulo, texto, tipo = 'erro') {
-        if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) return;
+        if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
+            console.error('Elementos do modal não encontrados!');
+            alert(`${titulo}: ${texto}`);
+            return;
+        }
 
         modalElements.icon.className = tipo === 'erro'
             ? 'fas fa-exclamation-circle text-red-500 text-2xl mr-3 mt-1'
@@ -50,16 +54,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // **Funções de validação internas**
-   // Validação simplificada de CPF
+    // Validação simplificada de CPF
     function isValidCPF(CPF) {
-    CPF = CPF.replace(/\D/g, '');
-    return CPF.length === 11 && !/^(\d)\1+$/.test(CPF);
+        CPF = CPF.replace(/\D/g, '');
+        return CPF.length === 11 && !/^(\d)\1+$/.test(CPF);
     }
 
-// Validação simplificada de CNPJ
+    // Validação simplificada de CNPJ
     function isValidCNPJ(CNPJ) {
-    CNPJ = CNPJ.replace(/\D/g, '');
-    return CNPJ.length === 14 && !/^(\d)\1+$/.test(CNPJ);
+        CNPJ = CNPJ.replace(/\D/g, '');
+        return CNPJ.length === 14 && !/^(\d)\1+$/.test(CNPJ);
     }
 
     const continueBtn = document.getElementById('continueBtn');
@@ -68,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (el) el.addEventListener('input', () => clearFieldError(el));
     });
 
-    continueBtn.addEventListener('click', function() {
+    continueBtn.addEventListener('click', async function() {
         const nome = document.getElementById('nome').value.trim();
         const numeroDocumentoEl = document.getElementById('numeroDocumento');
         const numeroDocumento = numeroDocumentoEl.value.trim();
@@ -106,17 +110,55 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Limpa apenas números
+        // Verificar se documento já existe no banco
         const numeroDocumentoLimpo = numeroDocumento.replace(/\D/g, '');
+        
+        try {
+            // Verificar se documento já está cadastrado
+            const response = await fetch(`http://localhost:8080/usuarios/verificar-documento/${numeroDocumentoLimpo}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        const dadosCadastro = {
-            nome,
-            tipoDocumento,
-            numeroDocumento: numeroDocumentoLimpo,
-            profileImage: '../img/default-profile.png'
-        };
-        localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCadastro));
+            if (response.status === 409) {
+                // Documento já existe
+                showFieldError(numeroDocumentoEl, `${tipoDocumento} já cadastrado.`);
+                mostrarMensagem('Erro', `${tipoDocumento} já está cadastrado no sistema.`, 'erro');
+                return;
+            } else if (!response.ok && response.status !== 404) {
+                // Outro erro (404 é OK - documento não existe)
+                throw new Error(`Erro ${response.status} ao verificar documento`);
+            }
 
-        window.location.href = 'cadastro-2.html';
+            // Se chegou aqui, documento não existe ou é 404 (pode prosseguir)
+            const dadosCadastro = {
+                nome,
+                tipoDocumento,
+                numeroDocumento: numeroDocumentoLimpo,
+                profileImage: '../img/default-profile.png'
+            };
+            localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCadastro));
+
+            window.location.href = 'cadastro-2.html';
+
+        } catch (error) {
+            console.error('Erro ao verificar documento:', error);
+            // Em caso de erro na verificação, permite prosseguir mas mostra alerta
+            mostrarMensagem('Atenção', 'Não foi possível verificar se o documento já existe. Prosseguindo com cadastro...', 'erro');
+            
+            const dadosCadastro = {
+                nome,
+                tipoDocumento,
+                numeroDocumento: numeroDocumentoLimpo,
+                profileImage: '../img/default-profile.png'
+            };
+            localStorage.setItem('usuarioCadastro', JSON.stringify(dadosCadastro));
+
+            setTimeout(() => {
+                window.location.href = 'cadastro-2.html';
+            }, 2000);
+        }
     });
 });

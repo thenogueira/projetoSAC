@@ -60,7 +60,22 @@ public class OcorrenciaService {
                     if (ocorrenciaDTO.getDescricao() != null) {
                         ocorrencia.setDescricao(ocorrenciaDTO.getDescricao());
                     }
-                    // Repita para todos os outros campos
+                    // ATUALIZA TODOS OS CAMPOS DO DTO:
+                    if (ocorrenciaDTO.getTipo() != null) {
+                        ocorrencia.setTipo(ocorrenciaDTO.getTipo());
+                    }
+                    if (ocorrenciaDTO.getCategoria() != null) {
+                        ocorrencia.setCategoria(ocorrenciaDTO.getCategoria());
+                    }
+                    if (ocorrenciaDTO.getLocalizacao() != null) {
+                        ocorrencia.setLocalizacao(ocorrenciaDTO.getLocalizacao());
+                    }
+                    if (ocorrenciaDTO.getEstadoDoacao() != null) {
+                        ocorrencia.setEstadoDoacao(ocorrenciaDTO.getEstadoDoacao());
+                    }
+                    if (ocorrenciaDTO.getImagem() != null) {
+                        ocorrencia.setImagem(ocorrenciaDTO.getImagem());
+                    }
                     return ocorrenciaRepository.save(ocorrencia);
                 })
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
