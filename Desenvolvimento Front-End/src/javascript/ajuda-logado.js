@@ -24,9 +24,11 @@ function mostrarModal(titulo, mensagem, tipo = 'info') {
 
 document.addEventListener('DOMContentLoaded', function() {
     // VERIFICAÇÃO DE LOGIN - MODIFICADA
-    const user = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+   const user = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
     if (!user) {
         mostrarModal('Erro', 'Você precisa estar logado para interagir', 'erro');
+        window.location.href = 'login.html';
+        return;
     }
 
     
