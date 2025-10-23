@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // VERIFICAÇÃO DE LOGIN - ADICIONADO
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
     if (!usuarioLogado) {
-        alert('Você precisa fazer login para interagir com as postagens');
+        mostrarModal('Erro', 'Você precisa fazer login para interagir com as postagens!', 'erro');
         window.location.href = 'login.html';
         return;
     }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function verificarLoginParaInteracao() {
         const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
         if (!usuario) {
-            alert('Você precisa fazer login para interagir');
+            mostrarModal('Erro', 'Você precisa fazer login para interagir', 'erro');
             window.location.href = 'login.html';
             return false;
         }

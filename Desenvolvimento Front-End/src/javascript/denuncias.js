@@ -1,8 +1,32 @@
+// ====== Função de Modal Customizado ======
+function mostrarModal(titulo, mensagem, tipo = 'info') {
+    const modal = document.getElementById('modalMensagem');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    // Define ícone e cor conforme tipo
+    let iconClass = 'fa-info-circle text-blue-500';
+    if (tipo === 'sucesso') iconClass = 'fa-check-circle text-green-500';
+    else if (tipo === 'erro') iconClass = 'fa-times-circle text-red-500';
+    else if (tipo === 'aviso') iconClass = 'fa-exclamation-circle text-yellow-500';
+
+    modalIcon.className = `fas ${iconClass} text-2xl mr-3 mt-1`;
+    modalTitle.textContent = titulo;
+    modalContent.textContent = mensagem;
+
+    modal.classList.remove('hidden');
+
+    modalCloseBtn.onclick = () => modal.classList.add('hidden');
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // VERIFICAÇÃO DE LOGIN - BLOQUEIO TOTAL DE ACESSO
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
     if (!usuarioLogado) {
-        alert('Você precisa fazer login para acessar esta página');
+        mostrarModal('Erro', 'Você precisa fazer login para acessar esta página', 'erro');
         window.location.href = 'login.html';
         return;
     }
@@ -13,8 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
         
         if (!token || !usuarioAtual) {
-            alert('Você precisa fazer login para interagir');
-            // Limpa qualquer dado residual
+            mostrarModal('Erro', 'Você precisa fazer login para interagir', 'erro');
             localStorage.removeItem('authToken');
             localStorage.removeItem('usuarioLogado');
             sessionStorage.clear();
@@ -29,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function configurarObservadorLogout() {
         window.addEventListener('storage', function(e) {
             if (e.key === 'usuarioLogado' && !e.newValue) {
-                alert('Sessão expirada. Faça login novamente para interagir.');
+                mostrarModal('Erro', 'Sessão expirada. Faça login novamente para interagir.', 'erro');
                 window.location.href = 'login.html';
             }
         });
@@ -39,7 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem('authToken');
             const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
             if (!token || !usuario) {
-                alert('Sessão expirada. Faça login novamente.');
+                mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
+                window.location.href = 'login.html';
                 window.location.href = 'login.html';
             }
         }, 2000);
@@ -79,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const descricao = descricaoTextarea.value.trim();
 
         if (!idDenuncia || !descricao) {
-            alert("Por favor, preencha todos os campos antes de enviar.");
+             mostrarModal('Erro', 'Por favor, preencha todos os campos antes de enviar.', 'erro');
             return;
         }
 
@@ -112,11 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             await emailjs.send("service_k6ww4io", "template_hjltlm8", params);
-            alert("✅ Denúncia enviada com sucesso!");
+            mostrarModal('Sucesso!', '✅ Denúncia enviada com sucesso!', 'sucesso');
             form.reset();
         } catch (error) {
-            console.error("Erro ao enviar denúncia:", error);
-            alert("❌ Ocorreu um erro ao enviar sua denúncia. Tente novamente mais tarde.");
+            mostrarModal('Erro', '❌ Ocorreu um erro ao enviar sua denúncia. Tente novamente mais tarde.', 'erro');
         }
     });
     // Configurar observador de logout

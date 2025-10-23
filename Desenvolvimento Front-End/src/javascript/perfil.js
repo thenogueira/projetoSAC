@@ -1,10 +1,36 @@
+// ====== Função de Modal Customizado ======
+function mostrarModal(titulo, mensagem, tipo = 'info') {
+    const modal = document.getElementById('modalMensagem');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    // Define ícone e cor conforme tipo
+    let iconClass = 'fa-info-circle text-blue-500';
+    if (tipo === 'sucesso') iconClass = 'fa-check-circle text-green-500';
+    else if (tipo === 'erro') iconClass = 'fa-times-circle text-red-500';
+    else if (tipo === 'aviso') iconClass = 'fa-exclamation-circle text-yellow-500';
+
+    modalIcon.className = `fas ${iconClass} text-2xl mr-3 mt-1`;
+    modalTitle.textContent = titulo;
+    modalContent.textContent = mensagem;
+
+    modal.classList.remove('hidden');
+
+    modalCloseBtn.onclick = () => modal.classList.add('hidden');
+}
+
+
 document.addEventListener('DOMContentLoaded', async function () {
     // VERIFICAÇÃO DE LOGIN - BLOQUEIO TOTAL DE ACESSO
     const token = localStorage.getItem('authToken');
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
     
     if (!usuarioLogado) {
-        alert('Você precisa fazer login para acessar esta página');
+        mostrarModal('Erro', 'Você precisa fazer login para acessar esta página', 'erro');
+
+        
         window.location.href = 'login.html';
         return;
     }
@@ -37,11 +63,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
         
         if (!token || !usuarioAtual) {
-            alert('Você precisa fazer login para interagir');
+            mostrarModal('Erro', 'Você precisa fazer login para interagir', 'erro');
             // Limpa qualquer dado residual
             localStorage.removeItem('authToken');
             localStorage.removeItem('usuarioLogado');
             sessionStorage.clear();
+            
             
             window.location.href = 'login.html';
             return false;
@@ -53,8 +80,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     function configurarObservadorLogout() {
         window.addEventListener('storage', function(e) {
             if (e.key === 'usuarioLogado' && !e.newValue) {
-                alert('Sessão expirada. Faça login novamente.');
+                mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
                 window.location.href = 'login.html';
+                
             }
         });
         
@@ -63,8 +91,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             const token = localStorage.getItem('authToken');
             const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
             if (!token || !usuario) {
-                alert('Sessão expirada. Faça login novamente.');
+                mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
                 window.location.href = 'login.html';
+               
             }
         }, 2000);
     }
@@ -144,7 +173,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 const photoInput = document.getElementById('editPhoto');
                 if (photoInput && photoInput.files[0]) {
-                    alert('Upload de foto será implementado em breve. Por enquanto, apenas a descrição será atualizada.');
+                    mostrarModal('Erro', 'Upload de foto será implementado em breve. Por enquanto, apenas a descrição será atualizada.', 'erro');
+
+                     
                     photoInput.value = '';
                 }
                 
@@ -184,11 +215,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 console.log('Usuário atualizado no localStorage:', usuario);
                 
                 editProfileContainer.classList.add('hidden');
-                alert('Descrição atualizada com sucesso!');
+                mostrarModal('Sucesso!', 'Descrição atualizada com sucesso!', 'sucesso');
+                
                 
             } catch (err) {
                 console.error('Erro:', err);
-                alert('Erro ao atualizar: ' + err.message);
+                mostrarModal('Erro', 'Erro ao atualizar: ' + err.message, 'erro');
+
+                
             }
         });
     }
@@ -220,11 +254,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Abrir nova aba com o Gmail
                     window.open(gmailUrl, '_blank');
                 } else {
-                    alert('Este usuário não possui email cadastrado para contato.');
+                    mostrarModal('Erro', 'Este usuário não possui email cadastrado para contato.', 'erro');
+
+                    
                 }
             } else {
                 // Se for o próprio perfil, mostrar mensagem diferente
-                alert('Este é o seu próprio perfil!');
+                mostrarModal('Erro', 'Este é o seu próprio perfil!', 'erro');
+
+                
             }
         });
     }
@@ -500,10 +538,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                         // Adiciona o botão novamente abaixo
                         containerComentarios.appendChild(addBtnContainer);
 
-                        alert('Comentário enviado com sucesso!');
+                        mostrarModal('Sucesso!', 'Comentário enviado com sucesso!', 'sucesso');
                     } catch (err) {
                         console.error(err);
-                        alert('Erro ao enviar comentário. Tente novamente.');
+                        mostrarModal('Erro', 'Erro ao enviar comentário. Tente novamente.', 'erro');
                     }
                 });
             });
@@ -597,7 +635,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             // Pegando a primeira postagem para associar o comentário
             const posts = await fetchUserPosts();
-            if (!posts.length) return alert('Não há postagens para comentar.');
+            if (!posts.length) return mostrarModal('Erro', 'Não há postagens para comentar.', 'erro');
+
+            
+
+            
 
             const ocorrenciaId = posts[0].id;
 
@@ -621,10 +663,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             const novoComentarioEl = createCommentElementLayout(usuarioLogado, comentarioCriado.texto, comentarioCriado.id);
             containerComentarios.prepend(novoComentarioEl);
 
-            alert('Comentário enviado com sucesso!');
+            mostrarModal('Sucesso!', 'Comentário enviado com sucesso!', 'sucesso');
         } catch (err) {
             console.error(err);
-            alert('Erro ao enviar comentário. Tente novamente.');
+            mostrarModal('Erro', 'Erro ao enviar comentário. Tente novamente.', 'erro');
         }
     }
 

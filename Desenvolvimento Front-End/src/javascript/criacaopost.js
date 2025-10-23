@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function mostrarMensagem(titulo, texto, tipo = 'erro') {
     if (!modalElements.modal || !modalElements.content || !modalElements.title || !modalElements.icon) {
       console.error('Elementos do modal não encontrados!');
-      alert(`${titulo}: ${texto}`);
+      mostrarModal(`${titulo}: ${texto}`);
       return;
     }
+
+    
 
     modalElements.icon.className = tipo === 'erro' 
       ? 'fas fa-exclamation-circle text-red-500 text-2xl mr-3 mt-1'
