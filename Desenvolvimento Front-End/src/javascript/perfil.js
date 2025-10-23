@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             async () => {
                 try {
                     // CORREÇÃO: Endpoint correto para deletar comentário
-                    const resp = await fetch(`http://localhost:8080/comentarios/deletar/${comentarioId}`, {
+                    const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': token ? `Bearer ${token}` : '',
