@@ -1,4 +1,4 @@
-// postagens.js - VERSÃO CORRIGIDA (LOCALIZAÇÃO COMPLETA)
+// postagens.js - VERSÃO CORRIGIDA (SEM URGÊNCIA)
 document.addEventListener('DOMContentLoaded', function () {
     // VERIFICAÇÃO DE LOGIN - ADICIONADO
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
@@ -265,13 +265,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         return false;
                     }
                 } catch (e) {
-                    return false;
-                }
-            }
-
-            // Filtro por urgência
-            if (filtrosLimpos.urgencia && filtrosLimpos.urgencia !== '') {
-                if (!post.urgencia || post.urgencia !== filtrosLimpos.urgencia) {
                     return false;
                 }
             }
@@ -602,10 +595,13 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('✅ Renderização concluída - Total de elementos no DOM:', postsContainerReal.children.length);
     }
 
-    // Adiciona estados brasileiros ao filtro de localização
+    // Adiciona estados brasileiros ao filtro de localização - VERSÃO CORRIGIDA
     function popularEstadosBrasileiros() {
         const selectLocalizacao = document.getElementById('localizacao');
-        if (!selectLocalizacao) return;
+        if (!selectLocalizacao) {
+            console.error('❌ Elemento select#localizacao não encontrado no DOM');
+            return;
+        }
 
         selectLocalizacao.innerHTML = '<option value="todas">Todos os estados</option>';
 
@@ -621,6 +617,8 @@ document.addEventListener('DOMContentLoaded', function () {
             option.textContent = estado;
             selectLocalizacao.appendChild(option);
         });
+        
+        console.log('✅ Estados brasileiros carregados no filtro');
     }
 
     // LÊ filtros salvos (para persistência ao voltar)
@@ -638,7 +636,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (filtrosAtuais.localizacao !== undefined) {
                         filtroForm.localizacao.value = filtrosAtuais.localizacao || 'todas';
                     }
-                    if (filtrosAtuais.urgencia !== undefined) filtroForm.urgencia.value = filtrosAtuais.urgencia || 'todas';
                 }
             } catch (e) {
                 console.warn('Erro ao ler filtros salvos:', e);
@@ -666,7 +663,6 @@ document.addEventListener('DOMContentLoaded', function () {
             filtroForm.tipo.value = 'todos';
             filtroForm.data.value = '';
             filtroForm.localizacao.value = 'todas';
-            filtroForm.urgencia.value = 'todas';
         }
         
         paginaAtual = 1;
@@ -676,24 +672,38 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('✅ Filtros limpos!');
     }
 
-    // Evento submit do formulário de filtros
+    // Evento submit do formulário de filtros - VERSÃO CORRIGIDA
     if (filtroForm) {
         filtroForm.addEventListener('submit', function (e) {
             e.preventDefault();
             
-            let categoria = filtroForm.categoria.value || '';
-            let tipo = filtroForm.tipo.value || '';
-            let data = filtroForm.data.value || '';
-            let localizacao = filtroForm.localizacao.value || '';
-            let urgencia = filtroForm.urgencia.value || '';
+            // CORREÇÃO: Verifica se os elementos existem antes de acessar .value
+            let categoria = '';
+            let tipo = '';
+            let data = '';
+            let localizacao = '';
 
-            // Ajusta valores
-            if (categoria === 'Todas') categoria = '';
-            if (tipo === 'todos') tipo = '';
-            if (localizacao === 'todas') localizacao = '';
-            if (urgencia === 'todas') urgencia = '';
+            // Verifica e obtém valores apenas se os elementos existirem
+            if (filtroForm.categoria) {
+                categoria = filtroForm.categoria.value || '';
+                if (categoria === 'Todas') categoria = '';
+            }
 
-            filtrosAtuais = { categoria, tipo, data, localizacao, urgencia };
+            if (filtroForm.tipo) {
+                tipo = filtroForm.tipo.value || '';
+                if (tipo === 'todos') tipo = '';
+            }
+
+            if (filtroForm.data) {
+                data = filtroForm.data.value || '';
+            }
+
+            if (filtroForm.localizacao) {
+                localizacao = filtroForm.localizacao.value || '';
+                if (localizacao === 'todas') localizacao = '';
+            }
+
+            filtrosAtuais = { categoria, tipo, data, localizacao };
             console.log('🎯 Filtros aplicados:', filtrosAtuais);
 
             // CORREÇÃO: Sempre volta para página 1 ao aplicar filtro

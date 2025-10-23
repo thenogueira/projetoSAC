@@ -18,6 +18,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       return tipo.charAt(0).toUpperCase() + tipo.slice(1).toLowerCase();
   }
 
+  // ====== FUNÇÃO CORRIGIDA: Buscar dados do usuário ======
+  async function buscarDadosUsuario(usuarioId) {
+    try {
+      // Usa o mesmo endpoint do perfil.js que funciona
+      const resp = await fetch(`http://localhost:8080/usuarios/listar/${usuarioId}`);
+      
+      if (!resp.ok) {
+        throw new Error(`Erro ${resp.status}: Usuário não encontrado`);
+      }
+      
+      const usuario = await resp.json();
+      console.log('Usuário encontrado:', usuario);
+      
+      return usuario;
+      
+    } catch (error) {
+      console.error('Erro ao buscar usuário:', error);
+      return null;
+    }
+  }
+
   if (!postId) {
     postDetails.innerHTML = `<p class="text-center text-red-500">
       Nenhum post selecionado. Volte para a página de postagens e escolha um.
@@ -37,7 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       : 'Data não informada';
 
     const nomeUsuario = post.usuarioNome || 'Usuário não identificado';
-    const emailUsuario = "";
     const idLogado = userLogado?.id || userLogado?.idUsuario || null;
 
     // ===== Função para extrair imagens =====
@@ -172,34 +192,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // ===== Renderização principal =====
-postDetails.innerHTML = `
-  <div class="flex justify-between mb-6 w-full items-center">
-    <div class="flex flex-col">
-      <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
-      <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
-    </div>
+    postDetails.innerHTML = `
+      <div class="flex justify-between mb-6 w-full items-center">
+        <div class="flex flex-col">
+          <h1 class="text-4xl mb-1">${post.titulo || 'Sem título'}</h1>
+          <p class="text-minitexto">Data da postagem: ${dataCriacao}</p>
+        </div>
 
-    <a href="#" id="denunciarPost">
-      <span class="icon">
-        <i class="fa-solid fa-circle-exclamation text-red-500 text-3xl"></i>
-      </span>
-    </a>
-  </div>
-
-  <div class="flex items-center justify-between mb-6 w-full mt-8">
-    <div class="flex gap-5 items-center">
-      <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
-        <img class="object-cover w-full h-full" 
-            src="${'../img/defaultPhoto.png'}" 
-            alt="Imagem do post"
-            onerror="this.src='../img/defaultPhoto.png'">
+        <a href="#" id="denunciarPost">
+          <span class="icon">
+            <i class="fa-solid fa-circle-exclamation text-red-500 text-3xl"></i>
+          </span>
+        </a>
       </div>
 
       <div class="flex items-center justify-between mb-6 w-full mt-8">
         <div class="flex gap-5 items-center">
           <div class="rounded-full overflow-hidden w-14 h-14 bg-gray-300">
             <img class="object-cover w-full h-full" 
-                src="${'../img/defaultPhoto.png'}" 
+                src="../img/defaultPhoto.png" 
                 alt="Imagem do post"
                 onerror="this.src='../img/defaultPhoto.png'">
           </div>
@@ -208,53 +219,18 @@ postDetails.innerHTML = `
             <span class="text-xl"><strong>ID Postagem:</strong> ${post.id}</span>
           </div>
         </div>
-        <div class="flex gap-3">
+        <div class="flex gap-3" id="botoesContainer">
           ${
             idLogado && post.usuarioId === idLogado
               ? `
                 <button id="editarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Editar</button>
               `
-              : emailUsuario
-                ? `<button id="contatarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Contactar</button>`
-                : `<button disabled class="bg-gray-300 py-2 px-4 rounded-xl opacity-50 cursor-not-allowed">Contactar</button>`
+              : `
+                <button id="contatarButton" class="bg-fundo1 border border-black py-2 px-4 rounded-xl hover:bg-destaque hover:text-white">Contactar</button>
+              `
           }
         </div>
       </div>
-    </div>
-    <div class="flex gap-3" id="botoesContainer"></div>
-  </div>
-
-  <hr class="text-minitexto mt-6 mb-10">
-
-  <div>
-    <ul class="text-xl mb-8">
-      <li class="flex items-center gap-2 mb-4"><p class="font-bold">Tipo:</p> <p>${post.tipo}</p></li>
-      <li class="flex items-center gap-2 mb-4"><p class="font-bold">Categoria:</p> <p>${post.categoria || 'Não informada'}</p></li>
-      <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
-    </ul>
-
-    <label class="text-xl font-bold">Descrição</label>
-    <p class="border border-black w-full rounded-xl py-2 px-4 mt-2">
-      ${post.descricao || 'Sem descrição disponível.'}
-    </p>
-  </div>
-
-  ${imagemPostHtml}
-`;
-
-// ====== Criação dinâmica do botão Contactar ======
-const botoesContainer = document.getElementById('botoesContainer');
-
-if (botoesContainer && !(idLogado && post.usuarioId === idLogado)) {
-  const contatarButton = document.createElement('button');
-  contatarButton.id = 'contatarButton';
-  contatarButton.className = 'bg-fundo1 border border-black hover:bg-destaque hover:text-white py-2 px-4 rounded-xl'
-  contatarButton.textContent = 'Contactar';
-
-  // ✅ Quando clicar, vai direto pro perfil do dono da postagem
-  contatarButton.addEventListener('click', () => {
-    window.location.href = `perfil.html?id=${post.usuarioId}`;
-  });
 
       <hr class="text-minitexto mt-6 mb-10">
 
@@ -265,6 +241,11 @@ if (botoesContainer && !(idLogado && post.usuarioId === idLogado)) {
           <li class="flex items-center gap-2 mb-4"><p class="font-bold">Localização:</p> <p>${post.localizacao || 'Não informada'}</p></li>
         </ul>
 
+        <label class="text-xl font-bold">Descrição</label>
+        <p class="border border-black w-full rounded-xl py-2 px-4 mt-2">
+          ${post.descricao || 'Sem descrição disponível.'}
+        </p>
+      </div>
 
       ${imagemPostHtml}
 
@@ -278,7 +259,8 @@ if (botoesContainer && !(idLogado && post.usuarioId === idLogado)) {
     // Botão de denúncia
     const denunciarButton = document.getElementById("denunciarPost");
     if (denunciarButton) {
-      denunciarButton.addEventListener("click", () => {
+      denunciarButton.addEventListener("click", (e) => {
+        e.preventDefault();
         // Salva o ID e o tipo no localStorage
         localStorage.setItem("denunciaTipo", "postagem");
         localStorage.setItem("denunciaId", post.id);
@@ -308,6 +290,52 @@ if (botoesContainer && !(idLogado && post.usuarioId === idLogado)) {
 
     document.getElementById('editarButton')?.addEventListener('click', () => {
       window.location.href = `editPost.html?id=${post.id}`;
+    });
+
+    // ====== CONFIGURAÇÃO DO BOTÃO CONTACTAR CORRIGIDA ======
+    document.getElementById('contatarButton')?.addEventListener('click', async () => {
+      if (!post.usuarioId) {
+        alert('Não foi possível encontrar o email do usuário.');
+        return;
+      }
+
+      try {
+        console.log('Buscando dados do usuário ID:', post.usuarioId);
+        
+        // Busca os dados completos do usuário (mesma lógica do perfil.js)
+        const usuarioDados = await buscarDadosUsuario(post.usuarioId);
+        
+        if (!usuarioDados) {
+          alert('Não foi possível encontrar o usuário para contato.');
+          return;
+        }
+
+        // Pega o email do usuário (mesma lógica do perfil.js)
+        const emailDoUsuario = usuarioDados.email;
+        
+        if (!emailDoUsuario) {
+          alert('Este usuário não possui email cadastrado para contato.');
+          return;
+        }
+
+        console.log('Email encontrado:', emailDoUsuario);
+
+        // Cria o assunto e corpo do email (mesmo formato do perfil.js)
+        const assunto = `Interesse na postagem: ${post.titulo || 'Sem título'}`;
+        const corpo = `Olá ${usuarioDados.nome || 'usuário'}!\n\nTenho interesse na sua postagem "${post.titulo || 'Sem título'}" no SAC.\n\nPostagem ID: ${post.id}\n\nAtenciosamente,\n${userLogado?.nome || 'Usuário SAC'}`;
+
+        // Cria o link do Gmail (mesma lógica do perfil.js)
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailDoUsuario)}&su=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+        
+        console.log('Abrindo Gmail:', gmailUrl);
+        
+        // Abre nova aba com o Gmail (mesmo comportamento do perfil.js)
+        window.open(gmailUrl, '_blank');
+        
+      } catch (error) {
+        console.error('Erro ao contactar:', error);
+        alert('Erro ao tentar contactar o usuário. Tente novamente mais tarde.');
+      }
     });
 
   } catch (error) {

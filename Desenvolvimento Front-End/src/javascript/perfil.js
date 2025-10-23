@@ -16,9 +16,109 @@ function mostrarModal(titulo, mensagem, tipo = 'info') {
     modalTitle.textContent = titulo;
     modalContent.textContent = mensagem;
 
-    modal.classList.remove('hidden');
+    // Resetar botão do modal para o padrão
+    modalCloseBtn.innerHTML = '';
+    const btnOk = document.createElement('button');
+    btnOk.textContent = 'OK';
+    btnOk.className = 'px-4 py-2 bg-destaque text-white rounded-md';
+    btnOk.onclick = () => modal.classList.add('hidden');
+    modalCloseBtn.appendChild(btnOk);
 
-    modalCloseBtn.onclick = () => modal.classList.add('hidden');
+    modal.classList.remove('hidden');
+}
+
+// ====== Função de Modal de Confirmação Personalizado ======
+function mostrarModalConfirmacao(mensagem, callbackConfirmar) {
+    const modal = document.getElementById('modalMensagem');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    // Configurar modal de confirmação
+    modalIcon.className = 'fas fa-question-circle text-blue-500 text-2xl mr-3 mt-1';
+    modalTitle.textContent = 'SAC - Confirmação';
+    modalContent.textContent = mensagem;
+
+    // Criar botões personalizados
+    modalCloseBtn.innerHTML = '';
+    modalCloseBtn.className = 'flex justify-center gap-4 mt-4';
+    
+    const btnCancelar = document.createElement('button');
+    btnCancelar.textContent = 'Cancelar';
+    btnCancelar.className = 'px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100';
+    btnCancelar.onclick = () => {
+        modal.classList.add('hidden');
+    };
+
+    const btnConfirmar = document.createElement('button');
+    btnConfirmar.textContent = 'Confirmar';
+    btnConfirmar.className = 'px-4 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50';
+    btnConfirmar.onclick = async () => {
+        modal.classList.add('hidden');
+        await callbackConfirmar();
+    };
+
+    modalCloseBtn.appendChild(btnCancelar);
+    modalCloseBtn.appendChild(btnConfirmar);
+
+    modal.classList.remove('hidden');
+}
+
+// ====== Função de Modal de Edição Personalizado ======
+function mostrarModalEdicao(textoAtual, callbackEditar) {
+    const modal = document.getElementById('modalMensagem');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('modalContent');
+    const modalIcon = document.getElementById('modalIcon');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    // Configurar modal de edição
+    modalIcon.className = 'fas fa-edit text-blue-500 text-2xl mr-3 mt-1';
+    modalTitle.textContent = 'SAC - Editar Comentário';
+    
+    // Criar textarea para edição
+    modalContent.innerHTML = '';
+    
+    const textarea = document.createElement('textarea');
+    textarea.value = textoAtual;
+    textarea.className = 'w-full p-2 border border-gray-300 rounded-md resize-none';
+    textarea.rows = 4;
+    textarea.placeholder = 'Digite o novo texto do comentário...';
+    
+    modalContent.appendChild(textarea);
+
+    // Criar botões personalizados
+    modalCloseBtn.innerHTML = '';
+    modalCloseBtn.className = 'flex justify-center gap-4 mt-4';
+    
+    const btnCancelar = document.createElement('button');
+    btnCancelar.textContent = 'Cancelar';
+    btnCancelar.className = 'px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100';
+    btnCancelar.onclick = () => {
+        modal.classList.add('hidden');
+    };
+
+    const btnSalvar = document.createElement('button');
+    btnSalvar.textContent = 'Salvar';
+    btnSalvar.className = 'px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50';
+    btnSalvar.onclick = async () => {
+        const novoTexto = textarea.value.trim();
+        if (!novoTexto) {
+            mostrarModal('Atenção', '⚠️ O comentário não pode estar vazio!', 'aviso');
+            return;
+        }
+        modal.classList.add('hidden');
+        await callbackEditar(novoTexto);
+    };
+
+    modalCloseBtn.appendChild(btnCancelar);
+    modalCloseBtn.appendChild(btnSalvar);
+
+    modal.classList.remove('hidden');
+    
+    // Focar no textarea
+    setTimeout(() => textarea.focus(), 100);
 }
 
 
@@ -29,8 +129,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     if (!usuarioLogado) {
         mostrarModal('Erro', 'Você precisa fazer login para acessar esta página', 'erro');
-
-        
         window.location.href = 'login.html';
         return;
     }
@@ -69,7 +167,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             localStorage.removeItem('usuarioLogado');
             sessionStorage.clear();
             
-            
             window.location.href = 'login.html';
             return false;
         }
@@ -82,7 +179,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (e.key === 'usuarioLogado' && !e.newValue) {
                 mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
                 window.location.href = 'login.html';
-                
             }
         });
         
@@ -93,7 +189,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!token || !usuario) {
                 mostrarModal('Erro', 'Sessão expirada. Faça login novamente.', 'erro');
                 window.location.href = 'login.html';
-               
             }
         }, 2000);
     }
@@ -174,8 +269,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const photoInput = document.getElementById('editPhoto');
                 if (photoInput && photoInput.files[0]) {
                     mostrarModal('Erro', 'Upload de foto será implementado em breve. Por enquanto, apenas a descrição será atualizada.', 'erro');
-
-                     
                     photoInput.value = '';
                 }
                 
@@ -215,14 +308,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 console.log('Usuário atualizado no localStorage:', usuario);
                 
                 editProfileContainer.classList.add('hidden');
-                mostrarModal('Sucesso!', 'Descrição atualizada com sucesso!', 'sucesso');
-                
+                mostrarModal('Sucesso!', '✅ Descrição atualizada com sucesso!', 'sucesso');
                 
             } catch (err) {
                 console.error('Erro:', err);
-                mostrarModal('Erro', 'Erro ao atualizar: ' + err.message, 'erro');
-
-                
+                mostrarModal('Erro', '❌ Erro ao atualizar: ' + err.message, 'erro');
             }
         });
     }
@@ -254,15 +344,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Abrir nova aba com o Gmail
                     window.open(gmailUrl, '_blank');
                 } else {
-                    mostrarModal('Erro', 'Este usuário não possui email cadastrado para contato.', 'erro');
-
-                    
+                    mostrarModal('Erro', '❌ Este usuário não possui email cadastrado para contato.', 'erro');
                 }
             } else {
                 // Se for o próprio perfil, mostrar mensagem diferente
-                mostrarModal('Erro', 'Este é o seu próprio perfil!', 'erro');
-
-                
+                mostrarModal('Erro', '❌ Este é o seu próprio perfil!', 'erro');
             }
         });
     }
@@ -359,34 +445,45 @@ document.addEventListener('DOMContentLoaded', async function () {
     // FUNÇÕES PARA EDITAR E DELETAR COMENTÁRIOS - CORRIGIDAS
     // =========================
 
-    // Função para deletar comentário
-    async function deletarComentario(comentarioId) {
+    // Função para deletar comentário - CORRIGIDA
+    async function deletarComentario(comentarioId, elementoDiv) {
         if (!verificarLoginTempoReal()) return false;
         
-        if (!confirm('Tem certeza que deseja excluir este comentário?')) {
-            return false;
-        }
+        // Modal de confirmação personalizado
+        mostrarModalConfirmacao(
+            'Tem certeza que deseja excluir este comentário?\n\nEsta ação não pode ser desfeita.',
+            async () => {
+                try {
+                    // CORREÇÃO: Endpoint correto para deletar comentário
+                    const resp = await fetch(`http://localhost:8080/comentarios/deletar/${comentarioId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': token ? `Bearer ${token}` : '',
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-        try {
-            const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': token ? `Bearer ${token}` : '',
-                    'Content-Type': 'application/json'
+                    if (!resp.ok) {
+                        throw new Error(`Erro ${resp.status} ao deletar comentário`);
+                    }
+
+                    // Remover o comentário da UI
+                    elementoDiv.remove();
+                    
+                    // Se não houver mais comentários, mostrar mensagem
+                    if (containerComentarios.children.length === 0) {
+                        containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
+                    }
+                    
+                    mostrarModal('Sucesso!', '✅ Comentário excluído com sucesso!', 'sucesso');
+                    return true;
+                } catch (err) {
+                    console.error('Erro ao deletar comentário:', err);
+                    mostrarModal('Erro', '❌ Erro ao excluir comentário. Tente novamente.', 'erro');
+                    return false;
                 }
-            });
-
-            if (!resp.ok) {
-                throw new Error(`Erro ${resp.status} ao deletar comentário`);
             }
-
-            alert('Comentário excluído com sucesso!');
-            return true;
-        } catch (err) {
-            console.error('Erro ao deletar comentário:', err);
-            alert('Erro ao excluir comentário: ' + err.message);
-            return false;
-        }
+        );
     }
 
     // Função para editar comentário - CORRIGIDA
@@ -396,40 +493,35 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Obter o texto atual do elemento DOM
         const textoAtual = elementoTexto.textContent || elementoTexto.innerText;
         
-        const novoTexto = prompt('Editar comentário:', textoAtual);
-        
-        if (novoTexto === null) return false; // Usuário cancelou
-        if (novoTexto.trim() === '') {
-            alert('O comentário não pode estar vazio!');
-            return false;
-        }
+        // Modal de edição personalizado
+        mostrarModalEdicao(textoAtual, async (novoTexto) => {
+            try {
+                const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        texto: novoTexto.trim()
+                    })
+                });
 
-        try {
-            const resp = await fetch(`http://localhost:8080/comentarios/${comentarioId}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': token ? `Bearer ${token}` : '',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    texto: novoTexto.trim()
-                })
-            });
+                if (!resp.ok) {
+                    throw new Error(`Erro ${resp.status} ao editar comentário`);
+                }
 
-            if (!resp.ok) {
-                throw new Error(`Erro ${resp.status} ao editar comentário`);
+                // Atualizar a UI imediatamente
+                elementoTexto.textContent = novoTexto.trim();
+                
+                mostrarModal('Sucesso!', '✅ Comentário editado com sucesso!', 'sucesso');
+                return true;
+            } catch (err) {
+                console.error('Erro ao editar comentário:', err);
+                mostrarModal('Erro', '❌ Erro ao editar comentário. Tente novamente.', 'erro');
+                return false;
             }
-
-            // Atualizar a UI imediatamente - CORREÇÃO PRINCIPAL
-            elementoTexto.textContent = novoTexto.trim();
-            
-            alert('Comentário editado com sucesso!');
-            return true;
-        } catch (err) {
-            console.error('Erro ao editar comentário:', err);
-            alert('Erro ao editar comentário: ' + err.message);
-            return false;
-        }
+        });
     }
 
     function renderUserComments(comments) {
@@ -538,10 +630,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                         // Adiciona o botão novamente abaixo
                         containerComentarios.appendChild(addBtnContainer);
 
-                        mostrarModal('Sucesso!', 'Comentário enviado com sucesso!', 'sucesso');
+                        mostrarModal('Sucesso!', '✅ Comentário enviado com sucesso!', 'sucesso');
                     } catch (err) {
                         console.error(err);
-                        mostrarModal('Erro', 'Erro ao enviar comentário. Tente novamente.', 'erro');
+                        mostrarModal('Erro', '❌ Erro ao enviar comentário. Tente novamente.', 'erro');
                     }
                 });
             });
@@ -606,7 +698,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 const sucesso = await editarComentario(comentarioId, textoElement);
                 if (sucesso) {
-                    // A atualização já foi feita dentro da função editarComentario
                     console.log('Comentário atualizado com sucesso');
                 }
             });
@@ -615,15 +706,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 e.preventDefault();
                 const comentarioId = deletarBtn.getAttribute('data-id');
                 
-                const sucesso = await deletarComentario(comentarioId);
+                const sucesso = await deletarComentario(comentarioId, div);
                 if (sucesso) {
-                    // Remover o comentário da UI
-                    div.remove();
-                    
-                    // Se não houver mais comentários, mostrar mensagem
-                    if (containerComentarios.children.length === 0) {
-                        containerComentarios.innerHTML = '<p class="text-sm text-gray-500 col-span-full text-center">Nenhum comentário encontrado.</p>';
-                    }
+                    console.log('Comentário deletado com sucesso');
                 }
             });
         }
@@ -635,11 +720,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             // Pegando a primeira postagem para associar o comentário
             const posts = await fetchUserPosts();
-            if (!posts.length) return mostrarModal('Erro', 'Não há postagens para comentar.', 'erro');
-
-            
-
-            
+            if (!posts.length) return mostrarModal('Erro', '❌ Não há postagens para comentar.', 'erro');
 
             const ocorrenciaId = posts[0].id;
 
@@ -663,10 +744,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             const novoComentarioEl = createCommentElementLayout(usuarioLogado, comentarioCriado.texto, comentarioCriado.id);
             containerComentarios.prepend(novoComentarioEl);
 
-            mostrarModal('Sucesso!', 'Comentário enviado com sucesso!', 'sucesso');
+            mostrarModal('Sucesso!', '✅ Comentário enviado com sucesso!', 'sucesso');
         } catch (err) {
             console.error(err);
-            mostrarModal('Erro', 'Erro ao enviar comentário. Tente novamente.', 'erro');
+            mostrarModal('Erro', '❌ Erro ao enviar comentário. Tente novamente.', 'erro');
         }
     }
 
