@@ -87,62 +87,15 @@ async function handleLogin(event) {
     }
 }
 
-// Recuperação de senha (fallback local se backend não disponível)
-function generateToken() {
-    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-    return 'tkn_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-function saveLocalResetToken(token, email) {
-    const key = 'pwResetTokens';
-    const raw = localStorage.getItem(key);
-    const map = raw ? JSON.parse(raw) : {};
-    const expires = Date.now() + 60 * 60 * 1000; // 1 hora
-    map[token] = { email, expires };
-    localStorage.setItem(key, JSON.stringify(map));
-}
-function formatResetLink(token) {
-    return `${window.location.origin}reset-senha.html?token=${encodeURIComponent(token)}`;
-}
-
-async function handleForgotSubmit(event) {
-    event.preventDefault();
-    const emailInput = document.getElementById('forgotEmail');
-    const email = emailInput?.value?.trim();
-    if (!email) {
-        mostrarMensagem('Erro', 'Informe um e‑mail válido.', 'erro');
-        return;
-    }
-
-    try {
-        const resp = await fetch('http://localhost:8080/auth/forgot-password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-        });
-        if (resp.ok) {
-            mostrarMensagem('Enviado', 'Verifique seu e‑mail com as instruções para recuperar a senha.', 'sucesso');
-            closeForgotModal();
-            return;
-        }
-        console.warn('Resposta forgot-password não OK:', resp.status);
-    } catch (err) {
-        console.warn('Falha backend forgot-password, usando fallback local.', err);
-    }
-
-    const token = generateToken();
-    saveLocalResetToken(token, email);
-    const link = formatResetLink(token);
-    closeForgotModal();
-    mostrarMensagem('Token gerado (ambiente local)', `Link de redefinição (teste):\n${link}\n\nO token expira em 1 hora.`, 'sucesso');
-}
-
-function openForgotModal() {
-    const modal = document.getElementById('forgotPasswordModal');
-    if (modal) modal.classList.remove('hidden');
-}
-function closeForgotModal() {
-    const modal = document.getElementById('forgotPasswordModal');
-    if (modal) modal.classList.add('hidden');
+// Função simples para redirecionar para email de recuperação
+function handleForgotPassword() {
+    const email = 'sistemadeapoiocomunitario@gmail.com';
+    const subject = 'Recuperação de Senha - Sistema de Apoio Comunitário';
+    const body = 'Por favor, preciso redefinir minha senha. Meu email de cadastro é: [INFORME SEU EMAIL AQUI]';
+    
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    window.open(mailtoLink, '_blank');
 }
 
 // Inicialização única e segura
@@ -159,144 +112,40 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('modalCloseBtn');
     if (closeBtn) closeBtn.addEventListener('click', fecharModal);
 
-    // forgot password
-    const forgotLink = document.getElementById('forgotPasswordLink');
-    if (forgotLink) forgotLink.addEventListener('click', function(e) { e.preventDefault(); openForgotModal(); });
-
-    const forgotForm = document.getElementById('forgotPasswordForm');
-    if (forgotForm) forgotForm.addEventListener('submit', handleForgotSubmit);
-
-    const forgotCancelBtn = document.getElementById('forgotCancelBtn');
-    if (forgotCancelBtn) forgotCancelBtn.addEventListener('click', closeForgotModal);
-
-    // fechar clicando fora do modal de forgot (seguro)
-    document.addEventListener('click', (e) => {
-        const modal = document.getElementById('forgotPasswordModal');
-        if (!modal || modal.classList.contains('hidden')) return;
-        const dialog = modal.querySelector('.relative');
-        if (!dialog) return;
-        if (!dialog.contains(e.target)) closeForgotModal();
-    });
-});
-
-// olhinho da senha
-document.querySelectorAll('button[data-toggle]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-toggle');
-      const input = document.getElementById(targetId);
-      if (!input) return;
-      const isPassword = input.type === 'password';
-      input.type = isPassword ? 'text' : 'password';
-      // alterna o ícone
-      const icon = btn.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-eye');
-        icon.classList.toggle('fa-eye-slash');
-      }
-    });
-  });
-  /**
-   * @function mostrarMensagem
-   * @param {string} titulo - Título da mensagem
-   * @param {string} texto - Corpo da mensagem
-   * @param {string} [tipo='erro'] - Tipo da mensagem ('erro' ou outro valor para sucesso)
-   */
-  function mostrarMensagem(titulo, texto, tipo = 'erro') {
-    const modal = document.getElementById('mensagemModal');
-    if (!modal) return;
-
-    modal.querySelector('.modal-title').textContent = titulo;
-    modal.querySelector('.modal-body').textContent = texto;
-    modal.classList.remove('hidden');
-
-    if (tipo === 'sucesso') {
-      modal.classList.add('bg-green-100');
-    } else {
-      modal.classList.add('bg-red-100');
-    }
-  }
-
-    // Configura listeners
-    const form = document.getElementById('loginForm');
-    if (form) {
-        form.addEventListener('submit', handleLogin);
-    }
-
-    // Limpa erros ao digitar
-    const emailField = document.getElementById('email');
-    const senhaField = document.getElementById('senha_hash');
-    
-    if (emailField) {
-        emailField.addEventListener('input', function() {
-            this.classList.remove('border-red-500', 'shake');
-        });
-    }
-    usuario
-    if (senhaField) {
-        senhaField.addEventListener('input', function() {
-            this.classList.remove('border-red-500', 'shake');
-        });
-    }
-
-    // Configura botão de fechar modal
-    const closeBtn = document.getElementById('modalCloseBtn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', fecharModal);
-    }
-
-    let entrarBtn = document.querySelector('#entrarBtn')
-
-    entrarBtn.addEventListener("mousedown", function (){
-        entrarBtn.classList.add('text-[16px]')
-    })
-
-    entrarBtn.addEventListener("mouseup", function (){
-        entrarBtn.classList.remove('text-[16px]')
-    })
-
-    // eventos do modal forgot password
+    // forgot password - agora redireciona diretamente para email
     const forgotLink = document.getElementById('forgotPasswordLink');
     if (forgotLink) {
-        forgotLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            openForgotModal();
+        forgotLink.addEventListener('click', function(e) { 
+            e.preventDefault(); 
+            handleForgotPassword(); 
         });
     }
 
-    const forgotForm = document.getElementById('forgotPasswordForm');
-    if (forgotForm) {
-        forgotForm.addEventListener('submit', handleForgotSubmit);
-    }
-
-    const forgotCancelBtn = document.getElementById('forgotCancelBtn');
-    if (forgotCancelBtn) forgotCancelBtn.addEventListener('click', closeForgotModal);
-
-    // fechar clicando fora
-    document.addEventListener('click', (e) => {
-        const modal = document.getElementById('forgotPasswordModal');
-        if (!modal) return;
-        const dialog = modal.querySelector('.relative');
-        if (!dialog) return;
-        if (!modal.classList.contains('hidden') && !dialog.contains(e.target)) {
-            closeForgotModal();
-        }
+    // olhinho da senha
+    document.querySelectorAll('button[data-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-toggle');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            // alterna o ícone
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            }
+        });
     });
 
-
-
-// olhinho da senha
- document.querySelectorAll('button[data-toggle]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetId = btn.getAttribute('data-toggle');
-          const input = document.getElementById(targetId);
-          if (!input) return;
-          const isPassword = input.type === 'password';
-          input.type = isPassword ? 'text' : 'password';
-          // alterna o ícone
-          const icon = btn.querySelector('i');
-          if (icon) {
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-          }
+    let entrarBtn = document.querySelector('#entrarBtn');
+    if (entrarBtn) {
+        entrarBtn.addEventListener("mousedown", function (){
+            entrarBtn.classList.add('text-[16px]');
         });
-      });
+
+        entrarBtn.addEventListener("mouseup", function (){
+            entrarBtn.classList.remove('text-[16px]');
+        });
+    }
+});

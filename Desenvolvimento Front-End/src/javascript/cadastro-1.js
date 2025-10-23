@@ -53,6 +53,40 @@ document.addEventListener('DOMContentLoaded', function() {
         if (sib && sib.classList && sib.classList.contains('field-error')) sib.remove();
     }
 
+    // **Função para formatar CPF automaticamente**
+    function formatarCPF(cpf) {
+        // Remove tudo que não é dígito
+        cpf = cpf.replace(/\D/g, '');
+        
+        // Aplica a formatação
+        cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+        cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        
+        return cpf;
+    }
+
+    // **Adiciona a formatação automática no campo de documento**
+    const numeroDocumentoEl = document.getElementById('numeroDocumento');
+    if (numeroDocumentoEl) {
+        numeroDocumentoEl.addEventListener('input', function() {
+            const tipoDocumento = document.querySelector('input[name="tipoDocumento"]:checked')?.value;
+            
+            // Aplica formatação apenas para CPF
+            if (tipoDocumento === 'CPF') {
+                const cursorPosition = this.selectionStart;
+                const valorOriginal = this.value;
+                
+                this.value = formatarCPF(this.value);
+                
+                // Mantém a posição do cursor correta após formatação
+                if (valorOriginal.length < this.value.length) {
+                    this.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+                }
+            }
+        });
+    }
+
     // **Funções de validação internas**
     // Validação simplificada de CPF
     function isValidCPF(CPF) {
@@ -94,15 +128,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let valido = false;
+        // **IMPORTANTE: Valida usando o número limpo (sem formatação)**
+        const numeroDocumentoLimpo = numeroDocumento.replace(/\D/g, '');
+        
         if (tipoDocumento === 'CPF') {
-            valido = isValidCPF(numeroDocumento);
+            valido = isValidCPF(numeroDocumentoLimpo);
             if (!valido) {
                 showFieldError(numeroDocumentoEl, 'CPF inválido.');
                 mostrarMensagem('Erro', 'CPF inválido.', 'erro');
                 return;
             }
         } else if (tipoDocumento === 'CNPJ') {
-            valido = isValidCNPJ(numeroDocumento);
+            valido = isValidCNPJ(numeroDocumentoLimpo);
             if (!valido) {
                 showFieldError(numeroDocumentoEl, 'CNPJ inválido.');
                 mostrarMensagem('Erro', 'CNPJ inválido.', 'erro');
@@ -111,8 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Verificar se documento já existe no banco
-        const numeroDocumentoLimpo = numeroDocumento.replace(/\D/g, '');
-        
         try {
             // Verificar se documento já está cadastrado
             const response = await fetch(`http://localhost:8080/usuarios/verificar-documento/${numeroDocumentoLimpo}`, {

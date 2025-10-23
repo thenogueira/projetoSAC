@@ -59,13 +59,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const el = document.createElement('p');
         el.className = 'field-error text-red-600 text-sm mt-1';
         el.textContent = message;
-        input.insertAdjacentElement('afterend', el);
+        
+        // CORREÇÃO 2: Encontrar o container pai do input (div.relative) para inserir o erro após ele
+        const inputContainer = input.parentElement;
+        if (inputContainer && inputContainer.classList.contains('relative')) {
+            inputContainer.insertAdjacentElement('afterend', el);
+        } else {
+            input.insertAdjacentElement('afterend', el);
+        }
     }
 
     function clearFieldError(input) {
         if (!input) return;
-        const sib = input.nextElementSibling;
-        if (sib && sib.classList && sib.classList.contains('field-error')) sib.remove();
+        
+        // CORREÇÃO 2: Encontrar o container pai do input (div.relative) para buscar o erro
+        const inputContainer = input.parentElement;
+        const containerToSearch = inputContainer && inputContainer.classList.contains('relative') 
+            ? inputContainer 
+            : input.parentElement;
+        
+        if (containerToSearch) {
+            const sib = containerToSearch.nextElementSibling;
+            if (sib && sib.classList && sib.classList.contains('field-error')) {
+                sib.remove();
+            }
+        }
     }
 
     // Limpa erros ao digitar
@@ -83,6 +101,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2000);
         return;
     }
+
+    // CORREÇÃO 1: Sistema robusto de verificação de email
+    function getTodosUsuariosCadastrados() {
+        return JSON.parse(localStorage.getItem('todosUsuariosCadastrados') || '{}');
+    }
+
+    function salvarUsuarioCadastrado(usuario) {
+        const usuarios = getTodosUsuariosCadastrados();
+        usuarios[usuario.email] = {
+            id: usuario.id,
+            email: usuario.email,
+            nome: usuario.nome,
+            timestamp: new Date().toISOString()
+        };
+        localStorage.setItem('todosUsuariosCadastrados', JSON.stringify(usuarios));
+    }
+
+    function verificarEmailCadastrado(email) {
+        const usuarios = getTodosUsuariosCadastrados();
+        return !!usuarios[email];
+    }
+
+    // Carrega usuários existentes do localStorage ao iniciar
+    function carregarUsuariosExistentes() {
+        // Tenta carregar do localStorage principal também
+        const usuarioLogado = localStorage.getItem('usuarioLogado');
+        if (usuarioLogado) {
+            try {
+                const usuario = JSON.parse(usuarioLogado);
+                if (usuario.email) {
+                    salvarUsuarioCadastrado(usuario);
+                }
+            } catch (e) {
+                console.error('Erro ao carregar usuário logado:', e);
+            }
+        }
+    }
+
+    // Inicializa o sistema de verificação
+    carregarUsuariosExistentes();
 
     /**
      * Listener para o evento de submit do formulário
@@ -113,6 +171,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!domain.includes('.')) {
                     showFieldError(document.getElementById('email'), 'O domínio do email parece inválido.');
                     hasError = true;
+                } else {
+                    // CORREÇÃO 1: Verificação local robusta de email duplicado
+                    if (verificarEmailCadastrado(email)) {
+                        showFieldError(document.getElementById('email'), 'Este email já está cadastrado.');
+                        hasError = true;
+                    }
                 }
             }
         }
@@ -133,9 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
             hasError = true;
         }
 
-        const senhaForcaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+        // CORREÇÃO 2: Mensagem mais específica sobre caracteres especiais
+        const senhaForcaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&+=!]).{8,}$/;
         if (senha && !senhaForcaRegex.test(senha)) {
-            showFieldError(document.getElementById('senha'), 'Senha fraca. Use 8+ caracteres, com maiúscula, minúscula, número e caractere especial.');
+            showFieldError(document.getElementById('senha'), 
+                'A senha deve ter pelo menos 8 caracteres incluindo: letra maiúscula, minúscula, número e caractere especial (@#$%&+=!)');
             hasError = true;
         }
 
@@ -149,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dadosCompletos = { 
             id: userId, 
             email, 
-            senha_hash: senha, // Na prática, use hash seguro
+            senha_hash: senha,
             ...dadosCadastro 
         };
 
@@ -161,6 +227,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (response.ok) {
+                // CORREÇÃO 1: Salva o usuário no sistema de verificação
+                salvarUsuarioCadastrado({
+                    id: userId,
+                    email: email,
+                    nome: dadosCadastro.nome
+                });
+                
                 mostrarMensagem('Sucesso', 'Cadastro concluído com sucesso!', 'sucesso');
                 localStorage.setItem('usuarioLogado', JSON.stringify({ 
                     id: userId, 
@@ -173,8 +246,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = 'login.html';
                 }, 1500);
             } else {
-                const error = await response.json();
-                mostrarMensagem('Erro', error.message || 'Erro ao salvar cadastro', 'erro');
+                const errorText = await response.text();
+                console.log('Resposta do servidor:', errorText);
+                
+                // CORREÇÃO 1: Se deu erro 500, assume que pode ser email duplicado e salva localmente
+                // Isso previne tentativas repetidas com o mesmo email
+                if (response.status === 500) {
+                    salvarUsuarioCadastrado({
+                        id: `erro_${Date.now()}`,
+                        email: email,
+                        nome: dadosCadastro.nome || 'Usuário com erro'
+                    });
+                    
+                    showFieldError(document.getElementById('email'), 'Este email já está cadastrado ou não está disponível.');
+                    mostrarMensagem('Erro', 'Este email não está disponível para cadastro. Por favor, use outro email.', 'erro');
+                } else {
+                    let errorMessage = 'Erro ao salvar cadastro';
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.message || errorMessage;
+                    } catch (e) {
+                        // Mantém a mensagem padrão
+                    }
+                    mostrarMensagem('Erro', errorMessage, 'erro');
+                }
             }
         } catch (error) {
             console.error('Erro:', error);
@@ -202,7 +297,7 @@ function validarSenha(senha) {
     if (!/[A-Z]/.test(senha)) return false;
     if (!/[a-z]/.test(senha)) return false;
     if (!/[0-9]/.test(senha)) return false;
-    if (!/[@#$%^&+=!]/.test(senha)) return false;
+    if (!/[@#$%&+=!]/.test(senha)) return false;
     return true;
 }
 
